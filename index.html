@@ -4,7 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PEA Affiliated Business Estimate | ศูนย์รวมระบบประมาณการ การไฟฟ้าส่วนภูมิภาค</title>
-    <meta name="description" content="ศูนย์รวมเครื่องมือประมาณการค่าบริการธุรกิจเกี่ยวเนื่อง การไฟฟ้าส่วนภูมิภาค (PEA Affiliated Business Estimation Portal)">
+    <meta name="description" content="ศูนย์รวมเครื่องมือประมาณการค่าบริการธุรกิจเกี่ยวเนื่อง การไฟฟ้าส่วนภูมิภาค (PEA Affiliated Business Estimation Portal) ประเมินราคามาตรฐาน แม่นยำ รวดเร็ว">
+    
+    <!-- Favicon & PWA Icons -->
+    <link rel="icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Mobile & PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PEA ESTIMATE">
+    <meta name="theme-color" content="#7c3aed">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,10 +37,10 @@
         <div class="nav-container">
             <div class="nav-brand">
                 <div class="pea-logo-badge">
-                    <i class="fa-solid => fa-bolt brand-icon"></i>
+                    <i class="fa-solid fa-bolt brand-icon"></i>
                 </div>
                 <div class="brand-text">
-                    <span class="brand-title">PEA ESTIMENT</span>
+                    <span class="brand-title">PEA ESTIMATE</span>
                     <span class="brand-sub">Affiliated Business Portal</span>
                 </div>
             </div>
@@ -56,7 +70,7 @@
                 <h1 class="hero-title">PEA Affiliated Business <span class="gradient-text">Estimate</span></h1>
                 <p class="hero-subtitle">
                     ศูนย์กลางเข้าถึงระบบและเครื่องมือประมาณการค่าบริการธุรกิจเกี่ยวเนื่อง การไฟฟ้าส่วนภูมิภาค 
-                    รวบรวมระบบคำนวณราคามาตรฐานเพื่อให้การประเมินงบประมาณสะดวก สะดวกรวดเร็ว และแม่นยำ
+                    รวบรวมระบบคำนวณราคามาตรฐานเพื่อให้การประเมินงบประมาณสะดวก สะดวกรวดเร็ว แม่นยำ และโปร่งใสตามหลักเกณฑ์ กฟภ.
                 </p>
                 
                 <!-- Search & Filter Controls -->
@@ -84,8 +98,8 @@
             </div>
 
             <div class="systems-grid" id="systems-grid">
-                <!-- Card 1: Gen Estiment -->
-                <div class="system-card" data-category="active popular" data-name="gen estiment เครื่องกำเนิดไฟฟ้า เช่า generator">
+                <!-- Card 1: Gen Estimate -->
+                <div class="system-card" data-category="active popular" data-name="gen estimate เครื่องกำเนิดไฟฟ้า เช่า generator">
                     <div class="card-badge active"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</div>
                     <div class="card-header">
                         <div class="card-icon generator-icon">
@@ -93,15 +107,16 @@
                         </div>
                         <div class="card-meta">
                             <span class="card-category">บริการเครื่องกำเนิดไฟฟ้า</span>
-                            <h3 class="card-title">Gen Estiment</h3>
+                            <h3 class="card-title">Gen Estimate</h3>
                         </div>
                     </div>
                     <p class="card-description">
-                        ระบบคำนวณและประมาณการค่าเช่าชุดเครื่องกำเนิดไฟฟ้า คำนวณค่าบริการ น้ำมันเชื้อเพลิง ระยะทาง และพนักงานคุมเครื่องตามหลักเกณฑ์ PEA
+                        ระบบคำนวณและประมาณการค่าเช่าชุดเครื่องกำเนิดไฟฟ้า คำนวณค่าบริการ น้ำมันเชื้อเพลิง ระยะทางขนส่ง และพนักงานคุมเครื่องตามหลักเกณฑ์ PEA Standard
                     </p>
                     <div class="card-features">
                         <span class="feature-tag"><i class="fa-solid fa-gas-pump"></i> คิดค่าน้ำมันอัตโนมัติ</span>
                         <span class="feature-tag"><i class="fa-solid fa-calculator"></i> รวม VAT 7%</span>
+                        <span class="feature-tag"><i class="fa-solid fa-file-contract"></i> ออกเอกสารประเมิน</span>
                     </div>
                     <div class="card-footer">
                         <a href="Gen Estiment/index.html" class="btn btn-primary">
@@ -111,8 +126,8 @@
                     </div>
                 </div>
 
-                <!-- Card 2: Line Guard Estiment -->
-                <div class="system-card" data-category="active popular" data-name="line guard estiment ครอบสาย ฉนวนครอบสายแรงสูง">
+                <!-- Card 2: Line Guard Estimate -->
+                <div class="system-card" data-category="active popular" data-name="line guard estimate ครอบสาย ฉนวนครอบสายแรงสูง">
                     <div class="card-badge active"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</div>
                     <div class="card-header">
                         <div class="card-icon lineguard-icon">
@@ -120,15 +135,16 @@
                         </div>
                         <div class="card-meta">
                             <span class="card-category">บริการฉนวนครอบสาย</span>
-                            <h3 class="card-title">Line Guard Estiment</h3>
+                            <h3 class="card-title">Line Guard Estimate</h3>
                         </div>
                     </div>
                     <p class="card-description">
-                        ระบบคำนวณและประมาณการค่าบริการติดตั้งฉนวนครอบสายแรงสูง (Line Guard) สำหรับงานก่อสร้างใกล้นานระบบไฟฟ้าเพื่อความปลอดภัย
+                        ระบบคำนวณและประมาณการค่าบริการติดตั้งฉนวนครอบสายแรงสูง (Line Guard) สำหรับงานก่อสร้างใกล้นานระบบไฟฟ้าเพื่อความปลอดภัยสูงสุด
                     </p>
                     <div class="card-features">
                         <span class="feature-tag"><i class="fa-solid fa-clock"></i> คำนวณตามจำนวนวัน/เดือน</span>
                         <span class="feature-tag"><i class="fa-solid fa-file-pdf"></i> พิมพ์ใบประมาณการ</span>
+                        <span class="feature-tag"><i class="fa-solid fa-shield-cat"></i> ป้องกันอันตรายไฟฟ้า</span>
                     </div>
                     <div class="card-footer">
                         <a href="Line Guard Estiment/index.html" class="btn btn-primary">
@@ -139,7 +155,7 @@
                 </div>
 
                 <!-- Card 3: Transformer Maintenance (Future Placeholder) -->
-                <div class="system-card upcoming-card" data-category="upcoming" data-name="transformer estiment บำรุงรักษาหม้อแปลง ตรวจสอบหม้อแปลงไฟฟ้า">
+                <div class="system-card upcoming-card" data-category="upcoming" data-name="transformer estimate บำรุงรักษาหม้อแปลง ตรวจสอบหม้อแปลงไฟฟ้า">
                     <div class="card-badge upcoming"><i class="fa-solid fa-clock"></i> เร็วๆ นี้</div>
                     <div class="card-header">
                         <div class="card-icon transformer-icon">
@@ -147,7 +163,7 @@
                         </div>
                         <div class="card-meta">
                             <span class="card-category">บริการหม้อแปลงไฟฟ้า</span>
-                            <h3 class="card-title">Transformer Estiment</h3>
+                            <h3 class="card-title">Transformer Estimate</h3>
                         </div>
                     </div>
                     <p class="card-description">
@@ -166,7 +182,7 @@
                 </div>
 
                 <!-- Card 4: Solar Rooftop Estimate (Future Placeholder) -->
-                <div class="system-card upcoming-card" data-category="upcoming" data-name="solar rooftop estiment โซลาร์เซลล์ ประเมินราคาติดตั้ง">
+                <div class="system-card upcoming-card" data-category="upcoming" data-name="solar rooftop estimate โซลาร์เซลล์ ประเมินราคาติดตั้ง">
                     <div class="card-badge upcoming"><i class="fa-solid fa-clock"></i> เร็วๆ นี้</div>
                     <div class="card-header">
                         <div class="card-icon solar-icon">
@@ -174,7 +190,7 @@
                         </div>
                         <div class="card-meta">
                             <span class="card-category">พลังงานสะอาด</span>
-                            <h3 class="card-title">Solar Estiment</h3>
+                            <h3 class="card-title">Solar Estimate</h3>
                         </div>
                     </div>
                     <p class="card-description">
@@ -208,7 +224,7 @@
         <div class="footer-container">
             <div class="footer-info">
                 <div class="footer-brand">
-                    <i class="fa-solid fa-bolt"></i> PEA ESTIMENT PORTAL
+                    <i class="fa-solid fa-bolt"></i> PEA ESTIMATE PORTAL
                 </div>
                 <p>การไฟฟ้าส่วนภูมิภาค (Provincial Electricity Authority) | ธุรกิจเกี่ยวเนื่อง</p>
                 <div class="developer-info">
@@ -225,3 +241,4 @@
     <script src="js/main.js"></script>
 </body>
 </html>
+

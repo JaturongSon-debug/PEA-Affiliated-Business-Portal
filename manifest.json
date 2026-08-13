@@ -1,0 +1,30 @@
+{
+  "name": "PEA ESTIMATE - ศูนย์รวมระบบประมาณการ การไฟฟ้าส่วนภูมิภาค",
+  "short_name": "PEA ESTIMATE",
+  "description": "ศูนย์รวมเครื่องมือประมาณการค่าบริการธุรกิจเกี่ยวเนื่อง การไฟฟ้าส่วนภูมิภาค (PEA Affiliated Business Estimation Portal)",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
