@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEA Affiliated Business Estimate | ศูนย์รวมระบบประมาณการ การไฟฟ้าส่วนภูมิภาค</title>
+    <meta name="description" content="ศูนย์รวมเครื่องมือประมาณการค่าบริการธุรกิจเกี่ยวเนื่อง การไฟฟ้าส่วนภูมิภาค (PEA Affiliated Business Estimation Portal)">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <div class="pea-logo-badge">
+                    <i class="fa-solid => fa-bolt brand-icon"></i>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-title">PEA ESTIMENT</span>
+                    <span class="brand-sub">Affiliated Business Portal</span>
+                </div>
+            </div>
+            
+            <div class="nav-actions">
+                <div class="stats-badge">
+                    <span class="pulse-dot"></span>
+                    <span id="active-systems-count">2 ระบบเปิดใช้งาน</span>
+                </div>
+                <button id="theme-toggle-btn" class="theme-toggle" aria-label="Toggle dark/light mode">
+                    <i class="fa-solid fa-moon dark-icon"></i>
+                    <i class="fa-solid fa-sun light-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="main-wrapper">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-background-glow"></div>
+            <div class="hero-content">
+                <div class="pea-pill-badge">
+                    <i class="fa-solid fa-layer-group"></i> Provincial Electricity Authority
+                </div>
+                <h1 class="hero-title">PEA Affiliated Business <span class="gradient-text">Estimate</span></h1>
+                <p class="hero-subtitle">
+                    ศูนย์กลางเข้าถึงระบบและเครื่องมือประมาณการค่าบริการธุรกิจเกี่ยวเนื่อง การไฟฟ้าส่วนภูมิภาค 
+                    รวบรวมระบบคำนวณราคามาตรฐานเพื่อให้การประเมินงบประมาณสะดวก สะดวกรวดเร็ว และแม่นยำ
+                </p>
+                
+                <!-- Search & Filter Controls -->
+                <div class="search-box-container">
+                    <div class="search-input-wrapper">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="search-input" placeholder="ค้นหาระบบประมาณการ เช่น เครื่องกำเนิดไฟฟ้า, Line Guard..." autocomplete="off">
+                        <button id="clear-search" class="clear-btn hidden"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                    <div class="category-filters" id="category-filters">
+                        <button class="filter-chip active" data-category="all">ทั้งหมด</button>
+                        <button class="filter-chip" data-category="active">พร้อมใช้งาน</button>
+                        <button class="filter-chip" data-category="popular">ยอดนิยม</button>
+                        <button class="filter-chip" data-category="upcoming">กำลังพัฒนา</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- System Cards Grid -->
+        <section class="systems-section">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fa-solid fa-grid-2"></i> ระบบประมาณการทั้งหมด</h2>
+                <span class="results-count" id="results-count">กำลังแสดง 2 จาก 2 ระบบ</span>
+            </div>
+
+            <div class="systems-grid" id="systems-grid">
+                <!-- Card 1: Gen Estiment -->
+                <div class="system-card" data-category="active popular" data-name="gen estiment เครื่องกำเนิดไฟฟ้า เช่า generator">
+                    <div class="card-badge active"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</div>
+                    <div class="card-header">
+                        <div class="card-icon generator-icon">
+                            <i class="fa-solid fa-charging-station"></i>
+                        </div>
+                        <div class="card-meta">
+                            <span class="card-category">บริการเครื่องกำเนิดไฟฟ้า</span>
+                            <h3 class="card-title">Gen Estiment</h3>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        ระบบคำนวณและประมาณการค่าเช่าชุดเครื่องกำเนิดไฟฟ้า คำนวณค่าบริการ น้ำมันเชื้อเพลิง ระยะทาง และพนักงานคุมเครื่องตามหลักเกณฑ์ PEA
+                    </p>
+                    <div class="card-features">
+                        <span class="feature-tag"><i class="fa-solid fa-gas-pump"></i> คิดค่าน้ำมันอัตโนมัติ</span>
+                        <span class="feature-tag"><i class="fa-solid fa-calculator"></i> รวม VAT 7%</span>
+                    </div>
+                    <div class="card-footer">
+                        <a href="Gen Estiment/index.html" class="btn btn-primary">
+                            <span>เข้าใช้งานระบบ</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 2: Line Guard Estiment -->
+                <div class="system-card" data-category="active popular" data-name="line guard estiment ครอบสาย ฉนวนครอบสายแรงสูง">
+                    <div class="card-badge active"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</div>
+                    <div class="card-header">
+                        <div class="card-icon lineguard-icon">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div class="card-meta">
+                            <span class="card-category">บริการฉนวนครอบสาย</span>
+                            <h3 class="card-title">Line Guard Estiment</h3>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        ระบบคำนวณและประมาณการค่าบริการติดตั้งฉนวนครอบสายแรงสูง (Line Guard) สำหรับงานก่อสร้างใกล้นานระบบไฟฟ้าเพื่อความปลอดภัย
+                    </p>
+                    <div class="card-features">
+                        <span class="feature-tag"><i class="fa-solid fa-clock"></i> คำนวณตามจำนวนวัน/เดือน</span>
+                        <span class="feature-tag"><i class="fa-solid fa-file-pdf"></i> พิมพ์ใบประมาณการ</span>
+                    </div>
+                    <div class="card-footer">
+                        <a href="Line Guard Estiment/index.html" class="btn btn-primary">
+                            <span>เข้าใช้งานระบบ</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Card 3: Transformer Maintenance (Future Placeholder) -->
+                <div class="system-card upcoming-card" data-category="upcoming" data-name="transformer estiment บำรุงรักษาหม้อแปลง ตรวจสอบหม้อแปลงไฟฟ้า">
+                    <div class="card-badge upcoming"><i class="fa-solid fa-clock"></i> เร็วๆ นี้</div>
+                    <div class="card-header">
+                        <div class="card-icon transformer-icon">
+                            <i class="fa-solid fa-industry"></i>
+                        </div>
+                        <div class="card-meta">
+                            <span class="card-category">บริการหม้อแปลงไฟฟ้า</span>
+                            <h3 class="card-title">Transformer Estiment</h3>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        ระบบประมาณการค่าบริการบำรุงรักษา กรองน้ำมันหม้อแปลง และทดสอบหม้อแปลงไฟฟ้าประจำปีสำหรับผู้ใช้ไฟรายใหญ่
+                    </p>
+                    <div class="card-features">
+                        <span class="feature-tag"><i class="fa-solid fa-vial"></i> ทดสอบคุณภาพน้ำมัน</span>
+                        <span class="feature-tag"><i class="fa-solid fa-wrench"></i> บำรุงรักษาเชิงป้องกัน</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-disabled" disabled>
+                            <span>กำลังพัฒนาระบบ</span>
+                            <i class="fa-solid fa-lock"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 4: Solar Rooftop Estimate (Future Placeholder) -->
+                <div class="system-card upcoming-card" data-category="upcoming" data-name="solar rooftop estiment โซลาร์เซลล์ ประเมินราคาติดตั้ง">
+                    <div class="card-badge upcoming"><i class="fa-solid fa-clock"></i> เร็วๆ นี้</div>
+                    <div class="card-header">
+                        <div class="card-icon solar-icon">
+                            <i class="fa-solid fa-solar-panel"></i>
+                        </div>
+                        <div class="card-meta">
+                            <span class="card-category">พลังงานสะอาด</span>
+                            <h3 class="card-title">Solar Estiment</h3>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        ระบบประมาณการจุดคุ้มทุนและค่าบริการติดตั้งระบบผลิตไฟฟ้าพลังงานแสงอาทิตย์บนหลังคา (Solar Rooftop)
+                    </p>
+                    <div class="card-features">
+                        <span class="feature-tag"><i class="fa-solid fa-sun"></i> คำนวณจุดคุ้มทุน (ROI)</span>
+                        <span class="feature-tag"><i class="fa-solid fa-leaf"></i> ลดการปล่อยคาร์บอน</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-disabled" disabled>
+                            <span>กำลังพัฒนาระบบ</span>
+                            <i class="fa-solid fa-lock"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No Results Message -->
+            <div id="no-results" class="no-results hidden">
+                <i class="fa-solid fa-box-open empty-icon"></i>
+                <h3>ไม่พบระบบประมาณการที่คุณค้นหา</h3>
+                <p>ลองค้นหาด้วยคำอื่น เช่น "เครื่องกำเนิดไฟฟ้า", "Line Guard" หรือรีเซ็ตการกรอง</p>
+                <button id="reset-search-btn" class="btn btn-secondary mt-3">รีเซ็ตการค้นหา</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-info">
+                <div class="footer-brand">
+                    <i class="fa-solid fa-bolt"></i> PEA ESTIMENT PORTAL
+                </div>
+                <p>การไฟฟ้าส่วนภูมิภาค (Provincial Electricity Authority) | ธุรกิจเกี่ยวเนื่อง</p>
+                <div class="developer-info">
+                    <i class="fa-solid fa-code-branch"></i> ผู้พัฒนา: <strong>นายจาตุรงค์ ทรงภักดี</strong> (พชง.7 ผรผ.กสฟ.(น2))
+                </div>
+            </div>
+            <div class="footer-copyright">
+                &copy; 2026 PEA Affiliated Business Estimation System. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+</body>
+</html>

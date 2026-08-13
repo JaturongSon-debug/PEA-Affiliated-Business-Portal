@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบคำนวณประมาณการค่าเช่าเครื่องกำเนิดไฟฟ้า | Generator Rental Cost Estimator</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Prompt:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="glass-bg"></div>
+    <div class="container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-top">
+                <div class="logo">
+                    <i class="fa-solid fa-charging-station lightning-icon"></i>
+                    <h1>ระบบคำนวณประมาณการค่าใช้จ่าย ของ กฟภ.</h1>
+                </div>
+                <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+            <p class="subtitle">คำนวณค่าเช่าเครื่องกำเนิดไฟฟ้า, ค่าควบคุมงาน และค่าจัดส่งแบบครบวงจร</p>
+        </header>
+
+        <!-- Main Dashboard -->
+        <div class="dashboard-grid">
+            <!-- Inputs Panel -->
+            <section class="panel input-panel">
+                <div class="panel-header">
+                    <i class="fa-solid fa-sliders"></i>
+                    <h2>ระบุเงื่อนไขการเช่า</h2>
+                </div>
+
+                <form id="calculator-form" onsubmit="event.preventDefault();">
+                    <!-- Regulation Type -->
+                    <div class="form-group">
+                        <label for="regulation_type" class="form-label">ระเบียบการคิดค่าใช้จ่าย</label>
+                        <div class="select-wrapper">
+                            <select id="regulation_type" name="regulation_type" required>
+                                <option value="rental_reg" selected>ระเบียบ การคิดค่าเช่าเครื่องกำเนิดไฟฟ้า</option>
+                                <option value="generator_set_reg">ระเบียบ การนำชุดเครื่องกำเนิดไฟฟ้า ( ข้อ 6.5 )</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down select-icon"></i>
+                        </div>
+                    </div>
+
+                    <!-- Customer Type -->
+                    <div class="form-group">
+                        <label class="form-label">ประเภทผู้เช่า</label>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="customer_type" value="A" checked>
+                                <span class="radio-custom">
+                                    <span class="radio-title">ประเภท ก</span>
+                                    <span class="radio-desc">หน่วยงานภายใน/พันธมิตร</span>
+                                </span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="customer_type" value="B">
+                                <span class="radio-custom">
+                                    <span class="radio-title">ประเภท ข</span>
+                                    <span class="radio-desc">บุคคลภายนอก/ทั่วไป</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Generator Size (Grouped Select) -->
+                    <div class="form-group">
+                        <label for="size_range" class="form-label">ขนาดเครื่องยนต์กำเนิดไฟฟ้า</label>
+                        <div class="select-wrapper">
+                            <select id="size_range" name="size_range" required>
+                                <optgroup label="กลุ่มแบบยกวางหรือแบบลากจูง">
+                                    <option value="3-10" selected>3 - 10 กิโลวัตต์ (kW)</option>
+                                    <option value="25-28">25 - 28 กิโลวัตต์ (kW)</option>
+                                    <option value="56-60">56 - 60 กิโลวัตต์ (kW)</option>
+                                    <option value="120-128">120 - 128 กิโลวัตต์ (kW)</option>
+                                </optgroup>
+                                <optgroup label="กลุ่มแบบติดตั้งบนรถยนต์">
+                                    <option value="300-335">300 - 335 กิโลวัตต์ (kW)</option>
+                                    <option value="500">500 กิโลวัตต์ (kW)</option>
+                                    <option value=">500">มากกว่า 500 กิโลวัตต์ (kW)</option>
+                                </optgroup>
+                            </select>
+                            <i class="fa-solid fa-chevron-down select-icon"></i>
+                        </div>
+                    </div>
+
+                    <!-- Grid for Quantity and Days -->
+                    <div class="form-row-2">
+                        <!-- Number of machines -->
+                        <div class="form-group">
+                            <label class="form-label">จำนวนเครื่องที่เช่า</label>
+                            <div class="number-stepper">
+                                <button type="button" class="step-btn" onclick="stepInput('num_machines', -1)"><i
+                                        class="fa-solid fa-minus"></i></button>
+                                <input type="number" id="num_machines" name="num_machines" value="1" min="1" max="50"
+                                    required>
+                                <button type="button" class="step-btn" onclick="stepInput('num_machines', 1)"><i
+                                        class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Rental days -->
+                        <div class="form-group">
+                            <label class="form-label">จำนวนวันที่ต้องการเช่า</label>
+                            <div class="number-stepper">
+                                <button type="button" class="step-btn" onclick="stepInput('total_days', -1)"><i
+                                        class="fa-solid fa-minus"></i></button>
+                                <input type="number" id="total_days" name="total_days" value="1" min="1" max="365"
+                                    required>
+                                <button type="button" class="step-btn" onclick="stepInput('total_days', 1)"><i
+                                        class="fa-solid fa-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transport Distance -->
+                    <div class="form-group">
+                        <label for="distance_range" class="form-label">ระยะทางจัดส่ง (ไป-กลับ)</label>
+                        <div class="select-wrapper">
+                            <select id="distance_range" name="distance_range" required>
+                                <option value="1-50">1 - 50 กิโลเมตร (กม.)</option>
+                                <option value="51-100">51 - 100 กิโลเมตร (กม.)</option>
+                                <option value="101-150">101 - 150 กิโลเมตร (กม.)</option>
+                                <option value="151+">มากกว่า 151 กิโลเมตร (กม.)</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down select-icon"></i>
+                        </div>
+                        <div class="input-note">
+                            <i class="fa-solid fa-circle-info"></i>
+                            ระยะทางนับจาก กฟฟ. ที่เป็นเจ้าของทรัพย์สิน ถึงสถานที่เช่า
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Download Section -->
+                <div class="download-section">
+                    <h3 class="download-title"><i class="fa-solid fa-file-pdf"></i> เอกสารระเบียบอ้างอิง</h3>
+                    <div class="download-buttons">
+                        <a href="ระเบียบการคิดค่าเช่าเครื่องกำเนิดไฟฟ้า  (1).pdf" download class="download-btn">
+                            <i class="fa-solid fa-download"></i> คิดค่าเช่าเครื่องกำเนิดไฟฟ้า
+                        </a>
+                        <a href="ระเบียบว่าด้วยการนำชุดเครื่องยนต์กำเนิด (1).pdf" download class="download-btn">
+                            <i class="fa-solid fa-download"></i> การนำชุดเครื่องกำเนิด
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Panel -->
+            <section class="panel result-panel">
+                <div class="panel-header">
+                    <i class="fa-solid fa-receipt"></i>
+                    <h2>สรุปรายละเอียดค่าใช้จ่าย</h2>
+                </div>
+
+                <div class="result-container">
+                    <!-- Details Breakdown -->
+                    <div class="breakdown-list">
+                        <!-- Machine Rental item -->
+                        <div class="breakdown-item" id="rental-breakdown-item">
+                            <div class="item-icon rental-icon">
+                                <i class="fa-solid fa-charging-station"></i>
+                            </div>
+                            <div class="item-details">
+                                <div class="item-title">ค่าเช่าเครื่องยนต์กำเนิดไฟฟ้า (ServiceMaterial : S-3O-001)</div>
+                                <div class="item-subtitle" id="rental-detail-text">ขนาด - จำนวน - วัน</div>
+                            </div>
+                            <div class="item-value" id="rental-total-fee">0 บาท</div>
+                        </div>
+
+                        <!-- Staff control item -->
+                        <div class="breakdown-item">
+                            <div class="item-icon staff-icon">
+                                <i class="fa-solid fa-user-gear"></i>
+                            </div>
+                            <div class="item-details">
+                                <div class="item-title">ค่าพนักงานควบคุมเครื่องยนต์ (ServiceMaterial : S-3O-002)</div>
+                                <div class="item-subtitle" id="staff-detail-text">ใช้ผู้ควบคุม - คน (- วัน)</div>
+                            </div>
+                            <div class="item-value" id="staff-total-fee">0 บาท</div>
+                        </div>
+
+                        <!-- Shipping item -->
+                        <div class="breakdown-item">
+                            <div class="item-icon transport-icon">
+                                <i class="fa-solid fa-truck-ramp-box"></i>
+                            </div>
+                            <div class="item-details">
+                                <div class="item-title">ค่าจัดส่งและขนส่ง (ServiceMaterial : S-3O-003)</div>
+                                <div class="item-subtitle" id="transport-detail-text">รูปแบบการขนส่ง</div>
+                            </div>
+                            <div class="item-value" id="transport-total-fee">0 บาท</div>
+                        </div>
+                    </div>
+
+                    <!-- Grand Total Display -->
+                    <div class="total-display">
+                        <div class="total-summary-rows">
+                            <div class="summary-row">
+                                <span class="summary-label">ประมาณการยอดรวมสุทธิ</span>
+                                <span class="summary-value"><span id="grand-total">0</span> <span class="currency-sub">บาท</span></span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">ภาษีมูลค่าเพิ่ม (VAT 7%)</span>
+                                <span class="summary-value"><span id="vat-amount">0</span> <span class="currency-sub">บาท</span></span>
+                            </div>
+                        </div>
+                        <div class="total-divider"></div>
+                        <div class="total-label">ยอดรวมทั้งสิ้น (รวม VAT)</div>
+                        <div class="total-amount"><span id="total-with-vat">0</span> <span class="currency">บาท</span></div>
+                        <div class="total-baht-text" id="total-baht-text">(ศูนย์บาทถ้วน)</div>
+                    </div>
+
+                    <!-- Remarks & Footnotes -->
+                    <div class="remarks-box">
+                        <h4><i class="fa-solid fa-circle-exclamation"></i> เงื่อนไขและข้อกำหนดเพิ่มเติม</h4>
+                        <ul>
+                            <li>ระยะทางขนส่งเริ่มนับจาก กฟฟ. เจ้าของทรัพย์สิน ไปยังสถานที่ใช้งานจริง</li>
+                            <li>สำหรับขนาดเครื่อง 3-15 kW ผู้เช่าต้องเป็นผู้รับและส่งคืนเครื่องยนต์ ณ กฟฟ. เอง
+                                (ค่าขนส่งเป็น 0 บาท)</li>
+                            <li>อัตราค่าบริการควบคุมงานคำนวณแบบ "ต่อคนต่อวัน" และค่าขนส่งคำนวณแบบ "ต่อเที่ยว (ไป-กลับ)
+                                ต่อเครื่อง"</li>
+                            <li>น้ำมันเชื้อเพลิงของเครื่องกำเนิดไฟฟ้าผู้เช่าจะต้องเป็นผู้รับผิดชอบจัดหาให้เอง</li>
+                            <li>ราคานี้เป็นราคาประมาณการเบื้องต้นตามตารางมาตรฐาน</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Copyright &copy; 2026 App Gen Estiment ผรผ.กสฟ.น2</p>
+        </footer>
+    </div>
+
+    <!-- Script connection -->
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ระบบประมาณการค่าใช้จ่าย ค่าครอบฉนวนไฟฟ้าแรงสูง (Line Guard Estimation) - การไฟฟ้าส่วนภูมิภาค PEA</title>
+  <meta name="description" content="ระบบคำนวณและประมาณการค่าบริการครอบฉนวนป้องกันไฟฟ้าแรงสูง ตามหลักเกณฑ์และอัตราค่าบริการมาตรฐานของการไฟฟ้าส่วนภูมิภาค (PEA)">
+  
+  <!-- Google Fonts: Prompt & Kanit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient background glow & PEA electrical pattern elements -->
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+  <div class="bg-glow-3"></div>
+  <div class="pea-circuit-bg"></div>
+  <div class="pea-pylon-bg"></div>
+
+  <div class="container">
+    <!-- Navbar Header -->
+    <header>
+      <nav class="navbar">
+        <div class="logo-group">
+          <div class="logo-icon">
+            <i class="fa-solid fa-bolt"></i>
+          </div>
+          <div class="logo-text">
+            <div class="pea-badge-mini"><i class="fa-solid fa-shield-cat"></i> PEA Line Guard</div>
+            <h1>Line Guard Estimation</h1>
+            <span>ระบบคำนวณค่าครอบฉนวนไฟฟ้าแรงสูง การไฟฟ้าส่วนภูมิภาค</span>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <!-- Theme Toggle Button -->
+          <button id="themeToggleBtn" class="btn-theme-toggle" title="สลับโหมดมืด/สว่าง" aria-label="สลับโหมดมืด/สว่าง">
+            <i class="fa-solid fa-moon" id="themeIcon"></i>
+            <span id="themeText">โหมดมืด</span>
+          </button>
+
+          <!-- PDF Download Button -->
+          <a href="อนุมัติ ผวก.หลักเกณฑ์การคิดค่าบริการฉนวนค.pdf" download class="btn-download-pdf" id="downloadPdfBtn">
+            <i class="fa-solid fa-file-pdf"></i>
+            ดาวน์โหลดระเบียบหลักเกณฑ์
+          </a>
+        </div>
+      </nav>
+
+      <div class="hero-banner">
+        <div class="pea-official-tag">
+          <i class="fa-solid fa-bolt-lightning"></i> การไฟฟ้าส่วนภูมิภาค (PROVINCIAL ELECTRICITY AUTHORITY)
+        </div>
+        <h2 class="hero-title">ประมาณการค่าบริการ <span class="gradient-text">ครอบฉนวนสายไฟฟ้าแรงสูง</span></h2>
+        <p class="hero-subtitle">คำนวณค่าธรรมเนียมและค่าอุปกรณ์ฉนวนป้องกันสายไฟฟ้าแรงสูง รวมภาษีมูลค่าเพิ่ม (VAT 7%) อัตโนมัติ ตามมาตรฐานระเบียบ ผวก.</p>
+      </div>
+    </header>
+
+    <!-- Standard Rate Display Cards -->
+    <section class="rates-grid">
+      <div class="rate-card">
+        <div class="rate-icon">
+          <i class="fa-solid fa-layer-group"></i>
+        </div>
+        <div class="rate-info">
+          <h4>ค่าบริการอุปกรณ์ฉนวนครอบ</h4>
+          <div class="value">100 บาท</div>
+          <div class="sub">ต่อ 1 ชิ้น / ต่อ 1 วัน (ไม่รวม VAT)</div>
+        </div>
+      </div>
+
+      <div class="rate-card">
+        <div class="rate-icon orange">
+          <i class="fa-solid fa-wrench"></i>
+        </div>
+        <div class="rate-info">
+          <h4>ค่าบริการติดตั้งและรื้อถอน</h4>
+          <div class="value">3,500 บาท</div>
+          <div class="sub">ต่อ 1 งาน (เหมาจ่าย / ไม่รวม VAT)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Calculator & Results -->
+    <main class="calculator-section">
+      <!-- Calculator Input Form -->
+      <div class="calc-card">
+        <h3 class="card-title">
+          <i class="fa-solid fa-calculator" style="color: var(--primary-light);"></i>
+          กรอกข้อมูลเพื่อคำนวณราคา
+        </h3>
+
+        <div class="input-group">
+          <label for="numDays"><i class="fa-regular fa-calendar-days"></i> จำนวนวันที่ใช้งานครอบฉนวน</label>
+          <div class="input-wrapper">
+            <input type="number" id="numDays" min="1" value="1" placeholder="ระบุจำนวนวัน">
+            <span class="input-unit">วัน</span>
+          </div>
+          <div class="quick-btn-group">
+            <button class="quick-btn" onclick="setDays(1)">1 วัน</button>
+            <button class="quick-btn" onclick="setDays(3)">3 วัน</button>
+            <button class="quick-btn" onclick="setDays(5)">5 วัน</button>
+            <button class="quick-btn" onclick="setDays(7)">7 วัน</button>
+            <button class="quick-btn" onclick="setDays(15)">15 วัน</button>
+            <button class="quick-btn" onclick="setDays(30)">30 วัน</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="numPieces"><i class="fa-solid fa-boxes-stacked"></i> จำนวนฉนวนครอบ (ชิ้น / ตัว)</label>
+          <div class="input-wrapper">
+            <input type="number" id="numPieces" min="1" value="1" placeholder="ระบุจำนวนชิ้น">
+            <span class="input-unit">ชิ้น</span>
+          </div>
+          <div class="quick-btn-group">
+            <button class="quick-btn" onclick="setPieces(1)">1 ชิ้น</button>
+            <button class="quick-btn" onclick="setPieces(3)">3 ชิ้น</button>
+            <button class="quick-btn" onclick="setPieces(5)">5 ชิ้น</button>
+            <button class="quick-btn" onclick="setPieces(10)">10 ชิ้น</button>
+          </div>
+        </div>
+
+        <div class="vat-auto-notice">
+          <div class="vat-badge">
+            <i class="fa-solid fa-circle-check"></i>
+            <span>รวมภาษีมูลค่าเพิ่ม (VAT 7%) ในการคำนวณแล้วอัตโนมัติ</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div class="result-card">
+        <div>
+          <h3 class="card-title">
+            <i class="fa-solid fa-receipt" style="color: var(--accent-secondary);"></i>
+            สรุปรายการค่าใช้จ่าย
+          </h3>
+
+          <div class="calc-breakdown">
+            <div class="breakdown-row">
+              <span>ค่าอุปกรณ์ฉนวนครอบสายไฟ (<span id="summaryDetail">100 บาท × 1 วัน × 1 ชิ้น</span>)</span>
+              <span class="breakdown-value" id="equipmentCostText">100 บาท</span>
+            </div>
+            <div class="breakdown-row">
+              <span>ค่าบริการติดตั้งและรื้อถอน</span>
+              <span class="breakdown-value" id="installCostText">3,500 บาท</span>
+            </div>
+            
+            <div class="divider"></div>
+
+            <div class="breakdown-row">
+              <span>รวมเป็นเงินก่อนภาษี (Subtotal)</span>
+              <span class="breakdown-value" id="subtotalText">3,600.00 บาท</span>
+            </div>
+
+            <div class="breakdown-row highlight-vat">
+              <span><i class="fa-solid fa-percent"></i> ภาษีมูลค่าเพิ่ม VAT 7%</span>
+              <span class="breakdown-value" id="vatText">252.00 บาท</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="total-box">
+          <div class="total-label">ประมาณการค่าใช้จ่ายสุทธิทั้งสิ้น (รวม VAT 7%)</div>
+          <div class="total-amount" id="grandTotalText">3,852.00.-</div>
+          <div class="vat-note" id="vatNoteText"><i class="fa-solid fa-shield-halved"></i> *ราคารวมภาษีมูลค่าเพิ่ม (VAT 7%) แล้วตามระเบียบ PEA</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Reference Table (Sample Prices) -->
+    <section class="table-section">
+      <div class="table-header">
+        <h3 class="card-title" style="border: none; padding: 0; margin: 0;">
+          <i class="fa-solid fa-table-list" style="color: var(--primary-light);"></i>
+          ตารางตัวอย่างการคิดค่าใช้จ่ายอ้างอิง
+        </h3>
+        <span class="hero-tag" style="margin: 0;">คำนวณรวม VAT 7% แล้ว</span>
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 50px; text-align: center;">ที่</th>
+              <th style="text-align: center;">จำนวนวัน</th>
+              <th style="text-align: center;">จำนวนฉนวน</th>
+              <th>รายละเอียดค่าบริการฉนวนครอบสายไฟฯ</th>
+              <th style="text-align: right;">ค่าติดตั้งรื้อถอน</th>
+              <th style="text-align: right;">ก่อน VAT (บาท)</th>
+              <th style="text-align: right;">VAT 7% (บาท)</th>
+              <th style="text-align: right;">รวมทั้งสิ้น (บาท)*</th>
+            </tr>
+          </thead>
+          <tbody id="sampleTableBody">
+            <!-- Dynamically populated via JS -->
+          </tbody>
+        </table>
+      </div>
+      <div class="note-footer">
+        <i class="fa-solid fa-circle-info"></i>
+        <span>* หมายเหตุ : ราคาในตารางรวมภาษีมูลค่าเพิ่ม (VAT 7%) คำนวณตามมาตรฐานระเบียบการไฟฟ้าส่วนภูมิภาคแล้ว</span>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="pea-footer-logo">
+        <i class="fa-solid fa-bolt"></i> <strong>การไฟฟ้าส่วนภูมิภาค (PEA)</strong>
+      </div>
+      <p>© 2026 Line Guard Estimation System. พัฒนาขึ้นเพื่ออำนวยความสะดวกในการประมาณการค่าครอบฉนวนไฟฟ้าแรงสูง</p>
+      <div class="developer-credit">
+        <i class="fa-solid fa-code"></i> พัฒนาโดย: <strong>นายจาตุรงค์ ทรงภักดี</strong> (พชง.7 ผรผ.กสฟ.น2)
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Theme Toggle Functionality
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeText = document.getElementById('themeText');
+    const htmlElement = document.documentElement;
+
+    function applyTheme(theme) {
+      htmlElement.setAttribute('data-theme', theme);
+      localStorage.setItem('pea_lineguard_theme', theme);
+      
+      if (theme === 'light') {
+        themeIcon.className = 'fa-solid fa-sun';
+        themeText.textContent = 'โหมดสว่าง';
+      } else {
+        themeIcon.className = 'fa-solid fa-moon';
+        themeText.textContent = 'โหมดมืด';
+      }
+    }
+
+    // Initialize Theme
+    const savedTheme = localStorage.getItem('pea_lineguard_theme') || 
+      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    applyTheme(savedTheme);
+
+    themeToggleBtn.addEventListener('click', () => {
+      const currentTheme = htmlElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(newTheme);
+    });
+
+    // Sample data from reference table
+    const sampleData = [
+      { id: 1, days: 1, pieces: 1 },
+      { id: 2, days: 1, pieces: 3 },
+      { id: 3, days: 1, pieces: 5 },
+      { id: 4, days: 1, pieces: 10 },
+      { id: 5, days: 3, pieces: 1 },
+      { id: 6, days: 3, pieces: 3 },
+      { id: 7, days: 3, pieces: 5 },
+      { id: 8, days: 3, pieces: 10 },
+      { id: 9, days: 5, pieces: 1 },
+      { id: 10, days: 5, pieces: 3 },
+      { id: 11, days: 5, pieces: 5 },
+      { id: 12, days: 5, pieces: 10 },
+      { id: 13, days: 7, pieces: 1 },
+      { id: 14, days: 15, pieces: 1 },
+      { id: 15, days: 30, pieces: 1 },
+      { id: 16, days: 7, pieces: 10 },
+      { id: 17, days: 15, pieces: 10 },
+      { id: 18, days: 30, pieces: 10 },
+    ];
+
+    const numDaysInput = document.getElementById('numDays');
+    const numPiecesInput = document.getElementById('numPieces');
+
+    const summaryDetail = document.getElementById('summaryDetail');
+    const equipmentCostText = document.getElementById('equipmentCostText');
+    const installCostText = document.getElementById('installCostText');
+    const subtotalText = document.getElementById('subtotalText');
+    const vatText = document.getElementById('vatText');
+    const grandTotalText = document.getElementById('grandTotalText');
+
+    function formatNumber(num, decimals = 0) {
+      return num.toLocaleString('th-TH', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      });
+    }
+
+    function calculate() {
+      const days = parseInt(numDaysInput.value) || 0;
+      const pieces = parseInt(numPiecesInput.value) || 0;
+
+      const equipmentRate = 100;
+      const installRate = 3500;
+
+      const equipmentCost = days * pieces * equipmentRate;
+      const installCost = (pieces > 0 || days > 0) ? installRate : 0;
+      const subtotal = equipmentCost + installCost;
+      const vat = subtotal * 0.07;
+      const grandTotal = subtotal + vat;
+
+      summaryDetail.textContent = `100 บาท × ${days} วัน × ${pieces} ชิ้น`;
+      equipmentCostText.textContent = `${formatNumber(equipmentCost)} บาท`;
+      installCostText.textContent = `${formatNumber(installCost)} บาท`;
+      subtotalText.textContent = `${formatNumber(subtotal, 2)} บาท`;
+      vatText.textContent = `${formatNumber(vat, 2)} บาท`;
+      grandTotalText.textContent = `${formatNumber(grandTotal, 2)}.-`;
+    }
+
+    function setDays(days) {
+      numDaysInput.value = days;
+      calculate();
+    }
+
+    function setPieces(pieces) {
+      numPiecesInput.value = pieces;
+      calculate();
+    }
+
+    function renderSampleTable() {
+      const tbody = document.getElementById('sampleTableBody');
+      tbody.innerHTML = '';
+
+      sampleData.forEach(item => {
+        const equipCost = item.days * item.pieces * 100;
+        const installCost = 3500;
+        const subtotal = equipCost + installCost;
+        const vat = subtotal * 0.07;
+        const grandTotal = subtotal + vat;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="text-align: center;">${item.id}</td>
+          <td style="text-align: center;">${item.days} วัน</td>
+          <td style="text-align: center;">${item.pieces} ชิ้น</td>
+          <td>
+            <span class="tag-formula">(100 × ${item.days} วัน × ${item.pieces} ชิ้น) = ${formatNumber(equipCost)}.-</span>
+          </td>
+          <td style="text-align: right;">${formatNumber(installCost)}.-</td>
+          <td style="text-align: right;">${formatNumber(subtotal)}.-</td>
+          <td style="text-align: right; color: var(--accent-pea);">${formatNumber(vat, 2)}.-</td>
+          <td style="text-align: right; font-weight: 600; color: var(--accent-secondary);">${formatNumber(grandTotal, 2)}.-</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    numDaysInput.addEventListener('input', calculate);
+    numPiecesInput.addEventListener('input', calculate);
+
+    // Initial calculation and rendering
+    calculate();
+    renderSampleTable();
+  </script>
+</body>
+</html>
