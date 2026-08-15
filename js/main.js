@@ -130,4 +130,19 @@ document.addEventListener('DOMContentLoaded', () => {
             card.style.transform = 'translateY(0)';
         });
     });
+
+    /* ==========================================================================
+       4. Visitor Counter (Mock implementation using localStorage)
+       ========================================================================== */
+    const visitorCountEl = document.getElementById('visitor-count');
+    if (visitorCountEl) {
+        let count = localStorage.getItem('pea_portal_visitor_count');
+        // Initialize a baseline if it doesn't exist
+        if (!count) {
+            count = Math.floor(Math.random() * 50) + 100;
+        }
+        count = parseInt(count) + 1;
+        localStorage.setItem('pea_portal_visitor_count', count);
+        visitorCountEl.textContent = count.toLocaleString('th-TH');
+    }
 });
