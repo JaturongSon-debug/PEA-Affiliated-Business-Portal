@@ -240,65 +240,36 @@
             </div>
 
             <div class="doc-body">
-                <div class="row header-info">
-                    <div class="col">
-                        เลขที่ <input type="text" class="input-red" id="docNo">
-                    </div>
-                    <div class="col text-right">
-                        เขียนที่ <input type="text" class="input-red" id="writeAt">
-                    </div>
-                </div>
-                <div class="row header-date text-right">
-                    วันที่ <input type="text" class="input-red date-input" id="docDay">
-                    เดือน <input type="text" class="input-red date-input-m" id="docMonth">
-                    พ.ศ. <input type="text" class="input-red date-input" id="docYear">
-                </div>
-
-                <div class="row mt-4">
-                    <div class="col-full">
-                        <strong>เรื่อง</strong> ขอใช้บริการบำรุงรักษาหม้อแปลงไฟฟ้า
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-full">
-                        <strong>เรียน</strong> ผู้จัดการ การไฟฟ้าส่วนภูมิภาคจังหวัด อุตรดิตถ์
+                <div class="doc-header-top" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                    <div>เลขที่ <span class="input-red" id="docNo"></span></div>
+                    <div style="text-align: right;">
+                        <div style="margin-bottom: 10px;">เขียนที่ <span class="input-red" id="writeAt"></span></div>
+                        <div>วันที่ <span class="input-red" id="docDay"></span> เดือน <span class="input-red" id="docMonth"></span> พ.ศ. <span class="input-red" id="docYear"></span></div>
                     </div>
                 </div>
 
-                <div class="row mt-4 indent-1">
-                    <div class="col-full">
-                        ข้าพเจ้า <input type="text" class="input-red w-40" id="customerName">
-                        ชื่อกิจการ <input type="text" class="input-red w-40" id="companyName">
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-full">
-                        ตั้งอยู่เลขที่ <input type="text" class="input-red w-15" id="addressNo">
-                        ถนน(ตรอก,ซอย) <input type="text" class="input-red w-20" id="street">
-                        ตำบล <input type="text" class="input-red w-20" id="subDistrict">
-                        อำเภอ <input type="text" class="input-red w-20" id="district">
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-full">
-                        จังหวัด <input type="text" class="input-red w-20" id="province">
-                        โทรศัพท์ <input type="text" class="input-red w-25" id="phone">
-                        โทรสาร <input type="text" class="input-red w-25" id="fax">
-                    </div>
+                <div class="doc-subject" style="margin-bottom: 25px; line-height: 1.6;">
+                    <div><strong>เรื่อง</strong> ขอใช้บริการบำรุงรักษาหม้อแปลงไฟฟ้า</div>
+                    <div><strong>เรียน</strong> ผู้จัดการ การไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์</div>
                 </div>
 
-                <div class="row mt-4">
-                    <div class="col-full">
-                        มีความประสงค์ใช้บริการบำรุงรักษาหม้อแปลงไฟฟ้าจากการไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์
-                    </div>
+                <div class="doc-paragraph" style="text-indent: 50px; margin-bottom: 15px;">
+                    ข้าพเจ้า <span class="input-red" id="customerName"></span> 
+                    ชื่อกิจการ <span class="input-red" id="companyName"></span> 
+                    ตั้งอยู่เลขที่ <span class="input-red" id="addressNo"></span> 
+                    ถนน(ตรอก,ซอย) <span class="input-red" id="street"></span> 
+                    ตำบล <span class="input-red" id="subDistrict"></span> 
+                    อำเภอ <span class="input-red" id="district"></span> 
+                    จังหวัด <span class="input-red" id="province"></span> 
+                    โทรศัพท์ <span class="input-red" id="phone"></span> 
+                    โทรสาร <span class="input-red" id="fax"></span>
                 </div>
-                <div class="row mt-2 indent-1">
-                    <div class="col-full">
-                        ทั้งนี้ ขอให้การไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์ ไปดำเนินการบำรุงรักษาหม้อแปลงไฟฟ้า ของหน่วยงาน / ข้าพเจ้า ดังนี้.- ( เลือกเครื่องหมาย ✔ ลงในช่อง ☐ ตามแพกเกจที่ต้องการใช้บริการ)
-                    </div>
+                
+                <div class="doc-paragraph" style="text-indent: 50px; margin-bottom: 25px;">
+                    มีความประสงค์ใช้บริการบำรุงรักษาหม้อแปลงไฟฟ้าจากการไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์ ทั้งนี้ ขอให้การไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์ ไปดำเนินการบำรุงรักษาหม้อแปลงไฟฟ้า ของหน่วยงาน / ข้าพเจ้า ดังนี้.- (เลือกเครื่องหมาย ✔ ลงในช่อง ☐ ตามแพกเกจที่ต้องการใช้บริการ)
                 </div>
 
-                <table class="package-table mt-4">
+                <table class="package-table" style="margin-bottom: 10px;">
                     <thead>
                         <tr>
                             <th>PACKAGE: A<br>บำรุงรักษาหม้อแปลงขั้นพื้นฐาน</th>
@@ -316,7 +287,7 @@
                         </tr>
                         <tr>
                             <td>
-                                <div class="cb-wrap"><span class="cb" id="cb-A2"></span> Package A2: ระบบ 3 เฟส ขนาดเกินกว่า 250<br>kVA ถึง 1,500 kVA อัตราค่าบริการ 7,000 บาท*</div>
+                                <div class="cb-wrap"><span class="cb" id="cb-A2"></span> Package A2: ระบบ 3 เฟส ขนาดเกินกว่า 250<br>ถึง 1,500 kVA อัตราค่าบริการ 7,000 บาท*</div>
                             </td>
                             <td>
                                 <div class="cb-wrap"><span class="cb" id="cb-B2"></span> Package B2: หม้อแปลงภายในรวมไม่เกิน 2 เครื่อง<br>ไม่เกิน 500 kVA อัตราค่าบริการ 25,000 บาท*</div>
@@ -338,12 +309,9 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="row mt-1 text-right">
-                    <div class="col-full">*เป็นราคาที่ยังไม่รวมภาษีมูลค่าเพิ่ม</div>
-                </div>
-                
-                <!-- NEW: Price Calculation Table added to PDF -->
-                <table class="price-summary-table mt-2">
+                <div style="text-align: right; margin-bottom: 20px; font-size: 14pt;">*เป็นราคาที่ยังไม่รวมภาษีมูลค่าเพิ่ม</div>
+
+                <table class="price-summary-table" style="margin-bottom: 25px;">
                     <tr>
                         <td class="text-right" style="width: 70%;"><strong>ราคาแพ็กเกจที่เลือก:</strong></td>
                         <td class="text-right"><span id="pdf_subtotal" class="input-red">0</span> บาท</td>
@@ -358,82 +326,38 @@
                     </tr>
                 </table>
 
-                <div class="transformer-list mt-4">
-                    <div class="row">
-                        <div class="col-full">
-                            1. หม้อแปลง ขนาด <input type="text" class="input-red w-10" id="tr1_kva"> เควีเอ. หมายเลข พีอีเอ. <input type="text" class="input-red w-30" id="tr1_pea">
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-full">
-                            2. หม้อแปลง ขนาด <input type="text" class="input-red w-10" id="tr2_kva"> เควีเอ. หมายเลข พีอีเอ. <input type="text" class="input-red w-30" id="tr2_pea">
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-full">
-                            3. หม้อแปลง ขนาด <input type="text" class="input-red w-10" id="tr3_kva"> เควีเอ. หมายเลข พีอีเอ. <input type="text" class="input-red w-30" id="tr3_pea">
-                        </div>
-                    </div>
-                    <div class="row mt-2">
-                        <div class="col-full">
-                            4. หม้อแปลง ขนาด <input type="text" class="input-red w-10" id="tr4_kva"> เควีเอ. หมายเลข พีอีเอ. <input type="text" class="input-red w-30" id="tr4_pea">
-                        </div>
-                    </div>
+                <div class="doc-paragraph" style="margin-bottom: 20px; padding-left: 20px;">
+                    1. หม้อแปลง ขนาด <span class="input-red" id="tr1_kva"></span> เควีเอ. หมายเลข พีอีเอ. <span class="input-red" id="tr1_pea"></span><br>
+                    2. หม้อแปลง ขนาด <span class="input-red" id="tr2_kva"></span> เควีเอ. หมายเลข พีอีเอ. <span class="input-red" id="tr2_pea"></span><br>
+                    3. หม้อแปลง ขนาด <span class="input-red" id="tr3_kva"></span> เควีเอ. หมายเลข พีอีเอ. <span class="input-red" id="tr3_pea"></span><br>
+                    4. หม้อแปลง ขนาด <span class="input-red" id="tr4_kva"></span> เควีเอ. หมายเลข พีอีเอ. <span class="input-red" id="tr4_pea"></span>
                 </div>
 
-                <div class="row mt-4">
-                    <div class="col-full">
-                        ในช่วงเวลา <input type="text" class="input-red w-10" id="timeStart"> น. ถึงเวลา <input type="text" class="input-red w-10" id="timeEnd"> น. ในระหว่าง วันที่ <input type="text" class="input-red date-input" id="periodDayStart"> เดือน <input type="text" class="input-red date-input-m" id="periodMonthStart"> พ.ศ. <input type="text" class="input-red date-input" id="periodYearStart">
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-full">
-                        ถึงวันที่ <input type="text" class="input-red date-input" id="periodDayEnd"> เดือน <input type="text" class="input-red date-input-m" id="periodMonthEnd"> พ.ศ. <input type="text" class="input-red date-input" id="periodYearEnd"> และ เพื่อความสะดวกในการดำเนินการกรุณา
-                    </div>
-                </div>
-                <div class="row mt-2">
-                    <div class="col-full">
-                        แจ้งกำหนดวัน เวลา ให้ทราบล่วงหน้าอย่างน้อย ๒ วัน โดยสามารถประสานงาน กับ <input type="text" class="input-red w-40" id="contactPerson">
-                    </div>
-                </div>
-                <div class="row mt-2 text-right">
-                    <div class="col-full">
-                        (ผู้ประสานงาน และ หมายเลขโทรศัพท์)
-                    </div>
+                <div class="doc-paragraph" style="text-indent: 50px; margin-bottom: 15px;">
+                    ในช่วงเวลา <span class="input-red" id="timeStart"></span> น. ถึงเวลา <span class="input-red" id="timeEnd"></span> น. 
+                    ในระหว่าง วันที่ <span class="input-red" id="periodDayStart"></span> เดือน <span class="input-red" id="periodMonthStart"></span> พ.ศ. <span class="input-red" id="periodYearStart"></span> 
+                    ถึงวันที่ <span class="input-red" id="periodDayEnd"></span> เดือน <span class="input-red" id="periodMonthEnd"></span> พ.ศ. <span class="input-red" id="periodYearEnd"></span> 
+                    และเพื่อความสะดวกในการดำเนินการกรุณาแจ้งกำหนดวัน เวลา ให้ทราบล่วงหน้าอย่างน้อย ๒ วัน โดยสามารถประสานงานกับ <span class="input-red" id="contactPerson"></span> (ผู้ประสานงาน และ หมายเลขโทรศัพท์)
                 </div>
 
-                <div class="row mt-4 indent-1">
-                    <div class="col-full">
-                        อนึ่ง หากมีความจำเป็นต้อง กรอง เติม เปลี่ยนถ่ายน้ำมันใหม่และซ่อมแซมอุปกรณ์ที่ชำรุดนั้น ทางหน่วยงาน / ข้าพเจ้า ขอให้การไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์ ดำเนินการพร้อมในคราวเดียวกัน และ ยินดีชำระค่าใช้จ่ายที่เกิดขึ้นตามระเบียบของการไฟฟ้าส่วนภูมิภาค ทุกประการ
-                    </div>
+                <div class="doc-paragraph" style="text-indent: 50px; margin-bottom: 15px;">
+                    อนึ่ง หากมีความจำเป็นต้อง กรอง เติม เปลี่ยนถ่ายน้ำมันใหม่และซ่อมแซมอุปกรณ์ที่ชำรุดนั้น ทางหน่วยงาน / ข้าพเจ้า ขอให้การไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์ ดำเนินการพร้อมในคราวเดียวกัน และ ยินดีชำระค่าใช้จ่ายที่เกิดขึ้นตามระเบียบของการไฟฟ้าส่วนภูมิภาค ทุกประการ
                 </div>
 
-                <div class="row mt-4 indent-1">
-                    <div class="col-full">
-                        จึงเรียนมาเพื่อทราบและดำเนินการต่อไปด้วย
-                    </div>
+                <div class="doc-paragraph" style="text-indent: 50px; margin-bottom: 40px;">
+                    จึงเรียนมาเพื่อทราบและดำเนินการต่อไปด้วย
                 </div>
 
-                <!-- html2pdf pagebreak avoid class to prevent bad jumps -->
-                <div class="signature-section mt-5 html2pdf__page-break">
-                    <div class="row">
-                        <div class="col-half"></div>
-                        <div class="col-half text-center">
-                            <div class="signature-image-container">
-                                <img id="signatureImage" src="" alt="Signature" style="display:none; max-width: 200px; max-height: 80px;">
-                            </div>
-                            
-                            <div class="mt-2">
-                                (ลงชื่อ) <input type="text" class="input-red w-40 text-center" id="signName">
-                            </div>
-                            <div class="mt-2">
-                                (<input type="text" class="input-red w-40 text-center" id="signNamePrinted">)
-                            </div>
-                            <div class="mt-2">
-                                ตำแหน่ง <input type="text" class="input-red w-40 text-center" id="signPosition">
-                            </div>
-                            <div class="mt-2">(ตราประทับ หากมี)</div>
+                <div class="signature-section html2pdf__page-break" style="display: flex; justify-content: flex-end; margin-top: 20px;">
+                    <div style="text-align: center; width: 350px;">
+                        <div class="signature-image-container" style="min-height: 80px; margin-bottom: 10px;">
+                            <img id="signatureImage" src="" alt="Signature" style="display:none; max-width: 250px; max-height: 80px;">
                         </div>
+                        
+                        <div style="margin-bottom: 10px;">(ลงชื่อ) <span class="input-red" id="signName"></span></div>
+                        <div style="margin-bottom: 10px;">(<span class="input-red" id="signNamePrinted"></span>)</div>
+                        <div style="margin-bottom: 10px;">ตำแหน่ง <span class="input-red" id="signPosition"></span></div>
+                        <div style="color: #666;">(ตราประทับ หากมี)</div>
                     </div>
                 </div>
 

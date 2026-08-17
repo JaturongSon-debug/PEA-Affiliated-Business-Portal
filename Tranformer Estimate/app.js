@@ -168,8 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const uiEl = document.getElementById(uiId);
             const docEl = document.getElementById(docId);
             if (uiEl && docEl) {
-                // Must setAttribute so html2pdf captures the value visually without borders
-                docEl.setAttribute('value', uiEl.value); 
+                // Since we changed inputs to spans, use textContent
+                docEl.textContent = uiEl.value; 
             }
         }
 
@@ -177,19 +177,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const signNamePrinted = document.getElementById('ui_signNamePrinted').value;
         const signNameEl = document.getElementById('signName');
         if (signNameEl) {
-            signNameEl.setAttribute('value', signNamePrinted);
+            signNameEl.textContent = signNamePrinted;
         }
 
         // Transfer Dates
         const dateStart = parseDateToThai(document.getElementById('ui_dateStart').value);
-        document.getElementById('periodDayStart').setAttribute('value', dateStart.day);
-        document.getElementById('periodMonthStart').setAttribute('value', dateStart.month);
-        document.getElementById('periodYearStart').setAttribute('value', dateStart.year);
+        document.getElementById('periodDayStart').textContent = dateStart.day;
+        document.getElementById('periodMonthStart').textContent = dateStart.month;
+        document.getElementById('periodYearStart').textContent = dateStart.year;
 
         const dateEnd = parseDateToThai(document.getElementById('ui_dateEnd').value);
-        document.getElementById('periodDayEnd').setAttribute('value', dateEnd.day);
-        document.getElementById('periodMonthEnd').setAttribute('value', dateEnd.month);
-        document.getElementById('periodYearEnd').setAttribute('value', dateEnd.year);
+        document.getElementById('periodDayEnd').textContent = dateEnd.day;
+        document.getElementById('periodMonthEnd').textContent = dateEnd.month;
+        document.getElementById('periodYearEnd').textContent = dateEnd.year;
 
         // Prepare Signature Image
         const signatureImage = document.getElementById('signatureImage');
@@ -200,37 +200,23 @@ document.addEventListener('DOMContentLoaded', () => {
             signatureImage.style.display = 'none';
         }
 
-        // PDF Generation
-        const element = document.getElementById('documentContent');
-        
-        const opt = {
-            margin:       [0, 0, 0, 0], // Strict no margin to prevent weird jumps
-            filename:     'PEA_Transformer_Estimate_Form.pdf',
-            image:        { type: 'jpeg', quality: 1.0 },
-            html2canvas:  { scale: 2, useCORS: true, logging: false },
-            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak:    { mode: 'css', avoid: '.html2pdf__page-break' } // Fix 2.1: Use class to handle breaks
-        };
-
         const originalText = btnReport.innerHTML;
-        btnReport.textContent = "กำลังสร้าง PDF...";
+        btnReport.textContent = "กำลังเปิดหน้าพิมพ์เอกสาร...";
         btnReport.disabled = true;
 
-        const hiddenContainer = document.querySelector('.hidden-pdf-container');
-        // Briefly make it visible but way off-screen for html2canvas
-        hiddenContainer.style.display = 'block';
-
-        html2pdf().set(opt).from(element).save().then(() => {
+        // Set timeout to ensure signature image is fully loaded and layout is updated
+        setTimeout(() => {
+            window.print();
             btnReport.innerHTML = originalText;
             btnReport.disabled = false;
-        });
+        }, 500);
     });
 
     // --- 8. Auto-fill Header Dates (Current Date for "วันที่เขียน") ---
     const today = new Date();
     const thMonths = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
     
-    document.getElementById('docDay').setAttribute('value', today.getDate());
-    document.getElementById('docMonth').setAttribute('value', thMonths[today.getMonth()]);
-    document.getElementById('docYear').setAttribute('value', today.getFullYear() + 543);
+    document.getElementById('docDay').textContent = today.getDate();
+    document.getElementById('docMonth').textContent = thMonths[today.getMonth()];
+    document.getElementById('docYear').textContent = today.getFullYear() + 543;
 });
