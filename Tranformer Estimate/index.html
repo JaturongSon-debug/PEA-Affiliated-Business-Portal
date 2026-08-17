@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบคำนวณประมาณการค่าใช้จ่าย บำรุงรักษาหม้อแปลง กฟภ.</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+</head>
+<body>
+    
+    <!-- ==================== MODERN UI (VISIBLE) ==================== -->
+    <div class="modern-app">
+        
+        <!-- HEADER -->
+        <header class="modern-header">
+            <div class="header-content">
+                <div class="header-logo">
+                    <!-- Clean icon instead of cartoon -->
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M13 10V3L4 14H11V21L20 10H13Z" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="header-text">
+                    <h1>ระบบคำนวณประมาณการค่าใช้จ่าย ของ กฟภ.</h1>
+                    <p>บำรุงรักษาหม้อแปลงไฟฟ้า</p>
+                </div>
+            </div>
+            <button id="themeToggle" class="theme-btn" title="Toggle Light/Dark Mode">
+                <svg id="moonIcon" class="icon-visible" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                <svg id="sunIcon" class="icon-hidden" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            </button>
+        </header>
+
+        <main class="split-layout">
+            
+            <!-- LEFT COLUMN: INPUT FORM -->
+            <div class="left-col">
+                <section class="card input-section">
+                    <div class="section-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                        <h2>ระบุเงื่อนไขการใช้บริการ</h2>
+                    </div>
+
+                    <div class="form-group mb-4">
+                        <label>เลือกแพ็กเกจ (Select Package)</label>
+                        <select id="ui_package_select" class="modern-select">
+                            <option value="" disabled selected>-- กรุณาเลือกแพ็กเกจ --</option>
+                            <optgroup label="PACKAGE A: บำรุงรักษาหม้อแปลงขั้นพื้นฐาน">
+                                <option value="A1" data-price="3000">Package A1: ระบบ 1 และ 3 เฟส ขนาดไม่เกิน 250 kVA (3,000 บาท)</option>
+                                <option value="A2" data-price="7000">Package A2: ระบบ 3 เฟส ขนาดเกินกว่า 250 - 1,500 kVA (7,000 บาท)</option>
+                                <option value="A3" data-price="9000">Package A3: ระบบ 3 เฟส ขนาดเกินกว่า 1,500 kVA (9,000 บาท)</option>
+                            </optgroup>
+                            <optgroup label="PACKAGE B: บำรุงรักษาไฟฟ้าแบบครบวงจร">
+                                <option value="B1" data-price="35000">Package B1: หม้อแปลงภายในรวมไม่เกิน 2 เครื่อง ไม่เกิน 1,500 kVA (35,000 บาท)</option>
+                                <option value="B2" data-price="25000">Package B2: หม้อแปลงภายในรวมไม่เกิน 2 เครื่อง ไม่เกิน 500 kVA (25,000 บาท)</option>
+                                <option value="B3" data-price="20000">Package B3: หม้อแปลงภายในรวม ไม่เกิน 250 kVA (20,000 บาท)</option>
+                                <option value="B4" data-price="10000">Package B4: หม้อแปลงภายในรวมไม่เกิน 50 kVA (10,000 บาท)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <div id="customerFormSection" style="opacity: 0.5; pointer-events: none; transition: opacity 0.3s;">
+                        <label class="section-label">ข้อมูลผู้ใช้บริการ</label>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>ชื่อ-นามสกุล / Name</label>
+                                <input type="text" id="ui_customerName" class="modern-input" placeholder="นาย สมมติ ทดสอบ">
+                            </div>
+                            <div class="form-group">
+                                <label>ชื่อกิจการ / Company</label>
+                                <input type="text" id="ui_companyName" class="modern-input" placeholder="บริษัท เอบีซี จำกัด">
+                            </div>
+                            <div class="form-group full-width">
+                                <label>ที่อยู่ (บ้านเลขที่, ซอย, ถนน) / Address</label>
+                                <div class="address-group">
+                                    <input type="text" id="ui_addressNo" class="modern-input" placeholder="บ้านเลขที่">
+                                    <input type="text" id="ui_street" class="modern-input flex-2" placeholder="ซอย, ถนน">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>ตำบล / Sub-district</label>
+                                <input type="text" id="ui_subDistrict" class="modern-input">
+                            </div>
+                            <div class="form-group">
+                                <label>อำเภอ / District</label>
+                                <input type="text" id="ui_district" class="modern-input">
+                            </div>
+                            <div class="form-group">
+                                <label>จังหวัด / Province</label>
+                                <input type="text" id="ui_province" class="modern-input" value="อุตรดิตถ์">
+                            </div>
+                            <div class="form-group">
+                                <label>โทรศัพท์ / Phone</label>
+                                <input type="text" id="ui_phone" class="modern-input">
+                            </div>
+                        </div>
+
+                        <label class="section-label mt-4">ข้อมูลหม้อแปลง</label>
+                        <div class="transformer-grid">
+                            <div class="tf-row">
+                                <span class="tf-num">1</span>
+                                <input type="text" id="ui_tr1_kva" class="modern-input" placeholder="ขนาด kVA">
+                                <input type="text" id="ui_tr1_pea" class="modern-input flex-2" placeholder="หมายเลข PEA">
+                            </div>
+                            <div class="tf-row">
+                                <span class="tf-num">2</span>
+                                <input type="text" id="ui_tr2_kva" class="modern-input" placeholder="ขนาด kVA">
+                                <input type="text" id="ui_tr2_pea" class="modern-input flex-2" placeholder="หมายเลข PEA">
+                            </div>
+                            <div class="tf-row">
+                                <span class="tf-num">3</span>
+                                <input type="text" id="ui_tr3_kva" class="modern-input" placeholder="ขนาด kVA">
+                                <input type="text" id="ui_tr3_pea" class="modern-input flex-2" placeholder="หมายเลข PEA">
+                            </div>
+                            <div class="tf-row">
+                                <span class="tf-num">4</span>
+                                <input type="text" id="ui_tr4_kva" class="modern-input" placeholder="ขนาด kVA">
+                                <input type="text" id="ui_tr4_pea" class="modern-input flex-2" placeholder="หมายเลข PEA">
+                            </div>
+                        </div>
+
+                        <label class="section-label mt-4">เวลานัดหมายดำเนินการ</label>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>ตั้งแต่วันที่</label>
+                                <input type="date" id="ui_dateStart" class="modern-input">
+                            </div>
+                            <div class="form-group">
+                                <label>ถึงวันที่</label>
+                                <input type="date" id="ui_dateEnd" class="modern-input">
+                            </div>
+                            <div class="form-group">
+                                <label>ตั้งแต่เวลา</label>
+                                <input type="time" id="ui_timeStart" class="modern-input">
+                            </div>
+                            <div class="form-group">
+                                <label>ถึงเวลา</label>
+                                <input type="time" id="ui_timeEnd" class="modern-input">
+                            </div>
+                            <div class="form-group full-width">
+                                <label>ชื่อผู้ประสานงาน พร้อมเบอร์โทรศัพท์</label>
+                                <input type="text" id="ui_contactPerson" class="modern-input">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- RIGHT COLUMN: SUMMARY & SIGNATURE -->
+            <div class="right-col">
+                
+                <section class="card summary-section">
+                    <div class="section-title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        <h2>สรุปรายละเอียดค่าใช้จ่าย</h2>
+                    </div>
+
+                    <div class="summary-card">
+                        <div class="summary-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        </div>
+                        <div class="summary-details">
+                            <h4 id="sum_pkg_name">กรุณาเลือกแพ็กเกจ</h4>
+                            <p id="sum_pkg_desc">-</p>
+                        </div>
+                        <div class="summary-price" id="sum_pkg_price">0 บาท</div>
+                    </div>
+
+                    <div class="calc-section">
+                        <div class="calc-row">
+                            <span>ประมาณการยอดรวมสุทธิ</span>
+                            <span id="calc_subtotal">0 บาท</span>
+                        </div>
+                        <div class="calc-row">
+                            <span>ภาษีมูลค่าเพิ่ม (VAT 7%)</span>
+                            <span id="calc_vat">0 บาท</span>
+                        </div>
+                    </div>
+
+                    <div class="total-section">
+                        <div class="total-label">ยอดรวมทั้งสิ้น (รวม VAT)</div>
+                        <div class="total-amount"><span id="calc_total">0</span> บาท</div>
+                        <div class="total-text" id="calc_text">(ศูนย์บาทถ้วน)</div>
+                    </div>
+                </section>
+
+                <section class="card signature-section" id="signatureSection" style="opacity: 0.5; pointer-events: none; transition: opacity 0.3s;">
+                    <div class="section-title">
+                        <h2>ลงนามรับทราบเงื่อนไข</h2>
+                    </div>
+                    
+                    <div class="sig-pad-wrapper">
+                        <canvas id="modernSignaturePad" width="350" height="150"></canvas>
+                        <button id="ui_clearSignature" class="btn-ghost">ล้างลายเซ็น</button>
+                    </div>
+                    
+                    <div class="form-group mt-3">
+                        <label>ลงชื่อ (ชื่อพิมพ์)</label>
+                        <input type="text" id="ui_signNamePrinted" class="modern-input">
+                    </div>
+                    <div class="form-group mt-3">
+                        <label>ตำแหน่ง</label>
+                        <input type="text" id="ui_signPosition" class="modern-input">
+                    </div>
+                    
+                    <button id="ui_btnReport" class="btn-primary-large mt-4">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        สร้างรายงาน PDF
+                    </button>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ==================== HIDDEN A4 TEMPLATE FOR PDF ==================== -->
+    <div class="hidden-pdf-container">
+        <div id="documentContent" class="document-page a4-format">
+            
+            <div class="doc-header">
+                <div class="doc-logo">
+                    <!-- Base64 or external URL for logo to ensure it loads in pdf -->
+                    <img src="https://upload.wikimedia.org/wikipedia/th/a/ad/Provincial_Electricity_Authority_Logo.png" alt="PEA Logo" width="100">
+                </div>
+                <h2>การไฟฟ้าส่วนภูมิภาค</h2>
+                <h3>PROVINCIAL ELECTRICITY AUTHORITY</h3>
+                <h3 class="doc-title">ใบตอบรับการขอใช้ บริการบำรุงรักษาหม้อแปลงไฟฟ้า</h3>
+            </div>
+
+            <div class="doc-body">
+                <div class="row header-info">
+                    <div class="col">
+                        เลขที่ <input type="text" class="input-red" id="docNo">
+                    </div>
+                    <div class="col text-right">
+                        เขียนที่ <input type="text" class="input-red" id="writeAt">
+                    </div>
+                </div>
+                <div class="row header-date text-right">
+                    วันที่ <input type="text" class="input-red date-input" id="docDay">
+                    เดือน <input type="text" class="input-red date-input-m" id="docMonth">
+                    พ.ศ. <input type="text" class="input-red date-input" id="docYear">
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-full">
+                        <strong>เรื่อง</strong> ขอใช้บริการบำรุงรักษาหม้อแปลงไฟฟ้า
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-full">
+                        <strong>เรียน</strong> ผู้จัดการ การไฟฟ้าส่วนภูมิภาคจังหวัด อุตรดิตถ์
+                    </div>
+                </div>
+
+                <div class="row mt-4 indent-1">
+                    <div class="col-full">
+                        ข้าพเจ้า <input type="text" class="input-red w-40" id="customerName">
+                        ชื่อกิจการ <input type="text" class="input-red w-40" id="companyName">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-full">
+                        ตั้งอยู่เลขที่ <input type="text" class="input-red w-15" id="addressNo">
+                        ถนน(ตรอก,ซอย) <input type="text" class="input-red w-20" id="street">
+                        ตำบล <input type="text" class="input-red w-20" id="subDistrict">
+                        อำเภอ <input type="text" class="input-red w-20" id="district">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-full">
+                        จังหวัด <input type="text" class="input-red w-20" id="province">
+                        โทรศัพท์ <input type="text" class="input-red w-25" id="phone">
+                        โทรสาร <input type="text" class="input-red w-25" id="fax">
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-full">
+                        มีความประสงค์ใช้บริการบำรุงรักษาหม้อแปลงไฟฟ้าจากการไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์
+                    </div>
+                </div>
+                <div class="row mt-2 indent-1">
+                    <div class="col-full">
+                        ทั้งนี้ ขอให้การไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์ ไปดำเนินการบำรุงรักษาหม้อแปลงไฟฟ้า ของหน่วยงาน / ข้าพเจ้า ดังนี้.- ( เลือกเครื่องหมาย ✔ ลงในช่อง ☐ ตามแพกเกจที่ต้องการใช้บริการ)
+                    </div>
+                </div>
+
+                <table class="package-table mt-4">
+                    <thead>
+                        <tr>
+                            <th>PACKAGE: A<br>บำรุงรักษาหม้อแปลงขั้นพื้นฐาน</th>
+                            <th>PACKAGE: B<br>บำรุงรักษาไฟฟ้าแบบครบวงจร</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="cb-wrap"><span class="cb" id="cb-A1"></span> Package A1: ระบบ 1 และ 3 เฟส<br>ขนาดไม่เกิน 250 kVA อัตราค่าบริการ 3,000 บาท*</div>
+                            </td>
+                            <td>
+                                <div class="cb-wrap"><span class="cb" id="cb-B1"></span> Package B1: หม้อแปลงภายในรวมไม่เกิน 2 เครื่อง<br>ไม่เกิน 1,500 kVA อัตราค่าบริการ 35,000 บาท*</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="cb-wrap"><span class="cb" id="cb-A2"></span> Package A2: ระบบ 3 เฟส ขนาดเกินกว่า 250<br>kVA ถึง 1,500 kVA อัตราค่าบริการ 7,000 บาท*</div>
+                            </td>
+                            <td>
+                                <div class="cb-wrap"><span class="cb" id="cb-B2"></span> Package B2: หม้อแปลงภายในรวมไม่เกิน 2 เครื่อง<br>ไม่เกิน 500 kVA อัตราค่าบริการ 25,000 บาท*</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="cb-wrap"><span class="cb" id="cb-A3"></span> Package A3: ระบบ 3 เฟส ขนาดเกินกว่า 1,500<br>kVA อัตราค่าบริการ 9,000 บาท*</div>
+                            </td>
+                            <td>
+                                <div class="cb-wrap"><span class="cb" id="cb-B3"></span> Package B3: หม้อแปลงภายในรวม ไม่เกิน 250<br>kVA อัตราค่าบริการ 20,000 บาท*</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <div class="cb-wrap"><span class="cb" id="cb-B4"></span> Package B4: หม้อแปลงภายในรวมไม่เกิน 50 kVA<br>อัตราค่าบริการ 10,000 บาท*</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row mt-1 text-right">
+                    <div class="col-full">*เป็นราคาที่ยังไม่รวมภาษีมูลค่าเพิ่ม</div>
+                </div>
+                
+                <!-- NEW: Price Calculation Table added to PDF -->
+                <table class="price-summary-table mt-2">
+                    <tr>
+                        <td class="text-right" style="width: 70%;"><strong>ราคาแพ็กเกจที่เลือก:</strong></td>
+                        <td class="text-right"><span id="pdf_subtotal" class="input-red">0</span> บาท</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><strong>ภาษีมูลค่าเพิ่ม (VAT 7%):</strong></td>
+                        <td class="text-right"><span id="pdf_vat" class="input-red">0</span> บาท</td>
+                    </tr>
+                    <tr>
+                        <td class="text-right"><strong>ยอดรวมทั้งสิ้น:</strong></td>
+                        <td class="text-right"><strong class="input-red" id="pdf_total">0</strong> <strong>บาท</strong></td>
+                    </tr>
+                </table>
+
+                <div class="transformer-list mt-4">
+                    <div class="row">
+                        <div class="col-full">
+                            1. หม้อแปลง ขนาด <input type="text" class="input-red w-10" id="tr1_kva"> เควีเอ. หมายเลข พีอีเอ. <input type="text" class="input-red w-30" id="tr1_pea">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-full">
+                            2. หม้อแปลง ขนาด <input type="text" class="input-red w-10" id="tr2_kva"> เควีเอ. หมายเลข พีอีเอ. <input type="text" class="input-red w-30" id="tr2_pea">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-full">
+                            3. หม้อแปลง ขนาด <input type="text" class="input-red w-10" id="tr3_kva"> เควีเอ. หมายเลข พีอีเอ. <input type="text" class="input-red w-30" id="tr3_pea">
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-full">
+                            4. หม้อแปลง ขนาด <input type="text" class="input-red w-10" id="tr4_kva"> เควีเอ. หมายเลข พีอีเอ. <input type="text" class="input-red w-30" id="tr4_pea">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-full">
+                        ในช่วงเวลา <input type="text" class="input-red w-10" id="timeStart"> น. ถึงเวลา <input type="text" class="input-red w-10" id="timeEnd"> น. ในระหว่าง วันที่ <input type="text" class="input-red date-input" id="periodDayStart"> เดือน <input type="text" class="input-red date-input-m" id="periodMonthStart"> พ.ศ. <input type="text" class="input-red date-input" id="periodYearStart">
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-full">
+                        ถึงวันที่ <input type="text" class="input-red date-input" id="periodDayEnd"> เดือน <input type="text" class="input-red date-input-m" id="periodMonthEnd"> พ.ศ. <input type="text" class="input-red date-input" id="periodYearEnd"> และ เพื่อความสะดวกในการดำเนินการกรุณา
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-full">
+                        แจ้งกำหนดวัน เวลา ให้ทราบล่วงหน้าอย่างน้อย ๒ วัน โดยสามารถประสานงาน กับ <input type="text" class="input-red w-40" id="contactPerson">
+                    </div>
+                </div>
+                <div class="row mt-2 text-right">
+                    <div class="col-full">
+                        (ผู้ประสานงาน และ หมายเลขโทรศัพท์)
+                    </div>
+                </div>
+
+                <div class="row mt-4 indent-1">
+                    <div class="col-full">
+                        อนึ่ง หากมีความจำเป็นต้อง กรอง เติม เปลี่ยนถ่ายน้ำมันใหม่และซ่อมแซมอุปกรณ์ที่ชำรุดนั้น ทางหน่วยงาน / ข้าพเจ้า ขอให้การไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์ ดำเนินการพร้อมในคราวเดียวกัน และ ยินดีชำระค่าใช้จ่ายที่เกิดขึ้นตามระเบียบของการไฟฟ้าส่วนภูมิภาค ทุกประการ
+                    </div>
+                </div>
+
+                <div class="row mt-4 indent-1">
+                    <div class="col-full">
+                        จึงเรียนมาเพื่อทราบและดำเนินการต่อไปด้วย
+                    </div>
+                </div>
+
+                <!-- html2pdf pagebreak avoid class to prevent bad jumps -->
+                <div class="signature-section mt-5 html2pdf__page-break">
+                    <div class="row">
+                        <div class="col-half"></div>
+                        <div class="col-half text-center">
+                            <div class="signature-image-container">
+                                <img id="signatureImage" src="" alt="Signature" style="display:none; max-width: 200px; max-height: 80px;">
+                            </div>
+                            
+                            <div class="mt-2">
+                                (ลงชื่อ) <input type="text" class="input-red w-40 text-center" id="signName">
+                            </div>
+                            <div class="mt-2">
+                                (<input type="text" class="input-red w-40 text-center" id="signNamePrinted">)
+                            </div>
+                            <div class="mt-2">
+                                ตำแหน่ง <input type="text" class="input-red w-40 text-center" id="signPosition">
+                            </div>
+                            <div class="mt-2">(ตราประทับ หากมี)</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
