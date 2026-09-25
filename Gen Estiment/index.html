@@ -44,6 +44,10 @@
                 </button>
             </div>
             <p class="subtitle">คำนวณค่าเช่าเครื่องกำเนิดไฟฟ้า, ค่าควบคุมงาน และค่าจัดส่งแบบครบวงจร</p>
+            <div class="nav-pills">
+                <a href="#calculator-form" class="nav-pill active" id="pill-rental"><i class="fa-solid fa-calculator"></i> ประมาณการค่าเช่าเครื่อง</a>
+                <a href="#kwh-calc-section" class="nav-pill" id="pill-kwh"><i class="fa-solid fa-bolt"></i> คำนวณหาหน่วยผลิต (kW/h)</a>
+            </div>
         </header>
 
         <!-- Main Dashboard -->
@@ -162,6 +166,9 @@
                 <div class="download-section">
                     <h3 class="download-title"><i class="fa-solid fa-file-pdf"></i> เอกสารระเบียบอ้างอิง</h3>
                     <div class="download-buttons">
+                        <a href="คำนวณหา kwh จากกระแสและชั่วโมงการเดินเครื่อง.xlsx" download class="download-btn excel-btn">
+                            <i class="fa-solid fa-file-excel"></i> แบบคำนวณ kW/h (.xlsx)
+                        </a>
                         <a href="ระเบียบการคิดค่าเช่าเครื่องกำเนิดไฟฟ้า  (1).pdf" download class="download-btn">
                             <i class="fa-solid fa-download"></i> คิดค่าเช่าเครื่องกำเนิดไฟฟ้า
                         </a>
@@ -253,6 +260,150 @@
                 </div>
             </section>
         </div>
+
+        <!-- Generator Output (kW/h) Calculator Panel -->
+        <section class="panel kwh-panel" id="kwh-calc-section">
+            <div class="panel-header kwh-panel-header">
+                <div class="kwh-header-title">
+                    <div class="kwh-header-icon">
+                        <i class="fa-solid fa-bolt-lightning"></i>
+                    </div>
+                    <div>
+                        <h2>คำนวณหาหน่วยผลิตไฟฟ้า (kW/h) เครื่องกำเนิดไฟฟ้า</h2>
+                        <p class="panel-subtitle">คำนวณหา kW จากกระแสสูงสุด และการเดินเครื่องกำเนิดไฟฟ้า ต่อชั่วโมง ตามสูตร กฟภ.</p>
+                    </div>
+                </div>
+                <div class="formula-tag">
+                    <i class="fa-solid fa-square-root-variable"></i>
+                    <span>สูตร: หน่วยผลิต (kW/h) = <strong>(I ÷ 2) × 0.55424 × H</strong></span>
+                </div>
+            </div>
+
+            <!-- Main Calculation Box -->
+            <div class="kwh-grid">
+                <!-- Inputs Section (ข้อ 1 & 2) -->
+                <div class="kwh-inputs-container">
+                    <!-- Item 1: I Current -->
+                    <div class="kwh-input-card">
+                        <div class="kwh-card-header">
+                            <span class="step-badge">ข้อ 1</span>
+                            <label for="kwh-current-input" class="kwh-label">
+                                <strong>I : กระแสสูงสุดของเฟสใดเฟสหนึ่ง</strong>
+                            </label>
+                        </div>
+                        <div class="kwh-input-wrapper">
+                            <input type="number" id="kwh-current-input" min="0" step="any" value="200" placeholder="ระบุกระแสไฟฟ้า">
+                            <span class="kwh-unit-pill">A (แอมแปร์)</span>
+                        </div>
+                        <div class="kwh-chips-bar">
+                            <span class="chips-label">ค่าลัด:</span>
+                            <button type="button" class="kwh-chip" onclick="setKwhCurrent(50)">50 A</button>
+                            <button type="button" class="kwh-chip" onclick="setKwhCurrent(100)">100 A</button>
+                            <button type="button" class="kwh-chip active" onclick="setKwhCurrent(200)">200 A</button>
+                            <button type="button" class="kwh-chip" onclick="setKwhCurrent(300)">300 A</button>
+                            <button type="button" class="kwh-chip" onclick="setKwhCurrent(400)">400 A</button>
+                        </div>
+                    </div>
+
+                    <!-- Item 2: H Operating Hours -->
+                    <div class="kwh-input-card">
+                        <div class="kwh-card-header">
+                            <span class="step-badge">ข้อ 2</span>
+                            <label for="kwh-hours-input" class="kwh-label">
+                                <strong>H : จำนวนชั่วโมงการเดินเครื่องกำเนิดไฟฟ้า</strong>
+                            </label>
+                        </div>
+                        <div class="kwh-input-wrapper">
+                            <input type="number" id="kwh-hours-input" min="0" step="any" value="7" placeholder="ระบุจำนวนชั่วโมง">
+                            <span class="kwh-unit-pill">ชม. (h)</span>
+                        </div>
+                        <div class="kwh-chips-bar">
+                            <span class="chips-label">ค่าลัด:</span>
+                            <button type="button" class="kwh-chip" onclick="setKwhHours(2)">2 ชม.</button>
+                            <button type="button" class="kwh-chip" onclick="setKwhHours(4)">4 ชม.</button>
+                            <button type="button" class="kwh-chip active" onclick="setKwhHours(7)">7 ชม.</button>
+                            <button type="button" class="kwh-chip" onclick="setKwhHours(8)">8 ชม.</button>
+                            <button type="button" class="kwh-chip" onclick="setKwhHours(12)">12 ชม.</button>
+                            <button type="button" class="kwh-chip" onclick="setKwhHours(24)">24 ชม.</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Card (ข้อ 3) -->
+                <div class="kwh-result-card">
+                    <div class="kwh-result-top">
+                        <span class="step-badge step-badge-result">ข้อ 3</span>
+                        <span class="kwh-result-title">หน่วยผลิตไฟฟ้าที่ได้</span>
+                        <span class="kwh-status-badge"><i class="fa-solid fa-bolt"></i> คำนวณอัตโนมัติ</span>
+                    </div>
+
+                    <div class="kwh-display-box">
+                        <div class="kwh-big-number-row">
+                            <span class="kwh-big-number" id="kwh-result-display">387.97</span>
+                            <span class="kwh-big-unit">kW/h</span>
+                        </div>
+                        <p class="kwh-equiv-text" id="kwh-equiv-text">กำลังผลิตเฉลี่ยประมาณ 55.42 kW ต่อชั่วโมง</p>
+                    </div>
+
+                    <div class="kwh-formula-steps-box">
+                        <div class="steps-title"><i class="fa-solid fa-calculator"></i> แสดงขั้นตอนการคำนวณ:</div>
+                        <div class="steps-formula" id="kwh-calc-steps">
+                            ( <span class="calc-var" id="calc-step-i">200.00</span> ÷ 2 ) × 0.55424 × <span class="calc-var" id="calc-step-h">7.00</span>
+                        </div>
+                    </div>
+
+                    <div class="kwh-card-actions">
+                        <button type="button" class="kwh-action-btn copy-btn" id="kwh-copy-btn" onclick="copyKwhResult()">
+                            <i class="fa-regular fa-copy"></i> คัดลอกผลลัพธ์
+                        </button>
+                        <button type="button" class="kwh-action-btn reset-btn" onclick="resetKwhCalc()">
+                            <i class="fa-solid fa-rotate-left"></i> รีเซ็ต
+                        </button>
+                        <a href="คำนวณหา kwh จากกระแสและชั่วโมงการเดินเครื่อง.xlsx" download class="kwh-action-btn excel-btn">
+                            <i class="fa-solid fa-file-excel"></i> ดาวน์โหลด Excel
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multi-Period Interactive Log Table -->
+            <div class="kwh-table-card">
+                <div class="kwh-table-top-bar">
+                    <div class="kwh-table-title">
+                        <i class="fa-solid fa-table-list"></i>
+                        <h3>ตารางคำนวณหลายช่วงเวลา / หลายวัน (Multi-Period Log)</h3>
+                    </div>
+                    <button type="button" class="kwh-add-row-btn" onclick="addKwhRow()">
+                        <i class="fa-solid fa-plus"></i> เพิ่มแถวบันทึก
+                    </button>
+                </div>
+                <div class="kwh-table-wrapper">
+                    <table class="kwh-data-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px;">ลำดับ</th>
+                                <th>ช่วงเวลา / วันที่ / รายละเอียด</th>
+                                <th style="width: 170px;">กระแสสูงสุด I (A)</th>
+                                <th style="width: 170px;">ชั่วโมงเดินเครื่อง H (ชม.)</th>
+                                <th style="width: 170px;">หน่วยผลิต (kW/h)</th>
+                                <th style="width: 70px; text-align: center;">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kwh-table-rows">
+                            <!-- Populated dynamically via app.js -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="kwh-table-total-row">
+                                <td colspan="3" style="text-align: right;"><strong>รวมทั้งหมด (Total):</strong></td>
+                                <td id="table-total-hours"><strong>0.00 ชม.</strong></td>
+                                <td id="table-total-kwh" class="total-kwh-cell"><strong>0.00 kW/h</strong></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </section>
 
         <!-- Footer -->
         <footer class="app-footer">

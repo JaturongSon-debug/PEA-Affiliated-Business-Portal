@@ -861,3 +861,795 @@ body.light-theme .download-btn:hover {
   }
 }
 
+/* Nav Pills in Header */
+.nav-pills {
+  display: inline-flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.35rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nav-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: var(--transition-smooth);
+}
+
+.nav-pill:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-pill.active {
+  background: linear-gradient(135deg, var(--accent-cyan), #3b82f6);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(6, 182, 212, 0.3);
+}
+
+body.light-theme .nav-pills {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .nav-pill {
+  color: #4b5563;
+}
+
+body.light-theme .nav-pill:hover {
+  color: #111827;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+body.light-theme .nav-pill.active {
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  color: #ffffff;
+}
+
+/* Excel Download Button in Original Download Section */
+.download-btn.excel-btn {
+  border-color: rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.download-btn.excel-btn i {
+  color: #10b981;
+}
+
+.download-btn.excel-btn:hover {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+/* ========================================================
+   kWh Generator Calculator Panel Styles
+   ======================================================== */
+.kwh-panel {
+  margin-top: 2.5rem;
+  scroll-margin-top: 2rem;
+}
+
+.kwh-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.kwh-header-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.kwh-header-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  color: #f59e0b;
+}
+
+.panel-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.2rem;
+  font-weight: 300;
+}
+
+.formula-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(124, 58, 237, 0.12);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 9999px;
+  font-size: 0.82rem;
+  color: #c084fc;
+}
+
+.formula-tag strong {
+  color: #f3f4f6;
+  font-weight: 600;
+}
+
+body.light-theme .formula-tag {
+  background: rgba(124, 58, 237, 0.08);
+  border-color: rgba(124, 58, 237, 0.25);
+  color: #7c3aed;
+}
+
+body.light-theme .formula-tag strong {
+  color: #4c1d95;
+}
+
+/* kWh Grid Layout */
+.kwh-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1.75rem;
+  margin-top: 1.5rem;
+  align-items: stretch;
+}
+
+/* Step Badge */
+.step-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: var(--accent-cyan);
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 6px;
+  letter-spacing: 0.02em;
+}
+
+.step-badge-result {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #10b981;
+}
+
+/* Inputs Container */
+.kwh-inputs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.kwh-input-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  padding: 1.25rem;
+  transition: var(--transition-smooth);
+}
+
+.kwh-input-card:focus-within {
+  border-color: rgba(6, 182, 212, 0.4);
+  background: rgba(6, 182, 212, 0.02);
+  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.08);
+}
+
+body.light-theme .kwh-input-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+body.light-theme .kwh-input-card:focus-within {
+  border-color: #0284c7;
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.1);
+}
+
+.kwh-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.kwh-label {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.kwh-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.kwh-input-wrapper input {
+  width: 100%;
+  padding: 0.85rem 6.5rem 0.85rem 1rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #ffffff;
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  font-weight: 600;
+  transition: var(--transition-smooth);
+}
+
+.kwh-input-wrapper input:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
+}
+
+body.light-theme .kwh-input-wrapper input {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+body.light-theme .kwh-input-wrapper input:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+}
+
+.kwh-unit-pill {
+  position: absolute;
+  right: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  pointer-events: none;
+}
+
+body.light-theme .kwh-unit-pill {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.kwh-chips-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+}
+
+.chips-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-right: 0.25rem;
+}
+
+.kwh-chip {
+  padding: 0.25rem 0.6rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.kwh-chip:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.kwh-chip.active {
+  background: rgba(6, 182, 212, 0.15);
+  border-color: rgba(6, 182, 212, 0.4);
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+body.light-theme .kwh-chip {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #64748b;
+}
+
+body.light-theme .kwh-chip:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+body.light-theme .kwh-chip.active {
+  background: rgba(2, 132, 199, 0.12);
+  border-color: #0284c7;
+  color: #0284c7;
+}
+
+/* Result Card Styles */
+.kwh-result-card {
+  background: linear-gradient(145deg, rgba(16, 185, 129, 0.06), rgba(6, 182, 212, 0.04));
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 20px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.kwh-result-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #10b981, #06b6d4);
+}
+
+body.light-theme .kwh-result-card {
+  background: linear-gradient(145deg, #f0fdf4, #f8fafc);
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.12);
+}
+
+.kwh-result-top {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.kwh-result-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.kwh-status-badge {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: #10b981;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 500;
+}
+
+.kwh-display-box {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+body.light-theme .kwh-display-box {
+  background: #ffffff;
+  border-color: rgba(16, 185, 129, 0.2);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.kwh-big-number-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.kwh-big-number {
+  font-family: var(--font-title);
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #10b981;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 14px rgba(16, 185, 129, 0.35);
+}
+
+.kwh-big-unit {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #34d399;
+}
+
+body.light-theme .kwh-big-number {
+  color: #059669;
+  text-shadow: none;
+}
+
+body.light-theme .kwh-big-unit {
+  color: #047857;
+}
+
+.kwh-equiv-text {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 0.35rem;
+}
+
+.kwh-formula-steps-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+body.light-theme .kwh-formula-steps-box {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.steps-title {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+}
+
+.steps-formula {
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.calc-var {
+  color: var(--accent-cyan);
+  font-weight: 700;
+}
+
+body.light-theme .calc-var {
+  color: #0284c7;
+}
+
+.kwh-card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.3fr;
+  gap: 0.6rem;
+}
+
+.kwh-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition-smooth);
+}
+
+.kwh-action-btn.copy-btn {
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: var(--accent-cyan);
+}
+
+.kwh-action-btn.copy-btn:hover {
+  background: var(--accent-cyan);
+  color: #0f172a;
+  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+}
+
+.kwh-action-btn.reset-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-secondary);
+}
+
+.kwh-action-btn.reset-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+
+.kwh-action-btn.excel-btn {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #10b981;
+}
+
+.kwh-action-btn.excel-btn:hover {
+  background: #10b981;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+body.light-theme .kwh-action-btn.copy-btn {
+  background: rgba(2, 132, 199, 0.1);
+  border-color: rgba(2, 132, 199, 0.3);
+  color: #0284c7;
+}
+
+body.light-theme .kwh-action-btn.copy-btn:hover {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+body.light-theme .kwh-action-btn.reset-btn {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #64748b;
+}
+
+body.light-theme .kwh-action-btn.excel-btn {
+  background: rgba(5, 150, 105, 0.1);
+  border-color: rgba(5, 150, 105, 0.3);
+  color: #059669;
+}
+
+body.light-theme .kwh-action-btn.excel-btn:hover {
+  background: #059669;
+  color: #ffffff;
+}
+
+/* ========================================================
+   Multi-Period Interactive Log Table Styles
+   ======================================================== */
+.kwh-table-card {
+  margin-top: 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  padding: 1.5rem;
+}
+
+body.light-theme .kwh-table-card {
+  background: #ffffff;
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.kwh-table-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.kwh-table-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.kwh-table-title i {
+  color: var(--accent-cyan);
+}
+
+.kwh-table-title h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.kwh-add-row-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 8px;
+  color: var(--accent-cyan);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.kwh-add-row-btn:hover {
+  background: var(--accent-cyan);
+  color: #0f172a;
+}
+
+body.light-theme .kwh-add-row-btn {
+  background: rgba(2, 132, 199, 0.1);
+  border-color: rgba(2, 132, 199, 0.3);
+  color: #0284c7;
+}
+
+body.light-theme .kwh-add-row-btn:hover {
+  background: #0284c7;
+  color: #ffffff;
+}
+
+.kwh-table-wrapper {
+  overflow-x: auto;
+}
+
+.kwh-data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.kwh-data-table th {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: 0.75rem 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: left;
+}
+
+body.light-theme .kwh-data-table th {
+  background: #f8fafc;
+  color: #475569;
+  border-bottom-color: #e2e8f0;
+}
+
+.kwh-data-table td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: middle;
+}
+
+body.light-theme .kwh-data-table td {
+  border-bottom-color: #f1f5f9;
+}
+
+.tbl-input-text,
+.tbl-input-num {
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-family: inherit;
+  transition: var(--transition-smooth);
+}
+
+.tbl-input-num {
+  text-align: right;
+  font-weight: 600;
+  color: #38bdf8;
+}
+
+.tbl-input-text:focus,
+.tbl-input-num:focus {
+  outline: none;
+  border-color: var(--accent-cyan);
+}
+
+body.light-theme .tbl-input-text,
+body.light-theme .tbl-input-num {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+body.light-theme .tbl-input-num {
+  color: #0284c7;
+}
+
+.tbl-calc-kwh {
+  font-weight: 700;
+  color: #10b981;
+  text-align: right;
+  font-family: var(--font-title);
+}
+
+body.light-theme .tbl-calc-kwh {
+  color: #059669;
+}
+
+.tbl-del-btn {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+  transition: var(--transition-smooth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.tbl-del-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.kwh-table-total-row td {
+  padding: 0.9rem 0.85rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid rgba(16, 185, 129, 0.4);
+  font-size: 0.95rem;
+}
+
+body.light-theme .kwh-table-total-row td {
+  background: #f8fafc;
+  border-top-color: #cbd5e1;
+  border-bottom-color: #059669;
+}
+
+.total-kwh-cell {
+  color: #10b981;
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  text-align: right;
+}
+
+body.light-theme .total-kwh-cell {
+  color: #059669;
+}
+
+/* Toast Notification for Copy */
+.kwh-toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: rgba(16, 185, 129, 0.95);
+  color: #ffffff;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 9999;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.kwh-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 900px) {
+  .kwh-grid {
+    grid-template-columns: 1fr;
+  }
+  .kwh-panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .kwh-card-actions {
+    grid-template-columns: 1fr;
+  }
+  .nav-pills {
+    flex-direction: column;
+    width: 100%;
+    border-radius: 14px;
+  }
+  .nav-pill {
+    justify-content: center;
+  }
+}
+
+

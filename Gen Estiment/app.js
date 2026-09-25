@@ -298,4 +298,268 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // คำนวณครั้งแรกเมื่อเปิดหน้าเว็บ
   updateUI();
+
+  // เริ่มต้นระบบคำนวณหน่วยผลิตไฟฟ้า (kW/h)
+  initKwhCalculator();
 });
+
+// ========================================================
+// 5. ระบบคำนวณหน่วยผลิตไฟฟ้า (kW/h) จากกระแสและชั่วโมงการเดินเครื่อง
+// สูตรมาตรฐาน กฟภ.: kW/h = (I / 2) * 0.55424 * H
+// ========================================================
+
+function formatNum(num, decimals = 2) {
+  if (isNaN(num) || num === null || num === undefined) return "0.00";
+  return Number(num).toLocaleString('th-TH', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  });
+}
+
+function calculateKwh() {
+  const currentInput = document.getElementById('kwh-current-input');
+  const hoursInput = document.getElementById('kwh-hours-input');
+  const resultDisplay = document.getElementById('kwh-result-display');
+  const stepI = document.getElementById('calc-step-i');
+  const stepH = document.getElementById('calc-step-h');
+  const equivText = document.getElementById('kwh-equiv-text');
+
+  if (!currentInput || !hoursInput || !resultDisplay) return;
+
+  const I = parseFloat(currentInput.value) || 0;
+  const H = parseFloat(hoursInput.value) || 0;
+
+  // สูตรคำนวณ: (I / 2) * 0.55424 * H
+  const kwh = (I / 2) * 0.55424 * H;
+  const kwAvg = H > 0 ? (kwh / H) : (I / 2) * 0.55424;
+
+  resultDisplay.textContent = formatNum(kwh, 2);
+  if (stepI) stepI.textContent = formatNum(I, 2);
+  if (stepH) stepH.textContent = formatNum(H, 2);
+  if (equivText) {
+    equivText.textContent = `กำลังผลิตเฉลี่ยประมาณ ${formatNum(kwAvg, 2)} kW ต่อชั่วโมง`;
+  }
+}
+
+function setKwhCurrent(val) {
+  const input = document.getElementById('kwh-current-input');
+  if (input) {
+    input.value = val;
+    const card = input.closest('.kwh-input-card');
+    if (card) {
+      const chips = card.querySelectorAll('.kwh-chip');
+      chips.forEach(chip => {
+        const chipVal = parseFloat(chip.textContent);
+        chip.classList.toggle('active', chipVal === val);
+      });
+    }
+    calculateKwh();
+  }
+}
+
+function setKwhHours(val) {
+  const input = document.getElementById('kwh-hours-input');
+  if (input) {
+    input.value = val;
+    const card = input.closest('.kwh-input-card');
+    if (card) {
+      const chips = card.querySelectorAll('.kwh-chip');
+      chips.forEach(chip => {
+        const chipVal = parseFloat(chip.textContent);
+        chip.classList.toggle('active', chipVal === val);
+      });
+    }
+    calculateKwh();
+  }
+}
+
+function resetKwhCalc() {
+  setKwhCurrent(200);
+  setKwhHours(7);
+  calculateKwh();
+  showKwhToast('รีเซ็ตค่าเป็นค่ามาตรฐาน (200 A, 7 ชม.) แล้ว');
+}
+
+function showKwhToast(msg) {
+  let toast = document.querySelector('.kwh-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.className = 'kwh-toast';
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${msg}`;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2500);
+}
+
+function copyKwhResult() {
+  const resultDisplay = document.getElementById('kwh-result-display');
+  const currentInput = document.getElementById('kwh-current-input');
+  const hoursInput = document.getElementById('kwh-hours-input');
+
+  const val = resultDisplay ? resultDisplay.textContent : '0';
+  const I = currentInput ? currentInput.value : '0';
+  const H = hoursInput ? hoursInput.value : '0';
+
+  const textToCopy = `หน่วยผลิตไฟฟ้าเครื่องกำเนิดไฟฟ้า: ${val} kW/h (คำนวณจากกระแสสูงสุด I = ${I} A, ชั่วโมงเดินเครื่อง H = ${H} ชม.)`;
+
+  navigator.clipboard.writeText(textToCopy).then(() => {
+    showKwhToast('คัดลอกผลลัพธ์เรียบร้อยแล้ว!');
+    const btn = document.getElementById('kwh-copy-btn');
+    if (btn) {
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> คัดลอกแล้ว!';
+      setTimeout(() => {
+        btn.innerHTML = originalHTML;
+      }, 2000);
+    }
+  }).catch(() => {
+    showKwhToast(`ผลลัพธ์: ${val} kW/h`);
+  });
+}
+
+// --------------------------------------------------------
+// Multi-Period Table Management
+// --------------------------------------------------------
+let kwhRowCounter = 0;
+
+function addKwhRow(desc = '', iVal = '', hVal = '') {
+  kwhRowCounter++;
+  const tbody = document.getElementById('kwh-table-rows');
+  if (!tbody) return;
+
+  const row = document.createElement('tr');
+  row.id = `kwh-row-${kwhRowCounter}`;
+  row.innerHTML = `
+    <td style="text-align: center; color: var(--text-secondary);">${tbody.children.length + 1}</td>
+    <td><input type="text" class="tbl-input-text" placeholder="ระบุช่วงเวลา/งาน" value="${desc}"></td>
+    <td><input type="number" class="tbl-input-num tbl-i" min="0" step="any" placeholder="0.00" value="${iVal}" oninput="calcTableRow(this)"></td>
+    <td><input type="number" class="tbl-input-num tbl-h" min="0" step="any" placeholder="0.00" value="${hVal}" oninput="calcTableRow(this)"></td>
+    <td class="tbl-calc-kwh">0.00</td>
+    <td style="text-align: center;">
+      <button type="button" class="tbl-del-btn" onclick="deleteKwhRow('${row.id}')" title="ลบแถว">
+        <i class="fa-solid fa-trash-can"></i>
+      </button>
+    </td>
+  `;
+  tbody.appendChild(row);
+
+  if (iVal !== '' && hVal !== '') {
+    calcTableRow(row.querySelector('.tbl-i'));
+  } else {
+    updateTableTotals();
+  }
+}
+
+function deleteKwhRow(rowId) {
+  const row = document.getElementById(rowId);
+  const tbody = document.getElementById('kwh-table-rows');
+  if (row && tbody) {
+    if (tbody.children.length <= 1) {
+      showKwhToast('ต้องมีอย่างน้อย 1 แถวบันทึกครับ');
+      return;
+    }
+    row.remove();
+    // Re-index row numbers
+    Array.from(tbody.children).forEach((r, idx) => {
+      r.children[0].textContent = idx + 1;
+    });
+    updateTableTotals();
+  }
+}
+
+function calcTableRow(inputEl) {
+  const row = inputEl.closest('tr');
+  if (!row) return;
+
+  const iInput = row.querySelector('.tbl-i');
+  const hInput = row.querySelector('.tbl-h');
+  const kwhCell = row.querySelector('.tbl-calc-kwh');
+
+  const I = parseFloat(iInput.value) || 0;
+  const H = parseFloat(hInput.value) || 0;
+  const kwh = (I / 2) * 0.55424 * H;
+
+  kwhCell.textContent = formatNum(kwh, 2);
+  updateTableTotals();
+}
+
+function updateTableTotals() {
+  const tbody = document.getElementById('kwh-table-rows');
+  const totalHoursEl = document.getElementById('table-total-hours');
+  const totalKwhEl = document.getElementById('table-total-kwh');
+  if (!tbody || !totalHoursEl || !totalKwhEl) return;
+
+  let sumHours = 0;
+  let sumKwh = 0;
+
+  tbody.querySelectorAll('tr').forEach(row => {
+    const hInput = row.querySelector('.tbl-h');
+    const iInput = row.querySelector('.tbl-i');
+    const I = parseFloat(iInput?.value) || 0;
+    const H = parseFloat(hInput?.value) || 0;
+    sumHours += H;
+    sumKwh += (I / 2) * 0.55424 * H;
+  });
+
+  totalHoursEl.innerHTML = `<strong>${formatNum(sumHours, 2)} ชม.</strong>`;
+  totalKwhEl.innerHTML = `<strong>${formatNum(sumKwh, 2)} kW/h</strong>`;
+}
+
+function initKwhCalculator() {
+  const currentInput = document.getElementById('kwh-current-input');
+  const hoursInput = document.getElementById('kwh-hours-input');
+
+  if (currentInput) {
+    currentInput.addEventListener('input', () => {
+      const card = currentInput.closest('.kwh-input-card');
+      if (card) {
+        const chips = card.querySelectorAll('.kwh-chip');
+        chips.forEach(chip => {
+          chip.classList.toggle('active', parseFloat(chip.textContent) === parseFloat(currentInput.value));
+        });
+      }
+      calculateKwh();
+    });
+  }
+
+  if (hoursInput) {
+    hoursInput.addEventListener('input', () => {
+      const card = hoursInput.closest('.kwh-input-card');
+      if (card) {
+        const chips = card.querySelectorAll('.kwh-chip');
+        chips.forEach(chip => {
+          chip.classList.toggle('active', parseFloat(chip.textContent) === parseFloat(hoursInput.value));
+        });
+      }
+      calculateKwh();
+    });
+  }
+
+  // Populate default sample rows in table
+  const tbody = document.getElementById('kwh-table-rows');
+  if (tbody && tbody.children.length === 0) {
+    addKwhRow('ช่วงเช้า (ตัวอย่าง)', 180, 4);
+    addKwhRow('ช่วงบ่าย (ตัวอย่าง)', 210, 3.5);
+    addKwhRow('กะค่ำ / จ่ายไฟฉุกเฉิน', 150, 2);
+  }
+
+  calculateKwh();
+
+  // Nav pills active toggle on click
+  const pillRental = document.getElementById('pill-rental');
+  const pillKwh = document.getElementById('pill-kwh');
+  if (pillRental && pillKwh) {
+    pillRental.addEventListener('click', () => {
+      pillRental.classList.add('active');
+      pillKwh.classList.remove('active');
+    });
+    pillKwh.addEventListener('click', () => {
+      pillKwh.classList.add('active');
+      pillRental.classList.remove('active');
+    });
+  }
+}
+
