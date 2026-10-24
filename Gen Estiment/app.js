@@ -1,39 +1,39 @@
 // 1. ฐานข้อมูลอัตราค่าเช่า (Rental Rates)
 const rentalRates = {
   "A": {
-    "3-10":    {"day1": 170,  "day2": 130,  "day3_plus": 100},
-    "25-28":   {"day1": 490,  "day2": 370,  "day3_plus": 300},
-    "56-60":   {"day1": 1200, "day2": 850,  "day3_plus": 680},
-    "120-128": {"day1": 2000, "day2": 1500, "day3_plus": 1200},
-    "300-335": {"day1": 4600, "day2": 3500, "day3_plus": 2800},
-    "500":     {"day1": 7100, "day2": 5400, "day3_plus": 4300},
-    ">500":    {"day1": 12500,"day2": 9300, "day3_plus": 7500}
+    "3-10": { "day1": 170, "day2": 130, "day3_plus": 100 },
+    "25-28": { "day1": 490, "day2": 370, "day3_plus": 300 },
+    "56-60": { "day1": 1200, "day2": 850, "day3_plus": 680 },
+    "120-128": { "day1": 2000, "day2": 1500, "day3_plus": 1200 },
+    "300-335": { "day1": 4600, "day2": 3500, "day3_plus": 2800 },
+    "500": { "day1": 7100, "day2": 5400, "day3_plus": 4300 },
+    ">500": { "day1": 12500, "day2": 9300, "day3_plus": 7500 }
   },
   "B": {
-    "3-10":    {"day1": 250,  "day2": 190,  "day3_plus": 150},
-    "25-28":   {"day1": 730,  "day2": 550,  "day3_plus": 440},
-    "56-60":   {"day1": 1700, "day2": 1300, "day3_plus": 1000},
-    "120-128": {"day1": 3000, "day2": 2300, "day3_plus": 1800},
-    "300-335": {"day1": 6800, "day2": 5200, "day3_plus": 4200},
-    "500":     {"day1": 10600,"day2": 8100, "day3_plus": 6500},
-    ">500":    {"day1": 18400,"day2": 14000,"day3_plus": 11200}
+    "3-10": { "day1": 250, "day2": 190, "day3_plus": 150 },
+    "25-28": { "day1": 730, "day2": 550, "day3_plus": 440 },
+    "56-60": { "day1": 1700, "day2": 1300, "day3_plus": 1000 },
+    "120-128": { "day1": 3000, "day2": 2300, "day3_plus": 1800 },
+    "300-335": { "day1": 6800, "day2": 5200, "day3_plus": 4200 },
+    "500": { "day1": 10600, "day2": 8100, "day3_plus": 6500 },
+    ">500": { "day1": 18400, "day2": 14000, "day3_plus": 11200 }
   }
 };
 
 // 2. ฐานข้อมูลค่าควบคุมงาน (Control Staff Rates)
 const controlRates = {
-  "3-15":   {"staff_by_machine": [1, 1, 2, 2], "rate_per_man_day": 500},
-  "16-28":  {"staff_by_machine": [1, 2, 2, 3], "rate_per_man_day": 1600},
-  "29-128": {"staff_by_machine": [1, 2, 2, 3], "rate_per_man_day": 1600},
-  "300+":   {"staff_by_machine": [2, 3, 4, 5], "rate_per_man_day": 1600}
+  "3-15": { "staff_by_machine": [1, 1, 2, 2], "rate_per_man_day": 500 },
+  "16-28": { "staff_by_machine": [1, 2, 2, 3], "rate_per_man_day": 1600 },
+  "29-128": { "staff_by_machine": [1, 2, 2, 3], "rate_per_man_day": 1600 },
+  "300+": { "staff_by_machine": [2, 3, 4, 5], "rate_per_man_day": 1600 }
 };
 
 // 3. ฐานข้อมูลค่าขนส่ง (Transport Rates)
 const transportRates = {
-  "1-50":   {"truck_300-499": 1000, "truck_500+": 1200, "trailer_3-15": 0, "trailer_16-55": 500,  "trailer_56-119": 800,  "trailer_120-128": 1000},
-  "51-100": {"truck_300-499": 1500, "truck_500+": 1800, "trailer_3-15": 0, "trailer_16-55": 650,  "trailer_56-119": 1100, "trailer_120-128": 1500},
-  "101-150":{"truck_300-499": 2000, "truck_500+": 2400, "trailer_3-15": 0, "trailer_16-55": 800,  "trailer_56-119": 1400, "trailer_120-128": 2000},
-  "151+":   {"truck_300-499": 2500, "truck_500+": 3000, "trailer_3-15": 0, "trailer_16-55": 1000, "trailer_56-119": 1600, "trailer_120-128": 2500}
+  "1-50": { "truck_300-499": 1000, "truck_500+": 1200, "trailer_3-15": 0, "trailer_16-55": 500, "trailer_56-119": 800, "trailer_120-128": 1000 },
+  "51-100": { "truck_300-499": 1500, "truck_500+": 1800, "trailer_3-15": 0, "trailer_16-55": 650, "trailer_56-119": 1100, "trailer_120-128": 1500 },
+  "101-150": { "truck_300-499": 2000, "truck_500+": 2400, "trailer_3-15": 0, "trailer_16-55": 800, "trailer_56-119": 1400, "trailer_120-128": 2000 },
+  "151+": { "truck_300-499": 2500, "truck_500+": 3000, "trailer_3-15": 0, "trailer_16-55": 1000, "trailer_56-119": 1600, "trailer_120-128": 2500 }
 };
 
 // ฟังก์ชันหาช่วงขนาดค่าควบคุมงาน (Control Key Mapping)
@@ -102,14 +102,14 @@ function ThaiBaht(Number) {
   const numStr = Number.toString().split('.');
   let baht = numStr[0];
   let satang = numStr[1] ? numStr[1] : "";
-  
+
   if (satang.length === 1) satang += "0";
-  
+
   let result = "";
   if (parseFloat(Number) === 0) {
     return "ศูนย์บาทถ้วน";
   }
-  
+
   result += NumberToThaiText(baht) + "บาท";
   if (satang === "" || satang === "00") {
     result += "ถ้วน";
@@ -124,11 +124,11 @@ function NumberToThaiText(NumberString) {
   const thaiPositions = ["", "สิบ", "ร้อย", "พัน", "หมื่น", "แสน", "ล้าน"];
   let text = "";
   const len = NumberString.length;
-  
+
   for (let i = 0; i < len; i++) {
     const digit = parseInt(NumberString.charAt(i));
     const position = len - 1 - i;
-    
+
     if (digit !== 0) {
       if (position === 1 && digit === 1) {
         text += "สิบ";
@@ -140,7 +140,7 @@ function NumberToThaiText(NumberString) {
         text += thaiNumbers[digit] + thaiPositions[position % 6];
       }
     }
-    
+
     if (position >= 6 && position % 6 === 0) {
       text += "ล้าน";
     }
@@ -153,7 +153,7 @@ function calculateTotalExpenses(regulationType, customerType, sizeRange, totalDa
   // 1. ค่าเช่ารวม
   let rentalFeePerMachine = 0;
   let totalRentalFee = 0;
-  
+
   if (regulationType === 'rental_reg') {
     rentalFeePerMachine = calculateRentalFee(customerType, sizeRange, totalDays);
     totalRentalFee = rentalFeePerMachine * numMachines;
@@ -244,8 +244,8 @@ function updateUI() {
   const transportKey = getTransportColumnKey(sizeRange);
   let transportMethod = '';
   if (transportKey.startsWith('trailer')) {
-    transportMethod = transportKey === 'trailer_3-15' 
-      ? 'ผู้เช่ารับ-ส่งคืนเอง ณ การไฟฟ้าฯ' 
+    transportMethod = transportKey === 'trailer_3-15'
+      ? 'ผู้เช่ารับ-ส่งคืนเอง ณ การไฟฟ้าฯ'
       : `ลากจูง (Trailer) ขนาด ${transportKey.replace('trailer_', '')} kW`;
   } else {
     transportMethod = `ติดตั้งบนรถยนต์ (Truck) ขนาด ${transportKey.replace('truck_', '')} kW`;
@@ -264,11 +264,11 @@ function stepInput(inputId, direction) {
   const min = parseInt(input.getAttribute('min')) || 1;
   const max = parseInt(input.getAttribute('max')) || 999;
   let val = parseInt(input.value) || min;
-  
+
   val += direction;
   if (val < min) val = min;
   if (val > max) val = max;
-  
+
   input.value = val;
   updateUI();
 }
@@ -276,7 +276,7 @@ function stepInput(inputId, direction) {
 // ตรวจสอบการป้อนข้อมูลและเพิ่ม Event Listeners ทันทีหลังจากโหลดหน้าเว็บสำเร็จ
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('calculator-form');
-  
+
   // เพิ่ม event listener ให้กับทุกอินพุตในฟอร์มเพื่ออัปเดตแบบเรียลไทม์
   form.addEventListener('input', updateUI);
   form.addEventListener('change', updateUI);

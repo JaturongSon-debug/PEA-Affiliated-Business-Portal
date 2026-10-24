@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PEA Solar Estimate | ระบบประมาณการติดตั้ง บำรุงรักษา และจุดคุ้มทุน โซลาร์เซลล์</title>
+    <meta name="description" content="ระบบประมาณการติดตั้งโซลาร์รูฟท็อป ค่าบริการบำรุงรักษา และคำนวณจุดคุ้มทุน (ROI) การไฟฟ้าส่วนภูมิภาค (PEA)">
+
+    <!-- Favicon & PWA Icons -->
+    <link rel="icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <meta name="theme-color" content="#7c3aed">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+
+    <div class="app-layout">
+        <!-- Top Navigation Bar -->
+        <header class="app-header">
+            <div class="header-container">
+                <div class="brand-group">
+                    <a href="../index.html" class="back-portal-btn" title="กลับหน้าหลัก PEA Estimate Portal">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>หน้าหลัก Portal</span>
+                    </a>
+                    <div class="brand-divider"></div>
+                    <div class="brand-title-wrap">
+                        <div class="pea-badge">
+                            <i class="fa-solid fa-solar-panel"></i>
+                        </div>
+                        <div>
+                            <h1 class="main-title">PEA SOLAR <span class="highlight-text">ESTIMATE</span></h1>
+                            <p class="sub-title">ระบบประมาณการติดตั้ง บำรุงรักษา และคำนวณจุดคุ้มทุนพลังงานแสงอาทิตย์</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-actions">
+                    <div class="active-badge">
+                        <span class="pulsing-dot"></span>
+                        <span class="status-label">PEA Standard 2026</span>
+                    </div>
+                    <button id="themeToggleBtn" class="theme-toggle-btn" aria-label="สลับโหมดมืด/สว่าง" title="สลับโหมดมืด/สว่าง">
+                        <i class="fa-solid fa-moon dark-icon"></i>
+                        <i class="fa-solid fa-sun light-icon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <nav class="nav-tabs-wrapper">
+                <div class="nav-tabs">
+                    <button class="tab-button active" data-tab="tab-installation">
+                        <i class="fa-solid fa-hammer"></i>
+                        <span>1. ประมาณการติดตั้ง</span>
+                        <span class="tab-badge" id="installSummaryBadge">เลือกแพ็กเกจ</span>
+                    </button>
+                    <button class="tab-button" data-tab="tab-maintenance">
+                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                        <span>2. บำรุงรักษา & ล้างแผง</span>
+                        <span class="tab-badge secondary" id="maintSummaryBadge">3 - 100 kW</span>
+                    </button>
+                    <button class="tab-button" data-tab="tab-roi">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>3. จุดคุ้มทุน & คืนทุน (ROI)</span>
+                        <span class="tab-badge success" id="roiSummaryBadge">วิเคราะห์ 25 ปี</span>
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-container">
+
+            <!-- ========================================== -->
+            <!-- TAB 1: INSTALLATION ESTIMATOR              -->
+            <!-- ========================================== -->
+            <section id="tab-installation" class="tab-content active">
+                <div class="section-hero">
+                    <div class="hero-left">
+                        <span class="category-pill"><i class="fa-solid fa-bolt"></i> แพ็กเกจระบบโซลาร์เซลล์มาตรฐาน กฟภ.</span>
+                        <h2>เลือกแพ็กเกจติดตั้ง <span class="gradient-text">Solar Rooftop</span></h2>
+                        <p>รวบรวมข้อมูลราคามาตรฐาน กฟภ. ปรับราคาใหม่ (24 มี.ค. 2569) และแพ็กเกจพรีเมียม HUAWEI Solar Solution ราคารวมภาษีมูลค่าเพิ่ม 7% พร้อมการรับประกันและบริการหลังการขาย</p>
+                    </div>
+                    <div class="hero-right quick-stats-box">
+                        <div class="stat-item">
+                            <span class="stat-number">25 ปี</span>
+                            <span class="stat-label">รับประกันประสิทธิภาพแผง</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">10 ปี</span>
+                            <span class="stat-label">รับประกัน Inverter</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">ฟรี 2 ปี</span>
+                            <span class="stat-label">บำรุงรักษาล้างแผง</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-tabs for Package Categories -->
+                <div class="package-category-switcher">
+                    <button class="sub-tab-btn active" data-source="pea-standard">
+                        <i class="fa-solid fa-tags"></i>
+                        <span>แพ็กเกจมาตรฐาน PEA SOLAR (ปรับราคา 2569)</span>
+                    </button>
+                    <button class="sub-tab-btn" data-source="huawei-solution">
+                        <i class="fa-solid fa-crown"></i>
+                        <span>แพ็กเกจพรีเมียม HUAWEI SOLAR SOLUTION</span>
+                    </button>
+                </div>
+
+                <!-- Filters Bar -->
+                <div class="filter-controls-bar">
+                    <div class="filter-group">
+                        <label><i class="fa-solid fa-bolt-lightning"></i> ระบบไฟฟ้า:</label>
+                        <div class="pill-selectors" id="phaseFilterGroup">
+                            <button class="pill-btn active" data-phase="all">ทั้งหมด</button>
+                            <button class="pill-btn" data-phase="1P">1 เฟส (220V)</button>
+                            <button class="pill-btn" data-phase="3P">3 เฟส (380V)</button>
+                        </div>
+                    </div>
+                    <div class="filter-group" id="huaweiTypeFilterGroup" style="display: none;">
+                        <label><i class="fa-solid fa-layer-group"></i> ประเภทระบบ HUAWEI:</label>
+                        <div class="pill-selectors">
+                            <button class="pill-btn active" data-hwtype="all">ทั้งหมด</button>
+                            <button class="pill-btn" data-hwtype="ongrid">ขั้นเริ่มต้น (On-Grid)</button>
+                            <button class="pill-btn" data-hwtype="optimizer">ติดตั้ง Optimizer</button>
+                            <button class="pill-btn" data-hwtype="hybrid">ติดตั้ง แบตเตอรี่ 7 kWh (Hybrid)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Packages Grid Display -->
+                <div class="packages-grid" id="packagesGrid">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+                <!-- Selected Package Sticky Dock -->
+                <div class="selected-package-dock" id="selectedPackageDock">
+                    <div class="dock-info">
+                        <div class="dock-thumb"><i class="fa-solid fa-circle-check"></i></div>
+                        <div>
+                            <div class="dock-title" id="dockPackageName">ยังไม่ได้เลือกแพ็กเกจ</div>
+                            <div class="dock-desc" id="dockPackageSpecs">คลิก 'เลือกแพ็กเกจ' บนการ์ดเพื่อนำไปคำนวณจุดคุ้มทุน</div>
+                        </div>
+                    </div>
+                    <div class="dock-actions">
+                        <div class="dock-price-wrap">
+                            <span class="dock-price-label">ราคาติดตั้งสุทธิ (รวม VAT)</span>
+                            <span class="dock-price-val" id="dockPackagePrice">-</span>
+                        </div>
+                        <button id="dockGotoRoiBtn" class="dock-btn-primary">
+                            <span>ไปคำนวณจุดคุ้มทุน (ROI)</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- TAB 2: MAINTENANCE & CLEANING              -->
+            <!-- ========================================== -->
+            <section id="tab-maintenance" class="tab-content">
+                <div class="section-hero">
+                    <div class="hero-left">
+                        <span class="category-pill green"><i class="fa-solid fa-shield-halved"></i> SOLAR Green Power By PEA</span>
+                        <h2>บริการบำรุงรักษาระบบ <span class="gradient-text emerald">Solar Rooftop</span></h2>
+                        <p>บริการล้างทำความสะอาดแผงโซล่าเซลล์ด้วยน้ำบริสุทธิ์ จัดการพื้นที่โดยรอบไม่ให้เกิดเงาบัง ตรวจสอบความปลอดภัยและประสิทธิภาพ 10 รายการมาตรฐานวิศวกรรม กฟภ.</p>
+                    </div>
+                    <div class="hero-right quick-stats-box green">
+                        <div class="stat-item">
+                            <span class="stat-number">10 รายการ</span>
+                            <span class="stat-label">ตรวจเช็กมาตรฐาน กฟภ.</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">+10-15%</span>
+                            <span class="stat-label">ประสิทธิภาพหลังล้างแผง</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">ฟรี!</span>
+                            <span class="stat-label">ให้คำปรึกษา & สำรวจ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="maintenance-dashboard">
+                    <!-- Left: Service Configuration -->
+                    <div class="maint-config-card glass-panel">
+                        <h3 class="panel-heading"><i class="fa-solid fa-sliders"></i> ระบุขนาดระบบและความถี่บริการ</h3>
+
+                        <!-- Capacity selection -->
+                        <div class="form-control-block">
+                            <label class="control-label">ขนาดติดตั้งระบบ Solar (kW):</label>
+                            <div class="capacity-chips-grid" id="maintCapacityGrid">
+                                <button class="cap-chip active" data-kw="3">3 kW</button>
+                                <button class="cap-chip" data-kw="5">5 kW</button>
+                                <button class="cap-chip" data-kw="10">10 kW</button>
+                                <button class="cap-chip" data-kw="15">15 kW</button>
+                                <button class="cap-chip" data-kw="20">20 kW</button>
+                                <button class="cap-chip" data-kw="50">50 kW</button>
+                                <button class="cap-chip" data-kw="100">100 kW</button>
+                            </div>
+                        </div>
+
+                        <!-- Service Frequency -->
+                        <div class="form-control-block">
+                            <label class="control-label">ความถี่ในการบริการ:</label>
+                            <div class="frequency-radios">
+                                <label class="radio-card active">
+                                    <input type="radio" name="maintFreq" value="1" checked>
+                                    <div class="radio-card-content">
+                                        <div class="radio-title"><i class="fa-solid fa-calendar-check"></i> รายครั้ง (1 ครั้ง/ปี)</div>
+                                        <div class="radio-desc">เหมาะสำหรับบ้านพักอาศัย ดูแลความสะอาดประจำปี</div>
+                                    </div>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="maintFreq" value="2">
+                                    <div class="radio-card-content">
+                                        <div class="radio-title"><i class="fa-solid fa-calendar-days"></i> รายปี (2 ครั้ง/ปี) <span class="tag-discount">แนะนำ</span></div>
+                                        <div class="radio-desc">ล้างช่วงฤดูแล้งและหลังฤดูฝน รักษาประสิทธิภาพสูงสุด</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Total Price Summary Box -->
+                        <div class="maint-price-box">
+                            <div class="price-row">
+                                <span>อัตราค่าบริการมาตรฐาน (ต่อครั้ง):</span>
+                                <span class="val" id="maintBaseRateText">4,890 บาท</span>
+                            </div>
+                            <div class="price-row">
+                                <span>ความถี่บริการ:</span>
+                                <span class="val" id="maintFreqText">1 ครั้ง / ปี</span>
+                            </div>
+                            <div class="price-row highlight">
+                                <span>ประมาณการค่าบำรุงรักษาต่อปี:</span>
+                                <span class="total-price" id="maintTotalPriceText">4,890 บาท/ปี</span>
+                            </div>
+                            <button id="sendMaintToRoiBtn" class="btn-sync-roi">
+                                <i class="fa-solid fa-link"></i> ส่งข้อมูลค่าบำรุงรักษานี้ไปยังการคำนวณจุดคุ้มทุน (ROI)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: PEA 10 Standard Inspection Items -->
+                    <div class="maint-checklist-card glass-panel">
+                        <div class="checklist-header">
+                            <div>
+                                <h3 class="panel-heading"><i class="fa-solid fa-list-check"></i> บริการครอบคลุม 10 รายการตรวจเช็ก</h3>
+                                <p class="checklist-sub">ดำเนินการโดยทีมวิศวกรและช่างผู้เชี่ยวชาญจากการไฟฟ้าส่วนภูมิภาค</p>
+                            </div>
+                            <span class="guarantee-badge"><i class="fa-solid fa-certificate"></i> มาตรฐาน กฟภ.</span>
+                        </div>
+
+                        <div class="checklist-items-grid" id="checklistItemsGrid">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- TAB 3: ROI & BREAK-EVEN CALCULATOR         -->
+            <!-- ========================================== -->
+            <section id="tab-roi" class="tab-content">
+                <div class="section-hero">
+                    <div class="hero-left">
+                        <span class="category-pill gold"><i class="fa-solid fa-coins"></i> วิเคราะห์ความคุ้มค่าทางการเงิน 25 ปี</span>
+                        <h2>คำนวณจุดคุ้มทุน <span class="gradient-text gold">ROI & Payback Period</span></h2>
+                        <p>วิเคราะห์ผลตอบแทนการลงทุน ระยะเวลาคืนทุน กระแสเงินสดสะสมตลอดอายุการใช้งาน 25 ปี พร้อมผลประโยชน์ด้านสิ่งแวดล้อมและการลดก๊าซคาร์บอนไดออกไซด์</p>
+                    </div>
+                    <div class="hero-right quick-stats-box gold">
+                        <div class="stat-item">
+                            <span class="stat-number" id="quickPaybackKpi">-</span>
+                            <span class="stat-label">ระยะเวลาคืนทุน</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="quickRoiKpi">-</span>
+                            <span class="stat-label">ผลตอบแทนสุทธิ 25 ปี</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="quickCo2Kpi">-</span>
+                            <span class="stat-label">ลด CO2 ต่อปี</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="roi-dashboard-grid">
+                    <!-- Left Column: Inputs & Assumptions Form -->
+                    <div class="roi-form-card glass-panel">
+                        <div class="form-header-row">
+                            <h3 class="panel-heading"><i class="fa-solid fa-sliders"></i> พารามิเตอร์การคำนวณ</h3>
+                            <button id="roiResetDefaultsBtn" class="btn-text-small" title="รีเซ็ตเป็นค่าเริ่มต้น">
+                                <i class="fa-solid fa-rotate-left"></i> รีเซ็ต
+                            </button>
+                        </div>
+
+                        <form id="roiForm" onsubmit="event.preventDefault();">
+                            <!-- Package quick select shortcut -->
+                            <div class="form-group">
+                                <label class="input-label" for="roiPackageSelect">
+                                    <span>ดึงข้อมูลจากแพ็กเกจติดตั้ง:</span>
+                                    <span class="input-hint">เลือกเพื่อกรอกต้นทุนอัตโนมัติ</span>
+                                </label>
+                                <select id="roiPackageSelect" class="styled-select">
+                                    <option value="custom">-- กรอกข้อมูลเอง (Custom) --</option>
+                                    <optgroup label="แพ็กเกจมาตรฐาน PEA SOLAR (2569)" id="roiOptGroupPEA">
+                                        <!-- Dynamically populated -->
+                                    </optgroup>
+                                    <optgroup label="HUAWEI SOLAR SOLUTION (พรีเมียม)" id="roiOptGroupHuawei">
+                                        <!-- Dynamically populated -->
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <div class="form-row-2">
+                                <div class="form-group">
+                                    <label class="input-label" for="roiCapacityInput">ขนาดติดตั้ง (kW):</label>
+                                    <div class="input-unit-wrap">
+                                        <input type="number" id="roiCapacityInput" min="1" max="1000" step="0.5" value="5">
+                                        <span class="unit">kW</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-label" for="roiCostInput">เงินลงทุนติดตั้งสุทธิ:</label>
+                                    <div class="input-unit-wrap">
+                                        <input type="number" id="roiCostInput" min="10000" step="1000" value="160500">
+                                        <span class="unit">บาท</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-row-2">
+                                <div class="form-group">
+                                    <label class="input-label" for="roiCurrentBillInput">ค่าไฟปัจจุบันเฉลี่ย:</label>
+                                    <div class="input-unit-wrap">
+                                        <input type="number" id="roiCurrentBillInput" min="500" step="500" value="4500">
+                                        <span class="unit">บาท/ด.</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-label" for="roiTariffRateInput">อัตราค่าไฟฟ้าเฉลี่ย:</label>
+                                    <div class="input-unit-wrap">
+                                        <input type="number" id="roiTariffRateInput" min="2" max="10" step="0.1" value="4.40">
+                                        <span class="unit">บ./หน่วย</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="slider-label-row">
+                                    <label class="input-label" for="roiDaytimeRatioInput">สัดส่วนการใช้ไฟฟ้าช่วงกลางวัน (09:00 - 16:00):</label>
+                                    <span class="slider-value" id="roiDaytimeRatioVal">70%</span>
+                                </div>
+                                <input type="range" id="roiDaytimeRatioInput" min="20" max="100" step="5" value="70" class="styled-range">
+                                <div class="range-milestones">
+                                    <span>20% (อยู่บ้านกลางคืน)</span>
+                                    <span>60-70% (บ้านพักอาศัย/WFH)</span>
+                                    <span>100% (ออฟฟิศ/โรงงาน)</span>
+                                </div>
+                            </div>
+
+                            <div class="form-divider"></div>
+
+                            <!-- Advance options toggle -->
+                            <details class="advanced-params">
+                                <summary class="advanced-summary"><i class="fa-solid fa-cog"></i> ปัจจัยเชิงเทคนิค & การบำรุงรักษาขั้นสูง</summary>
+                                <div class="advanced-content">
+                                    <div class="form-group">
+                                        <label class="checkbox-container">
+                                            <input type="checkbox" id="roiIncludeMaintCheck" checked>
+                                            <span class="checkmark"></span>
+                                            <span>หักลบค่าบริการบำรุงรักษาและล้างแผงรายปี</span>
+                                        </label>
+                                        <div class="input-unit-wrap mt-1" id="roiMaintInputWrap">
+                                            <input type="number" id="roiAnnualMaintInput" min="0" step="500" value="5750">
+                                            <span class="unit">บาท/ปี</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row-2">
+                                        <div class="form-group">
+                                            <label class="input-label" for="roiInflationInput">อัตราค่าไฟปรับขึ้นต่อปี:</label>
+                                            <div class="input-unit-wrap">
+                                                <input type="number" id="roiInflationInput" min="0" max="10" step="0.5" value="2.5">
+                                                <span class="unit">%/ปี</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="input-label" for="roiDegradationInput">อัตราแผงเสื่อมสภาพ:</label>
+                                            <div class="input-unit-wrap">
+                                                <input type="number" id="roiDegradationInput" min="0.1" max="2" step="0.05" value="0.55">
+                                                <span class="unit">%/ปี</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <button type="button" id="roiCalculateBtn" class="btn-calculate-glow">
+                                <i class="fa-solid fa-calculator"></i> คำนวณจุดคุ้มทุนทันที
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Right Column: Results & Interactive Visualization -->
+                    <div class="roi-results-card glass-panel">
+                        <div class="results-top-banner">
+                            <div class="banner-kpi highlight">
+                                <span class="kpi-label"><i class="fa-solid fa-hourglass-half"></i> ระยะเวลาคืนทุน (Payback)</span>
+                                <div class="kpi-big-value" id="kpiPaybackText">3 ปี 8 เดือน</div>
+                                <span class="kpi-subtext" id="kpiPaybackSubtext">จุดคุ้มทุนปีที่ 4</span>
+                            </div>
+                            <div class="banner-kpi">
+                                <span class="kpi-label"><i class="fa-solid fa-piggy-bank"></i> ประหยัดค่าไฟปีแรก</span>
+                                <div class="kpi-big-value accent" id="kpiYear1SavingsText">30,000 บ./ปี</div>
+                                <span class="kpi-subtext" id="kpiMonth1SavingsText">~2,500 บ./เดือน</span>
+                            </div>
+                            <div class="banner-kpi">
+                                <span class="kpi-label"><i class="fa-solid fa-sack-dollar"></i> ผลประโยชน์สุทธิ 25 ปี</span>
+                                <div class="kpi-big-value success" id="kpiNetSavingsText">680,000 บ.</div>
+                                <span class="kpi-subtext" id="kpiRoiPercentText">ROI ~320%</span>
+                            </div>
+                        </div>
+
+                        <!-- Eco & Environment impact pill row -->
+                        <div class="eco-metrics-row">
+                            <div class="eco-chip">
+                                <i class="fa-solid fa-leaf"></i>
+                                <span>ลดปล่อยก๊าซคาร์บอน: <strong id="ecoCo2Val">2.92</strong> ตัน CO₂/ปี</span>
+                            </div>
+                            <div class="eco-chip">
+                                <i class="fa-solid fa-tree"></i>
+                                <span>เทียบเท่าการปลูกต้นไม้: <strong id="ecoTreeVal">292</strong> ต้น/ปี</span>
+                            </div>
+                            <div class="eco-chip">
+                                <i class="fa-solid fa-bolt"></i>
+                                <span>ผลิตไฟฟ้าเฉลี่ย: <strong id="ecoKwhVal">5,840</strong> หน่วย/ปี</span>
+                            </div>
+                        </div>
+
+                        <!-- 25-Year Interactive Cashflow Chart -->
+                        <div class="chart-section">
+                            <div class="chart-header">
+                                <h4 class="chart-title"><i class="fa-solid fa-chart-area"></i> กราฟกระแสเงินสดสะสมและการคืนทุน 25 ปี (Break-even Chart)</h4>
+                                <span class="chart-legend-badge">เส้นตัดสีทอง = จุดคืนทุน</span>
+                            </div>
+                            <div class="chart-canvas-wrapper">
+                                <canvas id="roiCashflowChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Toggle 25-Year Table -->
+                        <details class="data-table-toggle">
+                            <summary class="table-summary-btn"><i class="fa-solid fa-table"></i> แสดงตารางกระแสเงินสดรายปี (ปีที่ 1 - 25)</summary>
+                            <div class="table-responsive-container">
+                                <table class="cashflow-table" id="cashflowTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ปีที่</th>
+                                            <th>ไฟฟ้าที่ผลิต (หน่วย)</th>
+                                            <th>ประหยัดค่าไฟ (บาท)</th>
+                                            <th>ค่าบำรุงรักษา (บาท)</th>
+                                            <th>กระแสเงินสดสุทธิ (บาท)</th>
+                                            <th>เงินสะสมคงเหลือ (บาท)</th>
+                                            <th>สถานะ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cashflowTableBody">
+                                        <!-- Dynamically generated rows -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-inner">
+                <div class="footer-left">
+                    <p><strong>ระบบประมาณการ การติดตั้ง บำรุงรักษา และจุดคุ้มทุน Solar Rooftop (PEA Solar Estimate)</strong></p>
+                    <p class="footer-sub">การไฟฟ้าส่วนภูมิภาค (Provincial Electricity Authority) | ศูนย์รวมระบบประมาณการธุรกิจเกี่ยวเนื่อง</p>
+                </div>
+                <div class="footer-right">
+                    <p><i class="fa-solid fa-code-branch"></i> ผู้พัฒนา: <strong>นายจาตุรงค์ ทรงภักดี</strong> (พชง.7 ผรผ.กสฟ.(น2))</p>
+                    <p class="copyright">&copy; 2026 PEA Affiliated Business Estimation System. All Rights Reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Application Script -->
+    <script src="app.js"></script>
+</body>
+
+</html>
