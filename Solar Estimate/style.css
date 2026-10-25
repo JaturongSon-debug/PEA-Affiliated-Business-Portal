@@ -1539,3 +1539,701 @@ h1, h2, h3, h4, .brand-title, .main-title, .sub-tab-btn, .tab-button {
         text-align: left;
     }
 }
+
+/* ==========================================================================
+   HEADER ACTIONS & NEW BUTTONS
+   ========================================================================== */
+.header-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.88rem;
+    font-weight: 600;
+    font-family: 'Prompt', sans-serif;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    text-decoration: none;
+}
+
+.header-action-btn.primary {
+    background: linear-gradient(135deg, #7c3aed, #9333ea);
+    color: #ffffff;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35);
+}
+
+.header-action-btn.primary:hover {
+    background: linear-gradient(135deg, #6d28d9, #7c3aed);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+}
+
+.header-action-btn.secondary {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--accent-gold);
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+.header-action-btn.secondary:hover {
+    background: rgba(245, 158, 11, 0.25);
+    color: #ffffff;
+    border-color: var(--accent-gold);
+    transform: translateY(-2px);
+}
+
+.dock-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.65rem 1.1rem;
+    border-radius: var(--radius-full);
+    background: rgba(124, 58, 237, 0.18);
+    border: 1px solid var(--pea-purple);
+    color: var(--pea-purple-light);
+    font-family: 'Prompt', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.dock-btn-secondary:hover {
+    background: var(--pea-purple);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   MODALS: QUOTATION & REFERENCE VIEWER
+   ========================================================================== */
+.quote-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    overflow-y: auto;
+}
+
+.quote-modal-backdrop.active {
+    display: flex;
+}
+
+.quote-modal-dialog {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 950px;
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    animation: modalSlideUp 0.25s ease-out;
+}
+
+.quote-modal-dialog.ref-dialog {
+    max-width: 1080px;
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.quote-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: var(--bg-surface-elevated);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.modal-header-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-family: 'Prompt', sans-serif;
+    color: var(--text-primary);
+}
+
+.modal-header-title i {
+    color: var(--pea-purple);
+}
+
+.modal-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.btn-modal-action.print-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, #7c3aed, #9333ea);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-full);
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-modal-action.print-btn:hover {
+    background: linear-gradient(135deg, #6d28d9, #7c3aed);
+    transform: translateY(-2px);
+}
+
+.btn-modal-close {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.btn-modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ef4444;
+}
+
+.quote-sheet-wrapper {
+    overflow-y: auto;
+    padding: 1.5rem;
+    background: #525659;
+    flex: 1;
+}
+
+.quote-sheet {
+    background: #ffffff;
+    color: #1e293b;
+    padding: 2.2rem 2.5rem;
+    border-radius: 6px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    font-family: 'Sarabun', sans-serif;
+    line-height: 1.5;
+}
+
+/* Official Header */
+.quote-sheet-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border-bottom: 2px solid #7c3aed;
+    padding-bottom: 1.2rem;
+    margin-bottom: 1.2rem;
+    gap: 1.2rem;
+}
+
+.quote-pea-emblem {
+    width: 54px;
+    height: 54px;
+    background: #7c3aed;
+    color: #ffffff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.7rem;
+    flex-shrink: 0;
+}
+
+.quote-pea-heading {
+    flex: 1;
+}
+
+.quote-pea-heading h2 {
+    font-family: 'Prompt', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #581c87;
+    margin-bottom: 0.1rem;
+}
+
+.quote-pea-heading h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #6b21a8;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.35rem;
+}
+
+.quote-doc-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.quote-doc-meta {
+    text-align: right;
+    font-size: 0.82rem;
+    color: #475569;
+    line-height: 1.6;
+}
+
+/* Customer Grid */
+.quote-customer-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 0.9rem 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.4rem;
+    font-size: 0.88rem;
+}
+
+.info-row:last-child {
+    margin-bottom: 0;
+}
+
+.info-row label {
+    font-weight: 600;
+    color: #475569;
+    min-width: 110px;
+}
+
+.quote-editable-input {
+    flex: 1;
+    border: 1px dashed #cbd5e1;
+    background: transparent;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 0.88rem;
+    color: #0f172a;
+}
+
+.quote-editable-input:focus {
+    border-color: #7c3aed;
+    background: #ffffff;
+    outline: none;
+}
+
+.info-val-badge {
+    background: #ede9fe;
+    color: #6d28d9;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.82rem;
+}
+
+/* Itemized Cost Table */
+.quote-table-container {
+    margin-bottom: 1.2rem;
+}
+
+.quote-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+}
+
+.quote-table th {
+    background: #7c3aed;
+    color: #ffffff;
+    font-family: 'Prompt', sans-serif;
+    font-weight: 600;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid #6d28d9;
+}
+
+.quote-table td {
+    padding: 0.65rem 0.75rem;
+    border: 1px solid #e2e8f0;
+    color: #1e293b;
+    vertical-align: top;
+}
+
+.quote-table .text-center {
+    text-align: center;
+}
+
+.quote-table .text-right {
+    text-align: right;
+}
+
+.quote-table .item-specs {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin-top: 0.2rem;
+    line-height: 1.4;
+}
+
+.quote-table tfoot td {
+    border: 1px solid #e2e8f0;
+    padding: 0.5rem 0.75rem;
+}
+
+.quote-table tfoot td.no-border {
+    border-left: none;
+    border-bottom: none;
+}
+
+.quote-table tfoot .tfoot-label {
+    text-align: right;
+    font-weight: 600;
+    color: #475569;
+    background: #f8fafc;
+}
+
+.quote-table tfoot .tfoot-val {
+    text-align: right;
+    font-weight: 700;
+    color: #1e293b;
+    background: #f8fafc;
+}
+
+.quote-table tr.grand-total-row td {
+    background: #ede9fe;
+    border-color: #c4b5fd;
+}
+
+.quote-table .baht-text-cell {
+    border-right: none;
+}
+
+.quote-table .baht-box {
+    font-size: 0.85rem;
+    color: #581c87;
+}
+
+.quote-table .grand-total-label {
+    text-align: right;
+    font-weight: 800;
+    color: #581c87;
+    font-size: 0.95rem;
+}
+
+.quote-table .grand-total-val {
+    text-align: right;
+    font-weight: 800;
+    font-size: 1.1rem;
+    color: #6d28d9;
+}
+
+/* Economic & ROI Summary Box */
+.quote-eco-summary {
+    background: #f5f3ff;
+    border: 1px solid #ddd6fe;
+    border-radius: 6px;
+    padding: 0.9rem 1.2rem;
+    margin-bottom: 1.2rem;
+}
+
+.eco-summary-title {
+    font-family: 'Prompt', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #6d28d9;
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.eco-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.6rem;
+}
+
+.eco-metric-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 0.5rem 0.6rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.eco-metric-card.highlight {
+    background: #fef3c7;
+    border-color: #fde68a;
+}
+
+.eco-metric-card .metric-caption {
+    font-size: 0.72rem;
+    color: #64748b;
+    margin-bottom: 0.2rem;
+}
+
+.eco-metric-card .metric-num {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.eco-metric-card.highlight .metric-num {
+    color: #b45309;
+}
+
+.eco-metric-card .metric-unit {
+    font-size: 0.72rem;
+    color: #64748b;
+}
+
+/* Terms */
+.quote-terms-section {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 0.8rem;
+    margin-bottom: 1.2rem;
+    font-size: 0.78rem;
+    color: #64748b;
+}
+
+.quote-terms-section h4 {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 0.3rem;
+}
+
+.quote-terms-section ol {
+    padding-left: 1.2rem;
+    line-height: 1.5;
+}
+
+/* Generic Dotted Signatures */
+.quote-signatures-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1.2rem;
+    padding-top: 0.8rem;
+}
+
+.signature-column {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #334155;
+}
+
+.signature-column .sig-title {
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.signature-column .sig-space {
+    height: 48px;
+}
+
+.signature-column .sig-dotted-line {
+    margin-bottom: 0.35rem;
+}
+
+.signature-column .sig-printed-name {
+    margin-bottom: 0.35rem;
+}
+
+.signature-column .sig-position,
+.signature-column .sig-dept,
+.signature-column .sig-date {
+    font-size: 0.82rem;
+    color: #64748b;
+    margin-bottom: 0.25rem;
+}
+
+/* Reference Modal Body */
+.ref-modal-body {
+    padding: 1.2rem;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.ref-nav-tabs {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--border-medium);
+    padding-bottom: 0.8rem;
+    overflow-x: auto;
+}
+
+.ref-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface-elevated);
+    color: var(--text-secondary);
+    font-family: 'Prompt', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: var(--transition);
+}
+
+.ref-tab-btn:hover {
+    color: var(--text-primary);
+    border-color: var(--pea-purple);
+}
+
+.ref-tab-btn.active {
+    background: var(--pea-purple);
+    color: #ffffff;
+    border-color: var(--pea-purple);
+}
+
+.ref-tab-pane {
+    display: none;
+}
+
+.ref-tab-pane.active {
+    display: block;
+}
+
+.ref-info-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    gap: 1rem;
+}
+
+.ref-download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-full);
+    background: rgba(124, 58, 237, 0.2);
+    border: 1px solid var(--pea-purple);
+    color: var(--pea-purple-light);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.ref-download-btn:hover {
+    background: var(--pea-purple);
+    color: #ffffff;
+}
+
+.ref-image-wrapper {
+    background: #000000;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 70vh;
+}
+
+.ref-preview-img {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+}
+
+/* ==========================================================================
+   PRINT MEDIA QUERY FOR SOLAR QUOTATION
+   ========================================================================== */
+@media print {
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .ambient-glow,
+    .app-header,
+    .main-container,
+    .app-footer,
+    .selected-package-dock,
+    .quote-modal-header,
+    .no-print {
+        display: none !important;
+    }
+
+    .quote-modal-backdrop {
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+        background: transparent !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+
+    .quote-modal-dialog {
+        border: none !important;
+        box-shadow: none !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+    }
+
+    .quote-sheet-wrapper {
+        background: #ffffff !important;
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+
+    .quote-sheet {
+        box-shadow: none !important;
+        padding: 0.5cm 0.8cm !important;
+        color: #000000 !important;
+    }
+
+    .quote-editable-input {
+        border: none !important;
+        padding: 0 !important;
+    }
+}
+

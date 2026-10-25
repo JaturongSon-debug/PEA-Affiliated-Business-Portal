@@ -243,7 +243,143 @@ document.addEventListener('DOMContentLoaded', () => {
     const today = new Date();
     const thMonths = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
     
-    document.getElementById('docDay').textContent = today.getDate();
-    document.getElementById('docMonth').textContent = thMonths[today.getMonth()];
-    document.getElementById('docYear').textContent = today.getFullYear() + 543;
+    const docDayEl = document.getElementById('docDay');
+    if (docDayEl) docDayEl.textContent = today.getDate();
+    const docMonthEl = document.getElementById('docMonth');
+    if (docMonthEl) docMonthEl.textContent = thMonths[today.getMonth()];
+    const docYearEl = document.getElementById('docYear');
+    if (docYearEl) docYearEl.textContent = today.getFullYear() + 543;
+
+    // --- 9. Package Cards & Tabs Switcher ---
+    const tabPkgA = document.getElementById('tabPkgA');
+    const tabPkgB = document.getElementById('tabPkgB');
+    const pkgGridA = document.getElementById('pkgGridA');
+    const pkgGridB = document.getElementById('pkgGridB');
+    const pkgCards = document.querySelectorAll('.pkg-card');
+
+    if (tabPkgA && tabPkgB) {
+        tabPkgA.addEventListener('click', () => {
+            tabPkgA.classList.add('active');
+            tabPkgB.classList.remove('active');
+            pkgGridA.style.display = 'grid';
+            pkgGridB.style.display = 'none';
+        });
+        tabPkgB.addEventListener('click', () => {
+            tabPkgB.classList.add('active');
+            tabPkgA.classList.remove('active');
+            pkgGridB.style.display = 'grid';
+            pkgGridA.style.display = 'none';
+        });
+    }
+
+    pkgCards.forEach(card => {
+        card.addEventListener('click', () => {
+            pkgCards.forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+            const val = card.dataset.val;
+            if (packageSelect) {
+                packageSelect.value = val;
+                packageSelect.dispatchEvent(new Event('change'));
+            }
+        });
+    });
+
+    // Also update active card when dropdown changes
+    packageSelect.addEventListener('change', () => {
+        const val = packageSelect.value;
+        pkgCards.forEach(c => {
+            c.classList.toggle('active', c.dataset.val === val);
+        });
+        if (val.startsWith('A')) {
+            if (tabPkgA && !tabPkgA.classList.contains('active')) tabPkgA.click();
+        } else if (val.startsWith('B')) {
+            if (tabPkgB && !tabPkgB.classList.contains('active')) tabPkgB.click();
+        }
+    });
+
+    // --- 10. Transformer Quotation Modal Logic ---
+    const openTfQuoteBtn = document.getElementById('openTransformerQuoteBtn');
+    const tfModal = document.getElementById('transformerQuoteModal');
+    const closeTfModal = document.getElementById('closeTfModal');
+    const closeTfModal2 = document.getElementById('closeTfModal2');
+    const printTfBtn = document.getElementById('printTfBtn');
+
+    if (openTfQuoteBtn && tfModal) {
+        openTfQuoteBtn.addEventListener('click', () => {
+            if (!packageSelect.value) {
+                alert('กรุณาเลือกแพ็กเกจการบำรุงรักษาก่อนออกใบประมาณการ');
+                return;
+            }
+            const custName = document.getElementById('ui_customerName').value.trim() || 'ผู้ขอใช้บริการทั่วไป';
+            const compName = document.getElementById('ui_companyName').value.trim() || '-';
+            const addrNo = document.getElementById('ui_addressNo').value.trim();
+            const street = document.getElementById('ui_street').value.trim();
+            const subDist = document.getElementById('ui_subDistrict').value.trim();
+            const dist = document.getElementById('ui_district').value.trim();
+            const prov = document.getElementById('ui_province').value.trim();
+            const fullAddr = [addrNo, street, subDist, dist, prov].filter(Boolean).join(' ') || '-';
+            const phone = document.getElementById('ui_phone').value.trim() || '-';
+
+            const opt = packageSelect.options[packageSelect.selectedIndex];
+            const price = parseInt(opt.dataset.price) || 0;
+            const vat = price * 0.07;
+            const total = price + vat;
+
+            const dateStart = document.getElementById('ui_dateStart').value;
+            const dateEnd = document.getElementById('ui_dateEnd').value;
+            const timeStart = document.getElementById('ui_timeStart').value;
+            const timeEnd = document.getElementById('ui_timeEnd').value;
+            let periodText = '-';
+            if (dateStart || dateEnd) {
+                periodText = `${dateStart || ''} ถึง ${dateEnd || ''} ${timeStart ? '(' + timeStart + ' - ' + timeEnd + ' น.)' : ''}`;
+            }
+            const contactPerson = document.getElementById('ui_contactPerson').value.trim() || '-';
+
+            // Gather transformer list
+            const trList = [];
+            for (let i = 1; i <= 4; i++) {
+                const kva = document.getElementById(`ui_tr${i}_kva`)?.value.trim();
+                const pea = document.getElementById(`ui_tr${i}_pea`)?.value.trim();
+                if (kva || pea) {
+                    trList.push(`เครื่องที่ ${i}: ขนาด ${kva || '-'} kVA, หมายเลข PEA: ${pea || '-'}`);
+                }
+            }
+
+            document.getElementById('q-tf-doc-id').textContent = Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('q-tf-cust').textContent = custName;
+            document.getElementById('q-tf-comp').textContent = compName;
+            document.getElementById('q-tf-addr').textContent = fullAddr;
+            document.getElementById('q-tf-phone').textContent = phone;
+            document.getElementById('q-tf-date').textContent = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('q-tf-period').textContent = periodText;
+            document.getElementById('q-tf-contact').textContent = contactPerson;
+
+            document.getElementById('q-tf-list').textContent = trList.length > 0 ? trList.join(' | ') : 'ไม่ได้ระบุหมายเลขหม้อแปลง';
+
+            document.getElementById('q-tf-pkg-title').textContent = `บริการบำรุงรักษาหม้อแปลงไฟฟ้า (${opt.value.startsWith('A') ? 'Package A ขั้นพื้นฐาน' : 'Package B ครบวงจร'})`;
+            document.getElementById('q-tf-pkg-desc').textContent = opt.textContent;
+            document.getElementById('q-tf-pkg-code').textContent = `Package ${opt.value}`;
+            document.getElementById('q-tf-pkg-price').textContent = price.toLocaleString('th-TH') + ' บาท';
+
+            document.getElementById('q-tf-subtotal').textContent = price.toLocaleString('th-TH') + ' บาท';
+            document.getElementById('q-tf-vat').textContent = vat.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' บาท';
+            document.getElementById('q-tf-total').textContent = total.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' บาท';
+            document.getElementById('q-tf-baht-text').textContent = ArabicNumberToText(total);
+
+            tfModal.style.display = 'flex';
+        });
+
+        const hideTfModal = () => { tfModal.style.display = 'none'; };
+        if (closeTfModal) closeTfModal.addEventListener('click', hideTfModal);
+        if (closeTfModal2) closeTfModal2.addEventListener('click', hideTfModal);
+        tfModal.addEventListener('click', (e) => {
+            if (e.target === tfModal) hideTfModal();
+        });
+
+        if (printTfBtn) {
+            printTfBtn.addEventListener('click', () => {
+                window.print();
+            });
+        }
+    }
 });

@@ -1,26 +1,30 @@
 :root {
-    /* Light Theme (Default) */
-    --primary-color: #0d9488; /* Teal color like the reference */
-    --primary-light: #14b8a6;
-    --primary-dark: #0f766e;
-    --bg-main: #f0f4f8; /* Soft blue-gray background */
+    /* Light Theme (PEA Enterprise Palette) */
+    --primary-color: #7c3aed;
+    --primary-light: #9333ea;
+    --primary-dark: #6b21a8;
+    --bg-main: #f8f9fc;
     --bg-card: #ffffff;
-    --text-main: #334155;
+    --text-main: #1e293b;
     --text-muted: #64748b;
     --border-color: #e2e8f0;
-    --accent-color: #0d9488;
+    --accent-color: #f59e0b;
+    --pea-purple: #7c3aed;
+    --pea-amber: #f59e0b;
 }
 
 [data-theme="dark"] {
-    --primary-color: #14b8a6; 
-    --primary-light: #2dd4bf;
-    --primary-dark: #0d9488;
-    --bg-main: #0f172a; /* Dark slate */
-    --bg-card: #1e293b;
+    --primary-color: #9d4edd; 
+    --primary-light: #c77dff;
+    --primary-dark: #7b2cbf;
+    --bg-main: #0b0f19; /* Deep Enterprise Dark */
+    --bg-card: #151c2e;
     --text-main: #f8fafc;
     --text-muted: #94a3b8;
-    --border-color: #334155;
-    --accent-color: #2dd4bf;
+    --border-color: #242f47;
+    --accent-color: #fbbf24;
+    --pea-purple: #9d4edd;
+    --pea-amber: #fbbf24;
 }
 
 * {
@@ -583,5 +587,134 @@ body {
     /* ซ่อนเส้นขอบตกแต่ง หรือสิ่งที่ไม่ต้องการให้แสดงใน Print */
     .hidden-pdf-container span.input-red {
         border-bottom: 1px dotted transparent !important;
+    }
+}
+
+/* ==================== MODERN PACKAGE CARDS UI ==================== */
+.pkg-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+.pkg-tab-btn {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-muted);
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Prompt', sans-serif;
+    transition: all 0.2s;
+    text-align: center;
+}
+.pkg-tab-btn.active {
+    background: var(--primary-color);
+    color: #ffffff;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+.package-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.pkg-card {
+    background: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.pkg-card:hover {
+    border-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(124, 58, 237, 0.15);
+}
+.pkg-card.active {
+    border-color: var(--primary-color);
+    background: rgba(124, 58, 237, 0.08);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25);
+}
+.pkg-card-code {
+    font-family: 'Prompt', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.pkg-card-desc {
+    font-size: 0.825rem;
+    color: var(--text-muted);
+    margin: 8px 0;
+    line-height: 1.4;
+}
+.pkg-card-price {
+    font-family: 'Prompt', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent-color);
+}
+.btn-quote-tf {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #7c3aed, #4c1d95);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Prompt', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35);
+    transition: all 0.2s;
+    margin-top: 15px;
+}
+.btn-quote-tf:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+}
+
+/* Modal Print override */
+@media print {
+    body * {
+        visibility: hidden !important;
+    }
+    #transformerQuoteModal, #transformerQuoteModal * {
+        visibility: visible !important;
+    }
+    #transformerQuoteModal {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        background: white !important;
+        padding: 0 !important;
+        display: block !important;
+    }
+    #transformerQuoteModal .modal-content {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 20px !important;
+        max-width: 100% !important;
+        background: white !important;
+        color: black !important;
+    }
+    #transformerQuoteModal .modal-header button, 
+    #transformerQuoteModal .modal-footer {
+        display: none !important;
     }
 }

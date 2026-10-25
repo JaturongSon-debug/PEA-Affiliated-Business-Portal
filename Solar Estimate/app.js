@@ -588,6 +588,8 @@ document.addEventListener("DOMContentLoaded", () => {
     initInstallationModule();
     initMaintenanceModule();
     initRoiModule();
+    initSolarQuoteModal();
+    initSolarReferenceModal();
 });
 
 // Theme Initialization & Switcher with Global Sync
@@ -1415,3 +1417,245 @@ function updateChartTheme(theme) {
     appState.roi.chartInstance.options.plugins.legend.labels.color = textColor;
     appState.roi.chartInstance.update();
 }
+
+// ==========================================
+// 8. THAI BAHT TEXT CONVERTER
+// ==========================================
+function ThaiBaht(num) {
+    if (num === null || num === undefined || isNaN(num)) return "-";
+    num = Math.round(Number(num) * 100) / 100;
+    const numStr = num.toFixed(2);
+    const [intPart, decPart] = numStr.split(".");
+
+    const digits = ["ศูนย์", "หนึ่ง", "สอง", "สาม", "สี่", "ห้า", "หก", "เจ็ด", "แปด", "เก้า"];
+    const positions = ["", "สิบ", "ร้อย", "พัน", "หมื่น", "แสน", "ล้าน"];
+
+    function convertSection(s) {
+        let result = "";
+        const len = s.length;
+        for (let i = 0; i < len; i++) {
+            const digit = parseInt(s[i], 10);
+            const pos = len - i - 1;
+            if (digit !== 0) {
+                if (pos === 1 && digit === 1) {
+                    result += "สิบ";
+                } else if (pos === 1 && digit === 2) {
+                    result += "ยี่สิบ";
+                } else if (pos === 0 && digit === 1 && len > 1 && s[len - 2] !== "0") {
+                    result += "เอ็ด";
+                } else {
+                    result += digits[digit] + positions[pos];
+                }
+            }
+        }
+        return result;
+    }
+
+    let intText = "";
+    if (parseInt(intPart, 10) === 0) {
+        intText = "ศูนย์บาท";
+    } else {
+        intText = convertSection(intPart) + "บาท";
+    }
+
+    let decText = "";
+    if (decPart === "00") {
+        decText = "ถ้วน";
+    } else {
+        if (decPart[0] === "1") {
+            decText += "สิบ";
+        } else if (decPart[0] === "2") {
+            decText += "ยี่สิบ";
+        } else if (decPart[0] !== "0") {
+            decText += digits[parseInt(decPart[0], 10)] + "สิบ";
+        }
+
+        if (decPart[1] === "1" && decPart[0] !== "0") {
+            decText += "เอ็ดสตางค์";
+        } else if (decPart[1] !== "0") {
+            decText += digits[parseInt(decPart[1], 10)] + "สตางค์";
+        } else {
+            decText += "สตางค์";
+        }
+    }
+
+    return intText + decText;
+}
+
+// ==========================================
+// 9. MODULE: SOLAR QUOTATION & ESTIMATION
+// ==========================================
+function initSolarQuoteModal() {
+    const modal = document.getElementById("solarQuoteModal");
+    const openBtn = document.getElementById("openSolarQuoteBtn");
+    const dockOpenBtn = document.getElementById("dockOpenQuoteBtn");
+    const closeBtn = document.getElementById("closeSolarQuoteBtn");
+    const printBtn = document.getElementById("printSolarQuoteBtn");
+
+    if (!modal) return;
+
+    function openQuote() {
+        populateSolarQuote();
+        modal.classList.add("active");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeQuote() {
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+    }
+
+    if (openBtn) openBtn.addEventListener("click", openQuote);
+    if (dockOpenBtn) dockOpenBtn.addEventListener("click", openQuote);
+    if (closeBtn) closeBtn.addEventListener("click", closeQuote);
+
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeQuote();
+    });
+
+    if (printBtn) {
+        printBtn.addEventListener("click", () => {
+            window.print();
+        });
+    }
+}
+
+function populateSolarQuote() {
+    // Determine active package
+    let pkg = appState.selectedPackage;
+    if (!pkg) {
+        const defaultPkg = PEA_SOLAR_PACKAGES[1]; // 5 kW 1P
+        pkg = {
+            id: defaultPkg.id,
+            name: `PEA Solar ${defaultPkg.capacity} kW (${defaultPkg.phaseLabel})`,
+            capacity: defaultPkg.capacity,
+            price: defaultPkg.pricing.microOrOptimizer ? defaultPkg.pricing.microOrOptimizer.price : 160500,
+            desc: `${defaultPkg.capacity} kW ${defaultPkg.phaseLabel} (${defaultPkg.pricing.microOrOptimizer.inverterBrand} + ${defaultPkg.pricing.microOrOptimizer.panelBrand})`,
+            annualGeneration: defaultPkg.annualGeneration
+        };
+    }
+
+    // Set Document ID & Thai Date
+    const today = new Date();
+    const thaiMonths = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+    const thaiDateStr = `${today.getDate()} ${thaiMonths[today.getMonth()]} ${today.getFullYear() + 543}`;
+    const docNo = `PEA-SOLAR-2569-${String(today.getDate()).padStart(2, "0")}${String(today.getMonth() + 1).padStart(2, "0")}-${Math.floor(100 + Math.random() * 900)}`;
+
+    const sqDocNo = document.getElementById("sqDocNo");
+    const sqDocDate = document.getElementById("sqDocDate");
+    const sqCustomerPhase = document.getElementById("sqCustomerPhase");
+    if (sqDocNo) sqDocNo.textContent = docNo;
+    if (sqDocDate) sqDocDate.textContent = thaiDateStr;
+    if (sqCustomerPhase) sqCustomerPhase.textContent = pkg.desc.includes("3 เฟส") ? "3 เฟส 380V" : "1 เฟส 220V";
+
+    // Item 1: Installation Package
+    const sqItem1Title = document.getElementById("sqItem1Title");
+    const sqItem1Specs = document.getElementById("sqItem1Specs");
+    const sqItem1UnitPrice = document.getElementById("sqItem1UnitPrice");
+    const sqItem1Total = document.getElementById("sqItem1Total");
+
+    if (sqItem1Title) sqItem1Title.textContent = `งานจัดหาและติดตั้งระบบ Solar Rooftop (${pkg.name})`;
+    if (sqItem1Specs) sqItem1Specs.textContent = `รายละเอียดอุปกรณ์: ${pkg.desc} พร้อมโครงสร้างยึดและระบบความปลอดภัย กฟภ. ครบวงจร`;
+    if (sqItem1UnitPrice) sqItem1UnitPrice.textContent = formatMoney(pkg.price);
+    if (sqItem1Total) sqItem1Total.textContent = formatMoney(pkg.price);
+
+    // Item 2: Maintenance
+    const maintCap = appState.maintenance.selectedCapacity || pkg.capacity;
+    const maintFreq = appState.maintenance.frequency || 1;
+    const maintAnnual = (MAINTENANCE_RATES[maintCap] || 5750) * maintFreq;
+
+    const sqItem2Title = document.getElementById("sqItem2Title");
+    const sqItem2Specs = document.getElementById("sqItem2Specs");
+    const sqItem2Qty = document.getElementById("sqItem2Qty");
+    const sqItem2UnitPrice = document.getElementById("sqItem2UnitPrice");
+    const sqItem2Total = document.getElementById("sqItem2Total");
+
+    if (sqItem2Title) sqItem2Title.textContent = `บริการบำรุงรักษาและล้างทำความสะอาดแผง (SOLAR Green Power) ขนาด ${maintCap} kW`;
+    if (sqItem2Specs) sqItem2Specs.textContent = `ตรวจเช็กมาตรฐานวิศวกรรม กฟภ. 10 รายการ ด้วยน้ำบริสุทธิ์และกล้องถ่ายภาพความร้อน (${maintFreq} ครั้ง/ปี)`;
+    if (sqItem2Qty) sqItem2Qty.textContent = `${maintFreq} ครั้ง/ปี`;
+    if (sqItem2UnitPrice) sqItem2UnitPrice.textContent = formatMoney(MAINTENANCE_RATES[maintCap] || 5750);
+    if (sqItem2Total) sqItem2Total.textContent = formatMoney(maintAnnual);
+
+    // Totals & VAT
+    const totalWithVat = pkg.price + maintAnnual;
+    const subtotal = Math.round((totalWithVat / 1.07) * 100) / 100;
+    const vat = Math.round((totalWithVat - subtotal) * 100) / 100;
+
+    const sqSubtotal = document.getElementById("sqSubtotal");
+    const sqVat = document.getElementById("sqVat");
+    const sqGrandTotal = document.getElementById("sqGrandTotal");
+    const sqBahtText = document.getElementById("sqBahtText");
+
+    if (sqSubtotal) sqSubtotal.textContent = subtotal.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (sqVat) sqVat.textContent = vat.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (sqGrandTotal) sqGrandTotal.textContent = totalWithVat.toLocaleString("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (sqBahtText) sqBahtText.textContent = `( ${ThaiBaht(totalWithVat)} )`;
+
+    // Metrics summary
+    const annualGen = pkg.annualGeneration || (pkg.capacity * 4 * 365 * 0.8);
+    const monthlySave = Math.round((annualGen * (appState.roi.tariffRate || 4.40) * 0.7) / 12);
+    const payback = (totalWithVat / (monthlySave * 12)).toFixed(1);
+    const total25Save = Math.round(monthlySave * 12 * 25 * 0.95);
+    const co2Offset = ((annualGen * 0.5) / 1000).toFixed(2);
+
+    const sqMetricGen = document.getElementById("sqMetricGen");
+    const sqMetricSavings = document.getElementById("sqMetricSavings");
+    const sqMetricRoi = document.getElementById("sqMetricRoi");
+    const sqMetricTotalSave = document.getElementById("sqMetricTotalSave");
+    const sqMetricCo2 = document.getElementById("sqMetricCo2");
+
+    if (sqMetricGen) sqMetricGen.textContent = formatMoney(annualGen);
+    if (sqMetricSavings) sqMetricSavings.textContent = formatMoney(monthlySave);
+    if (sqMetricRoi) sqMetricRoi.textContent = payback;
+    if (sqMetricTotalSave) sqMetricTotalSave.textContent = formatMoney(total25Save);
+    if (sqMetricCo2) sqMetricCo2.textContent = co2Offset;
+}
+
+// ==========================================
+// 10. MODULE: PEA STANDARD REFERENCES MODAL
+// ==========================================
+function initSolarReferenceModal() {
+    const modal = document.getElementById("solarReferenceModal");
+    const openBtn = document.getElementById("openSolarRefBtn");
+    const closeBtn = document.getElementById("closeSolarRefBtn");
+
+    if (!modal) return;
+
+    function openRef() {
+        modal.classList.add("active");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+    }
+
+    function closeRef() {
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+    }
+
+    if (openBtn) openBtn.addEventListener("click", openRef);
+    if (closeBtn) closeBtn.addEventListener("click", closeRef);
+
+    modal.addEventListener("click", (e) => {
+        if (e.target === modal) closeRef();
+    });
+
+    // Reference tab switching
+    const tabBtns = modal.querySelectorAll(".ref-tab-btn");
+    const tabPanes = modal.querySelectorAll(".ref-tab-pane");
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            tabBtns.forEach(b => b.classList.remove("active"));
+            tabPanes.forEach(p => p.classList.remove("active"));
+
+            btn.classList.add("active");
+            const targetId = btn.getAttribute("data-ref-target");
+            const targetPane = document.getElementById(targetId);
+            if (targetPane) targetPane.classList.add("active");
+        });
+    });
+}
+

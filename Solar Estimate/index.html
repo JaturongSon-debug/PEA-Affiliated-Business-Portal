@@ -58,6 +58,14 @@
                 </div>
 
                 <div class="header-actions">
+                    <button id="openSolarQuoteBtn" class="header-action-btn primary" title="ออกใบประมาณการค่าบริการโซลาร์">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                        <span>ออกใบประมาณการ</span>
+                    </button>
+                    <button id="openSolarRefBtn" class="header-action-btn secondary" title="ดูเอกสารอ้างอิงและตารางราคา กฟภ.">
+                        <i class="fa-solid fa-book-open"></i>
+                        <span>เอกสารอ้างอิง กฟภ.</span>
+                    </button>
                     <div class="active-badge">
                         <span class="pulsing-dot"></span>
                         <span class="status-label">PEA Standard 2026</span>
@@ -172,6 +180,10 @@
                             <span class="dock-price-label">ราคาติดตั้งสุทธิ (รวม VAT)</span>
                             <span class="dock-price-val" id="dockPackagePrice">-</span>
                         </div>
+                        <button id="dockOpenQuoteBtn" class="dock-btn-secondary" title="ออกใบประมาณการสำหรับแพ็กเกจนี้">
+                            <i class="fa-solid fa-file-invoice-dollar"></i>
+                            <span>ออกใบประมาณการ</span>
+                        </button>
                         <button id="dockGotoRoiBtn" class="dock-btn-primary">
                             <span>ไปคำนวณจุดคุ้มทุน (ROI)</span>
                             <i class="fa-solid fa-arrow-right"></i>
@@ -514,6 +526,275 @@
                 </div>
             </div>
         </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 1: OFFICIAL SOLAR QUOTATION MODAL    -->
+    <!-- ========================================== -->
+    <div id="solarQuoteModal" class="quote-modal-backdrop" aria-hidden="true">
+        <div class="quote-modal-dialog">
+            <div class="quote-modal-header no-print">
+                <div class="modal-header-title">
+                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                    <span>ใบประมาณการค่าบริการระบบโซลาร์รูฟท็อป (PEA Solar Rooftop Estimate)</span>
+                </div>
+                <div class="modal-header-actions">
+                    <button type="button" class="btn-modal-action print-btn" id="printSolarQuoteBtn" title="พิมพ์ใบประมาณการ / PDF">
+                        <i class="fa-solid fa-print"></i> พิมพ์ / บันทึก PDF
+                    </button>
+                    <button type="button" class="btn-modal-close" id="closeSolarQuoteBtn" aria-label="ปิด">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="quote-sheet-wrapper">
+                <div class="quote-sheet" id="solarQuoteSheet">
+                    <!-- PEA Official Header -->
+                    <div class="quote-sheet-header">
+                        <div class="quote-pea-emblem">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <div class="quote-pea-heading">
+                            <h2>การไฟฟ้าส่วนภูมิภาค</h2>
+                            <h3>PROVINCIAL ELECTRICITY AUTHORITY</h3>
+                            <p class="quote-doc-title">ใบประมาณการค่าบริการติดตั้งและบำรุงรักษาระบบผลิตไฟฟ้าพลังงานแสงอาทิตย์บนหลังคา (Solar Rooftop)</p>
+                        </div>
+                        <div class="quote-doc-meta">
+                            <div class="doc-meta-row"><strong>เลขที่เอกสาร:</strong> <span id="sqDocNo">PEA-SOLAR-2569-0089</span></div>
+                            <div class="doc-meta-row"><strong>วันที่ออกเอกสาร:</strong> <span id="sqDocDate">-</span></div>
+                            <div class="doc-meta-row"><strong>อายุใบเสนอราคา:</strong> <span>30 วัน</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Info Grid -->
+                    <div class="quote-customer-grid">
+                        <div class="customer-info-col">
+                            <div class="info-row">
+                                <label>ชื่อผู้ขอรับบริการ:</label>
+                                <input type="text" id="sqCustomerName" class="quote-editable-input" value="ลูกค้าทั่วไป / เจ้าของอาคาร" placeholder="ระบุชื่อลูกค้า / บริษัท">
+                            </div>
+                            <div class="info-row">
+                                <label>สถานที่ติดตั้ง:</label>
+                                <input type="text" id="sqCustomerAddress" class="quote-editable-input" value="กรุงเทพมหานคร และปริมณฑล" placeholder="ระบุเลขที่ตั้ง อาคาร ตำบล อำเภอ จังหวัด">
+                            </div>
+                        </div>
+                        <div class="customer-info-col">
+                            <div class="info-row">
+                                <label>ระบบไฟฟ้า:</label>
+                                <span id="sqCustomerPhase" class="info-val-badge">1 เฟส 220V</span>
+                            </div>
+                            <div class="info-row">
+                                <label>เบอร์โทรติดต่อ:</label>
+                                <input type="text" id="sqCustomerPhone" class="quote-editable-input" value="08X-XXX-XXXX" placeholder="เบอร์โทรศัพท์">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Itemized Cost Table -->
+                    <div class="quote-table-container">
+                        <table class="quote-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 8%; text-align: center;">ลำดับ</th>
+                                    <th style="width: 48%;">รายการประมาณการค่าใช้จ่าย</th>
+                                    <th style="width: 14%; text-align: center;">จำนวน</th>
+                                    <th style="width: 15%; text-align: right;">ราคาต่อหน่วย (บาท)</th>
+                                    <th style="width: 15%; text-align: right;">จำนวนเงิน (บาท)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center">1</td>
+                                    <td>
+                                        <strong id="sqItem1Title">งานจัดหาและติดตั้งระบบ Solar Rooftop ขนาด 5 kW</strong>
+                                        <div class="item-specs" id="sqItem1Specs">Inverter: HUAWEI SUN2000-5KTL-LBO | แผง: LONGi Tier 1 650W (8 แผง) พร้อมอุปกรณ์โครงสร้างยึดและระบบป้องกันฟ้าผ่าครบชุด</div>
+                                    </td>
+                                    <td class="text-center">1 ระบบ</td>
+                                    <td class="text-right" id="sqItem1UnitPrice">150,000</td>
+                                    <td class="text-right" id="sqItem1Total">150,000</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">2</td>
+                                    <td>
+                                        <strong id="sqItem2Title">บริการบำรุงรักษาและล้างทำความสะอาดแผงโซล่าเซลล์ (SOLAR Green Power)</strong>
+                                        <div class="item-specs" id="sqItem2Specs">ตรวจเช็กมาตรฐานวิศวกรรม กฟภ. 10 รายการ ด้วยน้ำบริสุทธิ์และกล้องเทอร์โมสแกน (1 ครั้ง/ปี)</div>
+                                    </td>
+                                    <td class="text-center" id="sqItem2Qty">1 ปี</td>
+                                    <td class="text-right" id="sqItem2UnitPrice">5,750</td>
+                                    <td class="text-right" id="sqItem2Total">5,750</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="no-border"></td>
+                                    <td class="tfoot-label">รวมเงินก่อนภาษี:</td>
+                                    <td class="tfoot-val" id="sqSubtotal">155,750.00</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="no-border"></td>
+                                    <td class="tfoot-label">ภาษีมูลค่าเพิ่ม (VAT 7%):</td>
+                                    <td class="tfoot-val" id="sqVat">10,902.50</td>
+                                </tr>
+                                <tr class="grand-total-row">
+                                    <td colspan="3" class="baht-text-cell">
+                                        <div class="baht-box">
+                                            <strong>จำนวนเงินตัวอักษร:</strong> <span id="sqBahtText">( - )</span>
+                                        </div>
+                                    </td>
+                                    <td class="grand-total-label">ยอดรวมสุทธิทั้งสิ้น:</td>
+                                    <td class="grand-total-val" id="sqGrandTotal">166,652.50</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <!-- Performance & Economics Highlights Box -->
+                    <div class="quote-eco-summary">
+                        <div class="eco-summary-title"><i class="fa-solid fa-chart-pie"></i> ข้อมูลคาดการณ์ประสิทธิภาพและผลประโยชน์ทางเศรษฐศาสตร์ 25 ปี</div>
+                        <div class="eco-summary-grid">
+                            <div class="eco-metric-card">
+                                <span class="metric-caption">พลังงานไฟฟ้าที่ผลิตได้</span>
+                                <span class="metric-num" id="sqMetricGen">5,840</span>
+                                <span class="metric-unit">หน่วย (kWh)/ปี</span>
+                            </div>
+                            <div class="eco-metric-card">
+                                <span class="metric-caption">ประหยัดค่าไฟเฉลี่ย</span>
+                                <span class="metric-num" id="sqMetricSavings">2,500</span>
+                                <span class="metric-unit">บาท/เดือน</span>
+                            </div>
+                            <div class="eco-metric-card highlight">
+                                <span class="metric-caption">ระยะเวลาคืนทุน (Payback)</span>
+                                <span class="metric-num" id="sqMetricRoi">5.2</span>
+                                <span class="metric-unit">ปี</span>
+                            </div>
+                            <div class="eco-metric-card">
+                                <span class="metric-caption">ประหยัดสะสม 25 ปี</span>
+                                <span class="metric-num" id="sqMetricTotalSave">890,000</span>
+                                <span class="metric-unit">บาท</span>
+                            </div>
+                            <div class="eco-metric-card">
+                                <span class="metric-caption">ลดคาร์บอน (CO₂ Offset)</span>
+                                <span class="metric-num" id="sqMetricCo2">2.92</span>
+                                <span class="metric-unit">ตัน/ปี</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Terms & Conditions -->
+                    <div class="quote-terms-section">
+                        <h4>เงื่อนไขและข้อกำหนดมาตรฐาน กฟภ.:</h4>
+                        <ol>
+                            <li>ราคารวมค่าดำเนินการสำรวจทางวิศวกรรม ค่าอุปกรณ์ และค่าติดตั้งตามมาตรฐานความปลอดภัยการไฟฟ้าส่วนภูมิภาค</li>
+                            <li>กฟภ. ดำเนินการยื่นขอขนานไฟฟ้ากับระบบจำหน่าย กฟภ. และดำเนินการเอกสารขออนุญาตกับหน่วยงานรัฐที่เกี่ยวข้อง</li>
+                            <li>รับประกันประสิทธิภาพแผงเซลล์แสงอาทิตย์ (Linear Power Output) 25 ปี และรับประกันอินเวอร์เตอร์ตามมาตรฐานผู้ผลิต</li>
+                            <li>เอกสารประมาณการนี้จัดทำขึ้นโดยระบบ PEA Solar Estimate อ้างอิงตามอัตราค่าบริการมาตรฐานธุรกิจเกี่ยวเนื่อง กฟภ. ปี 2569</li>
+                        </ol>
+                    </div>
+
+                    <!-- Dotted Generic Signature Block (Requirement 1: NO hardcoded personal name or position) -->
+                    <div class="quote-signatures-container">
+                        <div class="signature-column">
+                            <p class="sig-title">ผู้ขอรับบริการ / ลูกค้า</p>
+                            <div class="sig-space"></div>
+                            <p class="sig-dotted-line">ลงชื่อ ................................................................</p>
+                            <p class="sig-printed-name">( ................................................................ )</p>
+                            <p class="sig-position">ผู้ขอรับบริการ / ตัวแทนผู้มีอำนาจ</p>
+                            <p class="sig-date">วันที่ ........ / ........ / ................</p>
+                        </div>
+                        <div class="signature-column">
+                            <p class="sig-title">เจ้าหน้าที่ผู้จัดทำประมาณการ กฟภ.</p>
+                            <div class="sig-space"></div>
+                            <p class="sig-dotted-line">ลงชื่อ ................................................................</p>
+                            <p class="sig-printed-name">( ................................................................ )</p>
+                            <p class="sig-position">ตำแหน่ง ................................................................</p>
+                            <p class="sig-dept">การไฟฟ้าส่วนภูมิภาค ................................................................</p>
+                            <p class="sig-date">วันที่ ........ / ........ / ................</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- MODAL 2: PEA STANDARD REFERENCES MODAL     -->
+    <!-- ========================================== -->
+    <div id="solarReferenceModal" class="quote-modal-backdrop" aria-hidden="true">
+        <div class="quote-modal-dialog ref-dialog">
+            <div class="quote-modal-header">
+                <div class="modal-header-title">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>เอกสารอ้างอิงและตารางราคามาตรฐาน กฟภ. (PEA Solar Standard References)</span>
+                </div>
+                <button type="button" class="btn-modal-close" id="closeSolarRefBtn" aria-label="ปิด">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="ref-modal-body">
+                <!-- Reference Navigation Tabs -->
+                <div class="ref-nav-tabs">
+                    <button class="ref-tab-btn active" data-ref-target="ref-install">
+                        <i class="fa-solid fa-table-list"></i>
+                        <span>1. ตารางราคาติดตั้ง Solar กฟภ. (มี.ค. 2569)</span>
+                    </button>
+                    <button class="ref-tab-btn" data-ref-target="ref-maint">
+                        <i class="fa-solid fa-soap"></i>
+                        <span>2. อัตราค่าบริการบำรุงรักษา & ล้างแผง</span>
+                    </button>
+                    <button class="ref-tab-btn" data-ref-target="ref-huawei">
+                        <i class="fa-solid fa-solar-panel"></i>
+                        <span>3. PEA x HUAWEI Solar Residential Solution</span>
+                    </button>
+                </div>
+
+                <!-- Reference Tab Content 1 -->
+                <div id="ref-install" class="ref-tab-pane active">
+                    <div class="ref-info-bar">
+                        <div class="ref-meta">
+                            <strong>เอกสารอ้างอิง:</strong> PEA SOLAR ปรับราคาใหม่ 24 มี.ค. 2569 (ขนาด 3 kW, 5 kW, 10 kW, 15 kW, 20 kW ทั้ง 1P และ 3P)
+                        </div>
+                        <a href="คำนวณการ ติดตั้ง solar cell.png" target="_blank" class="ref-download-btn" title="เปิดรูปภาพต้นฉบับ">
+                            <i class="fa-solid fa-up-right-from-square"></i> เปิดภาพขนาดเต็ม
+                        </a>
+                    </div>
+                    <div class="ref-image-wrapper">
+                        <img src="คำนวณการ ติดตั้ง solar cell.png" alt="ตารางราคาคำนวณการติดตั้ง solar cell กฟภ." class="ref-preview-img">
+                    </div>
+                </div>
+
+                <!-- Reference Tab Content 2 -->
+                <div id="ref-maint" class="ref-tab-pane">
+                    <div class="ref-info-bar">
+                        <div class="ref-meta">
+                            <strong>เอกสารอ้างอิง:</strong> SOLAR Green Power By PEA — อัตราค่าบริการบำรุงรักษาและล้างแผง 3 kW - 100 kW พร้อมตรวจเช็ก 10 รายการมาตรฐาน
+                        </div>
+                        <a href="ค่าบริการบำรุงรักษา Solar rooftop.jpg" target="_blank" class="ref-download-btn" title="เปิดรูปภาพต้นฉบับ">
+                            <i class="fa-solid fa-up-right-from-square"></i> เปิดภาพขนาดเต็ม
+                        </a>
+                    </div>
+                    <div class="ref-image-wrapper">
+                        <img src="ค่าบริการบำรุงรักษา Solar rooftop.jpg" alt="อัตราค่าบริการบำรุงรักษา Solar rooftop กฟภ." class="ref-preview-img">
+                    </div>
+                </div>
+
+                <!-- Reference Tab Content 3 -->
+                <div id="ref-huawei" class="ref-tab-pane">
+                    <div class="ref-info-bar">
+                        <div class="ref-meta">
+                            <strong>เอกสารอ้างอิง:</strong> PEA x HUAWEI Residential Solar Solution (On-Grid, Micro-Inverter/Optimizer, และ Hybrid Battery LUNA2000) รวม VAT 7%
+                        </div>
+                        <a href="S__211345411.jpg" target="_blank" class="ref-download-btn" title="เปิดรูปภาพต้นฉบับ">
+                            <i class="fa-solid fa-up-right-from-square"></i> เปิดภาพขนาดเต็ม
+                        </a>
+                    </div>
+                    <div class="ref-image-wrapper">
+                        <img src="S__211345411.jpg" alt="PEA x HUAWEI Solar Rooftop Solution" class="ref-preview-img">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Application Script -->
