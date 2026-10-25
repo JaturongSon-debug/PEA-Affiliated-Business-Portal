@@ -755,3 +755,34 @@ footer a:hover {
   color: var(--accent-secondary);
   font-weight: 600;
 }
+
+/* Official Estimate Sheet Print Styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #lineGuardModal, #lineGuardModal * {
+    visibility: visible;
+  }
+  #lineGuardModal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    background: white !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+  .modal-content {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 20px !important;
+    max-width: 100% !important;
+    background: white !important;
+    color: black !important;
+  }
+  .modal-header button, .modal-footer {
+    display: none !important;
+  }
+}

@@ -189,7 +189,46 @@ function calculateTotalExpenses(regulationType, customerType, sizeRange, totalDa
 
 // รูปแบบแสดงเงินสกุลบาท (ใส่เครื่องหมายคอมมา)
 function formatCurrency(number) {
+  if (isNaN(number) || number === null || number === undefined) return "0";
   return number.toLocaleString('th-TH');
+}
+
+// แปลงตัวเลขเป็นข้อความภาษาไทย (Thai Baht Text)
+function ThaiBaht(number) {
+  if (number === null || number === undefined || isNaN(number) || number === 0) return "ศูนย์บาทถ้วน";
+  const numStr = Number(number).toFixed(2).toString();
+  const txtNum = ["ศูนย์", "หนึ่ง", "สอง", "สาม", "สี่", "ห้า", "หก", "เจ็ด", "แปด", "เก้า", "สิบ"];
+  const txtDigit = ["", "สิบ", "ร้อย", "พัน", "หมื่น", "แสน", "ล้าน"];
+  const parts = numStr.split(".");
+  const baht = parts[0];
+  const satang = parts.length > 1 ? parts[1] : "00";
+
+  function convertChunk(str) {
+    let out = "";
+    for (let i = 0; i < str.length; i++) {
+      const n = parseInt(str.charAt(i));
+      const digit = str.length - i - 1;
+      if (n !== 0) {
+        if (n === 1 && digit === 0 && str.length > 1) { out += "เอ็ด"; }
+        else if (n === 2 && digit === 1) { out += "ยี่"; }
+        else if (n === 1 && digit === 1) { out += ""; }
+        else { out += txtNum[n]; }
+        out += txtDigit[digit];
+      }
+    }
+    return out;
+  }
+
+  let result = "";
+  if (parseInt(baht) > 0) {
+    result += convertChunk(baht) + "บาท";
+  }
+  if (satang === "00" || satang === "0") {
+    result += "ถ้วน";
+  } else {
+    result += convertChunk(satang) + "สตางค์";
+  }
+  return result;
 }
 
 // อัปเดตการสรุปผลบนหน้าจอ UI
@@ -281,20 +320,90 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('input', updateUI);
   form.addEventListener('change', updateUI);
 
-  // จัดการการเปลี่ยนธีม (Light/Dark Mode)
+  // จัดการการเปลี่ยนธีม (Light/Dark Mode) ให้รองรับ Global Theme Sync
   const themeToggle = document.getElementById('theme-toggle');
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme === 'light') {
-    document.body.classList.add('light-theme');
-    themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+  
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.body.classList.toggle('light-theme', theme === 'light');
+    themeToggle.innerHTML = theme === 'light' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    localStorage.setItem('pea_global_theme', theme);
+    localStorage.setItem('theme', theme);
   }
 
+  const initialTheme = localStorage.getItem('pea_global_theme') || localStorage.getItem('theme') || 'dark';
+  applyTheme(initialTheme);
+
   themeToggle.addEventListener('click', () => {
-    document.body.classList.toggle('light-theme');
-    const isLight = document.body.classList.contains('light-theme');
-    themeToggle.innerHTML = isLight ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
-    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    const isCurrentlyLight = document.body.classList.contains('light-theme');
+    const newTheme = isCurrentlyLight ? 'dark' : 'light';
+    applyTheme(newTheme);
   });
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'pea_global_theme' && e.newValue) {
+      applyTheme(e.newValue);
+    }
+  });
+
+  // Modal Estimate Sheet Logic
+  const openModalBtn = document.getElementById('open-quote-modal-btn');
+  const quoteModal = document.getElementById('quote-modal');
+  const closeModalBtn = document.getElementById('close-quote-modal');
+  const closeModalBtn2 = document.getElementById('close-modal-btn2');
+  const printQuoteBtn = document.getElementById('print-quote-btn');
+
+  if (openModalBtn && quoteModal) {
+    openModalBtn.addEventListener('click', () => {
+      const reg = form.elements['regulation_type'].value;
+      const cust = form.elements['customer_type'].value;
+      const size = form.elements['size_range'].value;
+      const machines = parseInt(form.elements['num_machines'].value) || 1;
+      const days = parseInt(form.elements['total_days'].value) || 1;
+      const dist = form.elements['distance_range'].value;
+      const res = calculateTotalExpenses(reg, cust, size, days, machines, dist);
+      const vat = res.grandTotal * 0.07;
+      const total = res.grandTotal + vat;
+
+      document.getElementById('q-reg').textContent = reg === 'generator_set_reg' ? 'ระเบียบการนำชุดเครื่องกำเนิดไฟฟ้า (ข้อ 6.5)' : 'ระเบียบการคิดค่าเช่าเครื่องกำเนิดไฟฟ้า';
+      document.getElementById('q-cust').textContent = cust === 'A' ? 'ประเภท ก (หน่วยงานภายใน/พันธมิตร)' : 'ประเภท ข (บุคคลภายนอก/ทั่วไป)';
+      document.getElementById('q-dist').textContent = `${dist} กิโลเมตร`;
+      document.getElementById('q-date').textContent = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+      document.getElementById('q-doc-id').textContent = Math.floor(1000 + Math.random() * 9000);
+
+      document.getElementById('q-gen-desc').textContent = `ขนาด ${size} kW (อัตราเครื่องละ ${formatCurrency(res.rentalFeePerMachine)} บ.)`;
+      document.getElementById('q-gen-qty').textContent = `${machines} เครื่อง / ${days} วัน`;
+      document.getElementById('q-gen-amount').textContent = formatCurrency(res.totalRentalFee);
+
+      document.getElementById('q-staff-desc').textContent = `ผู้ควบคุม ${res.numStaff} คน/วัน (อัตราคนละ ${formatCurrency(res.ratePerManDay)} บ./วัน)`;
+      document.getElementById('q-staff-qty').textContent = `${res.numStaff * machines} คน / ${days} วัน`;
+      document.getElementById('q-staff-amount').textContent = formatCurrency(res.totalControlFee);
+
+      document.getElementById('q-trans-desc').textContent = `ระยะทาง ${dist} กม. (อัตราเครื่องละ ${formatCurrency(res.shippingRatePerMachine)} บ.)`;
+      document.getElementById('q-trans-qty').textContent = `${machines} เครื่อง`;
+      document.getElementById('q-trans-amount').textContent = formatCurrency(res.totalShippingFee);
+
+      document.getElementById('q-subtotal').textContent = `${formatCurrency(res.grandTotal)} บาท`;
+      document.getElementById('q-vat').textContent = `${formatCurrency(vat)} บาท`;
+      document.getElementById('q-total').textContent = `${formatCurrency(total)} บาท`;
+      document.getElementById('q-baht-text').textContent = `(${ThaiBaht(total)})`;
+
+      quoteModal.style.display = 'flex';
+    });
+
+    const hideModal = () => { quoteModal.style.display = 'none'; };
+    if (closeModalBtn) closeModalBtn.addEventListener('click', hideModal);
+    if (closeModalBtn2) closeModalBtn2.addEventListener('click', hideModal);
+    quoteModal.addEventListener('click', (e) => {
+      if (e.target === quoteModal) hideModal();
+    });
+
+    if (printQuoteBtn) {
+      printQuoteBtn.addEventListener('click', () => {
+        window.print();
+      });
+    }
+  }
 
   // คำนวณครั้งแรกเมื่อเปิดหน้าเว็บ
   updateUI();

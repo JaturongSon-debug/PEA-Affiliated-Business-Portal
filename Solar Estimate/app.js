@@ -590,21 +590,33 @@ document.addEventListener("DOMContentLoaded", () => {
     initRoiModule();
 });
 
-// Theme Initialization & Switcher
+// Theme Initialization & Switcher with Global Sync
 function initTheme() {
     const themeBtn = document.getElementById("themeToggleBtn");
-    const savedTheme = localStorage.getItem("pea_solar_theme") || "dark";
-    document.documentElement.setAttribute("data-theme", savedTheme);
+    
+    function applySolarTheme(theme) {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("pea_global_theme", theme);
+        localStorage.setItem("pea_solar_theme", theme);
+        if (appState.roi && appState.roi.chartInstance) {
+            updateChartTheme(theme);
+        }
+    }
 
-    themeBtn.addEventListener("click", () => {
-        const currentTheme = document.documentElement.getAttribute("data-theme");
-        const newTheme = currentTheme === "dark" ? "light" : "dark";
-        document.documentElement.setAttribute("data-theme", newTheme);
-        localStorage.setItem("pea_solar_theme", newTheme);
+    const savedTheme = localStorage.getItem("pea_global_theme") || localStorage.getItem("pea_solar_theme") || "dark";
+    applySolarTheme(savedTheme);
 
-        // Update chart if initialized
-        if (appState.roi.chartInstance) {
-            updateChartTheme(newTheme);
+    if (themeBtn) {
+        themeBtn.addEventListener("click", () => {
+            const currentTheme = document.documentElement.getAttribute("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            applySolarTheme(newTheme);
+        });
+    }
+
+    window.addEventListener("storage", (e) => {
+        if (e.key === "pea_global_theme" && e.newValue) {
+            applySolarTheme(e.newValue);
         }
     });
 }

@@ -1,26 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // --- 1. Light/Dark Theme Toggle ---
+    // --- 1. Light/Dark Theme Toggle with Global Sync ---
     const themeBtn = document.getElementById('themeToggle');
-    themeBtn.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        if (currentTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'light');
-        } else {
-            document.documentElement.setAttribute('data-theme', 'dark');
-        }
-    });
+    const moonIcon = document.getElementById('moonIcon');
+    const sunIcon = document.getElementById('sunIcon');
 
     // --- 2. Initialize Signature Pad ---
     const canvas = document.getElementById('modernSignaturePad');
     const signaturePad = new SignaturePad(canvas, {
         backgroundColor: 'rgba(255, 255, 255, 0)',
-        penColor: 'rgb(0, 0, 0)'
+        penColor: '#ffffff'
     });
 
     const clearButton = document.getElementById('ui_clearSignature');
     clearButton.addEventListener('click', () => {
         signaturePad.clear();
+    });
+
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('pea_global_theme', theme);
+        if (theme === 'dark') {
+            moonIcon.classList.remove('icon-visible');
+            moonIcon.classList.add('icon-hidden');
+            sunIcon.classList.remove('icon-hidden');
+            sunIcon.classList.add('icon-visible');
+            if (signaturePad) signaturePad.penColor = '#ffffff';
+        } else {
+            sunIcon.classList.remove('icon-visible');
+            sunIcon.classList.add('icon-hidden');
+            moonIcon.classList.remove('icon-hidden');
+            moonIcon.classList.add('icon-visible');
+            if (signaturePad) signaturePad.penColor = '#000000';
+        }
+    }
+
+    const savedTheme = localStorage.getItem('pea_global_theme') || 'dark';
+    applyTheme(savedTheme);
+
+    themeBtn.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme);
+    });
+
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'pea_global_theme' && e.newValue) {
+            applyTheme(e.newValue);
+        }
     });
 
     // --- 3. Number to Thai Text (for Total Text) ---

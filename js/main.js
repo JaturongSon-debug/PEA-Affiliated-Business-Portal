@@ -16,23 +16,41 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentCategory = 'all';
 
     /* ==========================================================================
-       1. Theme Switcher (Dark / Light Mode)
+       1. Global Theme Switcher (Dark / Light Mode)
        ========================================================================== */
-    // Initialize Theme from localStorage or system preference
-    const savedTheme = localStorage.getItem('pea_portal_theme') || 
-                       (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    function getStoredTheme() {
+        return localStorage.getItem('pea_global_theme') || 
+               localStorage.getItem('pea_portal_theme') || 
+               (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    }
+
+    function applyGlobalTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('pea_global_theme', theme);
+        localStorage.setItem('pea_portal_theme', theme);
+        localStorage.setItem('theme', theme);
+        localStorage.setItem('pea_lineguard_theme', theme);
+        localStorage.setItem('pea_solar_theme', theme);
+    }
+
+    // Initialize Theme
+    const currentTheme = getStoredTheme();
+    applyGlobalTheme(currentTheme);
 
     if (themeToggleBtn) {
         themeToggleBtn.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('pea_portal_theme', newTheme);
+            const active = document.documentElement.getAttribute('data-theme');
+            const newTheme = active === 'dark' ? 'light' : 'dark';
+            applyGlobalTheme(newTheme);
         });
     }
+
+    // Real-time synchronization across browser tabs
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'pea_global_theme' && e.newValue) {
+            document.documentElement.setAttribute('data-theme', e.newValue);
+        }
+    });
 
     /* ==========================================================================
        2. Real-time Search & Category Filtering
@@ -132,17 +150,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ==========================================================================
-       4. Visitor Counter (Mock implementation using localStorage)
+       5. Dynamic System Counters
        ========================================================================== */
-    const visitorCountEl = document.getElementById('visitor-count');
-    if (visitorCountEl) {
-        let count = localStorage.getItem('pea_portal_visitor_count');
-        // Initialize a baseline if it doesn't exist
-        if (!count) {
-            count = Math.floor(Math.random() * 50) + 100;
-        }
-        count = parseInt(count) + 1;
-        localStorage.setItem('pea_portal_visitor_count', count);
-        visitorCountEl.textContent = count.toLocaleString('th-TH');
+    const activeCards = document.querySelectorAll('.system-card:not(.upcoming-card)');
+    const upcomingCards = document.querySelectorAll('.system-card.upcoming-card');
+    
+    const activeCountText = `${activeCards.length} ระบบ`;
+    const upcomingCountText = `${upcomingCards.length} ระบบ`;
+
+    const activeSystemsCountEl = document.getElementById('active-systems-count');
+    if (activeSystemsCountEl) {
+        activeSystemsCountEl.textContent = `${activeCountText}เปิดใช้งาน`;
+    }
+
+    const kpiActiveEl = document.getElementById('kpi-active-count');
+    if (kpiActiveEl) {
+        kpiActiveEl.textContent = activeCountText;
+    }
+
+    const kpiUpcomingEl = document.getElementById('kpi-upcoming-count');
+    if (kpiUpcomingEl) {
+        kpiUpcomingEl.textContent = upcomingCountText;
     }
 });

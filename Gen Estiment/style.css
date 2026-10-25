@@ -1652,4 +1652,35 @@ body.light-theme .total-kwh-cell {
   }
 }
 
+/* Official Estimate Print Modal & Print Styles */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #quote-modal, #quote-modal * {
+    visibility: visible;
+  }
+  #quote-modal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: auto;
+    background: white !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+  .modal-content {
+    border: none !important;
+    box-shadow: none !important;
+    padding: 20px !important;
+    max-width: 100% !important;
+    background: white !important;
+    color: black !important;
+  }
+  .modal-header button, .modal-footer {
+    display: none !important;
+  }
+}
+
 

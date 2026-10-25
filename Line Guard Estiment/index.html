@@ -139,6 +139,20 @@
           </div>
         </div>
 
+        <div class="input-group">
+          <label for="customerName"><i class="fa-solid fa-user"></i> ชื่อผู้ขอใช้บริการ / ผู้รับเหมา</label>
+          <div class="input-wrapper">
+            <input type="text" id="customerName" placeholder="เช่น บริษัท เอสซีบี คอนสตรัคชั่น จำกัด หรือ นายสมชาย มั่นคง">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="locationDesc"><i class="fa-solid fa-map-location-dot"></i> สถานที่ติดตั้ง / แนวสายไฟฟ้า</label>
+          <div class="input-wrapper">
+            <input type="text" id="locationDesc" placeholder="เช่น บริเวณหน้าไซต์งานก่อสร้าง ถนนพหลโยธิน เสาเลขที่...">
+          </div>
+        </div>
+
         <div class="vat-auto-notice">
           <div class="vat-badge">
             <i class="fa-solid fa-circle-check"></i>
@@ -183,6 +197,12 @@
           <div class="total-label">ประมาณการค่าใช้จ่ายสุทธิทั้งสิ้น (รวม VAT 7%)</div>
           <div class="total-amount" id="grandTotalText">3,852.00.-</div>
           <div class="vat-note" id="vatNoteText"><i class="fa-solid fa-shield-halved"></i> *ราคารวมภาษีมูลค่าเพิ่ม (VAT 7%) แล้วตามระเบียบ PEA</div>
+        </div>
+
+        <div class="quote-action-wrap" style="margin-top: 15px;">
+          <button type="button" id="openLineGuardModalBtn" class="btn-download-pdf" style="width: 100%; border: none; cursor: pointer; justify-content: center; font-size: 0.95rem; font-family: 'Prompt', sans-serif;">
+            <i class="fa-solid fa-file-invoice-dollar"></i> ออกใบประมาณการทางการ (Official Estimate Sheet)
+          </button>
         </div>
       </div>
     </main>
@@ -234,8 +254,105 @@
     </footer>
   </div>
 
+    <!-- Line Guard Official Estimate Sheet Modal -->
+    <div id="lineGuardModal" class="modal-overlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px;">
+      <div class="modal-content" style="background: var(--bg-card, #111827); color: var(--text-primary, #ffffff); max-width: 780px; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 16px; border: 1px solid rgba(16,185,129,0.3); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); padding: 30px;">
+        <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(16,185,129,0.3); padding-bottom: 15px; margin-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <i class="fa-solid fa-shield-halved" style="font-size: 1.8rem; color: #10b981;"></i>
+            <div>
+              <h3 style="margin: 0; font-family: 'Prompt', sans-serif; font-size: 1.3rem;">ใบประมาณการค่าบริการครอบฉนวนป้องกันไฟฟ้าแรงสูง</h3>
+              <p style="margin: 0; font-size: 0.85rem; color: #94a3b8;">การไฟฟ้าส่วนภูมิภาค (Provincial Electricity Authority)</p>
+            </div>
+          </div>
+          <button type="button" id="closeLgModal" style="background: transparent; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        
+        <div id="printAreaLg" style="font-family: 'Prompt', 'Kanit', sans-serif;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 0.9rem;">
+            <div>
+              <strong>เลขที่เอกสาร:</strong> PEA-LG-<span id="lg-doc-id">2026-001</span><br>
+              <strong>ผู้ขอรับบริการ:</strong> <span id="lg-cust-name">-</span><br>
+              <strong>สถานที่ปฏิบัติงาน:</strong> <span id="lg-loc">-</span>
+            </div>
+            <div style="text-align: right;">
+              <strong>วันที่ประมาณการ:</strong> <span id="lg-date">25 ตุลาคม 2569</span><br>
+              <strong>ตามระเบียบ:</strong> หลักเกณฑ์คิดค่าบริการครอบฉนวน ผวก.<br>
+              <strong>สถานะ:</strong> <span style="color: #10b981; font-weight: 600;">ผ่านเกณฑ์มาตรฐาน</span>
+            </div>
+          </div>
+
+          <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9rem;">
+            <thead>
+              <tr style="background: rgba(16,185,129,0.12); border-bottom: 2px solid #10b981;">
+                <th style="padding: 10px; text-align: center; width: 50px;">ลำดับ</th>
+                <th style="padding: 10px; text-align: left;">รายการประมาณการ (Service Description)</th>
+                <th style="padding: 10px; text-align: center; width: 120px;">จำนวนวัน / ชิ้น</th>
+                <th style="padding: 10px; text-align: right; width: 140px;">จำนวนเงิน (บาท)</th>
+              </tr>
+            </thead>
+            <tbody style="border-bottom: 1px solid #475569;">
+              <tr>
+                <td style="padding: 10px; text-align: center;">1</td>
+                <td style="padding: 10px;">
+                  <strong>ค่าบริการอุปกรณ์ฉนวนครอบสายไฟฟ้าแรงสูง</strong><br>
+                  <span style="font-size: 0.85rem; color: #94a3b8;">อัตรา 100 บาท ต่อ 1 ชิ้น / ต่อ 1 วัน</span>
+                </td>
+                <td style="padding: 10px; text-align: center;" id="lg-qty-desc">1 วัน × 1 ชิ้น</td>
+                <td style="padding: 10px; text-align: right;" id="lg-equip-cost">100.00</td>
+              </tr>
+              <tr>
+                <td style="padding: 10px; text-align: center;">2</td>
+                <td style="padding: 10px;">
+                  <strong>ค่าบริการติดตั้งและรื้อถอนฉนวนครอบสาย</strong><br>
+                  <span style="font-size: 0.85rem; color: #94a3b8;">อัตราเหมาจ่าย 3,500 บาท ต่อ 1 งาน</span>
+                </td>
+                <td style="padding: 10px; text-align: center;">1 งานเหมา</td>
+                <td style="padding: 10px; text-align: right;" id="lg-install-cost">3,500.00</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3" style="padding: 8px 10px; text-align: right; font-weight: 600;">รวมเป็นเงินก่อนภาษี (Subtotal):</td>
+                <td style="padding: 8px 10px; text-align: right; font-weight: 600;" id="lg-subtotal">3,600.00</td>
+              </tr>
+              <tr>
+                <td colspan="3" style="padding: 8px 10px; text-align: right;">ภาษีมูลค่าเพิ่ม (VAT 7%):</td>
+                <td style="padding: 8px 10px; text-align: right;" id="lg-vat">252.00</td>
+              </tr>
+              <tr style="background: rgba(16,185,129,0.12); font-size: 1.05rem;">
+                <td colspan="3" style="padding: 12px 10px; text-align: right; font-weight: 700; color: #10b981;">ยอดรวมค่าบริการสุทธิทั้งสิ้น (รวม VAT):</td>
+                <td style="padding: 12px 10px; text-align: right; font-weight: 700; color: #10b981;" id="lg-grand-total">3,852.00</td>
+              </tr>
+              <tr>
+                <td colspan="4" style="padding: 8px 10px; text-align: center; font-style: italic; color: #94a3b8;" id="lg-baht-text">(สามพันแปดร้อยห้าสิบสองบาทถ้วน)</td>
+              </tr>
+            </tfoot>
+          </table>
+
+          <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; text-align: center; font-size: 0.9rem;">
+            <div>
+              <div style="border-bottom: 1px dotted #94a3b8; width: 180px; margin: 40px auto 10px;"></div>
+              <div>( .................................................... )</div>
+              <div style="color: #94a3b8; font-size: 0.85rem; margin-top: 4px;">ผู้ขอใช้บริการ / ผู้รับเหมา</div>
+            </div>
+            <div>
+              <div style="border-bottom: 1px dotted #94a3b8; width: 180px; margin: 40px auto 10px;"></div>
+              <div>( นายจาตุรงค์ ทรงภักดี )</div>
+              <div style="color: #94a3b8; font-size: 0.85rem; margin-top: 4px;">พชง.7 ผรผ.กสฟ.(น2) ผู้ประมาณการ</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer" style="margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(16,185,129,0.2); display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" id="closeLgModal2" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #64748b; background: transparent; color: inherit; cursor: pointer;">ปิดหน้าต่าง</button>
+          <button type="button" id="printLgBtn" style="padding: 10px 24px; border-radius: 8px; border: none; background: #10b981; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-print"></i> พิมพ์เอกสาร / บันทึก PDF</button>
+        </div>
+      </div>
+    </div>
+
   <script>
-    // Theme Toggle Functionality
+    // Theme Toggle Functionality with Global Sync
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const themeIcon = document.getElementById('themeIcon');
     const themeText = document.getElementById('themeText');
@@ -243,6 +360,7 @@
 
     function applyTheme(theme) {
       htmlElement.setAttribute('data-theme', theme);
+      localStorage.setItem('pea_global_theme', theme);
       localStorage.setItem('pea_lineguard_theme', theme);
       
       if (theme === 'light') {
@@ -255,8 +373,9 @@
     }
 
     // Initialize Theme
-    const savedTheme = localStorage.getItem('pea_lineguard_theme') || 
-      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    const savedTheme = localStorage.getItem('pea_global_theme') || 
+                       localStorage.getItem('pea_lineguard_theme') || 
+                       (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
     applyTheme(savedTheme);
 
     themeToggleBtn.addEventListener('click', () => {
@@ -264,6 +383,50 @@
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       applyTheme(newTheme);
     });
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'pea_global_theme' && e.newValue) {
+        applyTheme(e.newValue);
+      }
+    });
+
+    // Thai Baht Text Converter
+    function ThaiBaht(number) {
+      if (number === null || number === undefined || isNaN(number) || number === 0) return "ศูนย์บาทถ้วน";
+      const numStr = Number(number).toFixed(2).toString();
+      const txtNum = ["ศูนย์", "หนึ่ง", "สอง", "สาม", "สี่", "ห้า", "หก", "เจ็ด", "แปด", "เก้า", "สิบ"];
+      const txtDigit = ["", "สิบ", "ร้อย", "พัน", "หมื่น", "แสน", "ล้าน"];
+      const parts = numStr.split(".");
+      const baht = parts[0];
+      const satang = parts.length > 1 ? parts[1] : "00";
+
+      function convertChunk(str) {
+        let out = "";
+        for (let i = 0; i < str.length; i++) {
+          const n = parseInt(str.charAt(i));
+          const digit = str.length - i - 1;
+          if (n !== 0) {
+            if (n === 1 && digit === 0 && str.length > 1) { out += "เอ็ด"; }
+            else if (n === 2 && digit === 1) { out += "ยี่"; }
+            else if (n === 1 && digit === 1) { out += ""; }
+            else { out += txtNum[n]; }
+            out += txtDigit[digit];
+          }
+        }
+        return out;
+      }
+
+      let result = "";
+      if (parseInt(baht) > 0) {
+        result += convertChunk(baht) + "บาท";
+      }
+      if (satang === "00" || satang === "0") {
+        result += "ถ้วน";
+      } else {
+        result += convertChunk(satang) + "สตางค์";
+      }
+      return result;
+    }
 
     // Sample data from reference table
     const sampleData = [
@@ -289,6 +452,8 @@
 
     const numDaysInput = document.getElementById('numDays');
     const numPiecesInput = document.getElementById('numPieces');
+    const customerNameInput = document.getElementById('customerName');
+    const locationDescInput = document.getElementById('locationDesc');
 
     const summaryDetail = document.getElementById('summaryDetail');
     const equipmentCostText = document.getElementById('equipmentCostText');
@@ -296,6 +461,8 @@
     const subtotalText = document.getElementById('subtotalText');
     const vatText = document.getElementById('vatText');
     const grandTotalText = document.getElementById('grandTotalText');
+
+    let currentCalculations = { days: 1, pieces: 1, equipmentCost: 100, installCost: 3500, subtotal: 3600, vat: 252, grandTotal: 3852 };
 
     function formatNumber(num, decimals = 0) {
       return num.toLocaleString('th-TH', {
@@ -316,6 +483,8 @@
       const subtotal = equipmentCost + installCost;
       const vat = subtotal * 0.07;
       const grandTotal = subtotal + vat;
+
+      currentCalculations = { days, pieces, equipmentCost, installCost, subtotal, vat, grandTotal };
 
       summaryDetail.textContent = `100 บาท × ${days} วัน × ${pieces} ชิ้น`;
       equipmentCostText.textContent = `${formatNumber(equipmentCost)} บาท`;
@@ -365,6 +534,48 @@
 
     numDaysInput.addEventListener('input', calculate);
     numPiecesInput.addEventListener('input', calculate);
+
+    // Modal Sheet Handlers
+    const openLgModalBtn = document.getElementById('openLineGuardModalBtn');
+    const lineGuardModal = document.getElementById('lineGuardModal');
+    const closeLgModal = document.getElementById('closeLgModal');
+    const closeLgModal2 = document.getElementById('closeLgModal2');
+    const printLgBtn = document.getElementById('printLgBtn');
+
+    if (openLgModalBtn && lineGuardModal) {
+      openLgModalBtn.addEventListener('click', () => {
+        const custName = customerNameInput.value.trim() || 'ผู้ขอใช้บริการทั่วไป';
+        const loc = locationDescInput.value.trim() || 'ตามที่ระบุในคำขอ';
+
+        document.getElementById('lg-doc-id').textContent = Math.floor(1000 + Math.random() * 9000);
+        document.getElementById('lg-cust-name').textContent = custName;
+        document.getElementById('lg-loc').textContent = loc;
+        document.getElementById('lg-date').textContent = new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' });
+
+        document.getElementById('lg-qty-desc').textContent = `${currentCalculations.days} วัน × ${currentCalculations.pieces} ชิ้น`;
+        document.getElementById('lg-equip-cost').textContent = formatNumber(currentCalculations.equipmentCost, 2);
+        document.getElementById('lg-install-cost').textContent = formatNumber(currentCalculations.installCost, 2);
+        document.getElementById('lg-subtotal').textContent = `${formatNumber(currentCalculations.subtotal, 2)} บาท`;
+        document.getElementById('lg-vat').textContent = `${formatNumber(currentCalculations.vat, 2)} บาท`;
+        document.getElementById('lg-grand-total').textContent = `${formatNumber(currentCalculations.grandTotal, 2)} บาท`;
+        document.getElementById('lg-baht-text').textContent = `(${ThaiBaht(currentCalculations.grandTotal)})`;
+
+        lineGuardModal.style.display = 'flex';
+      });
+
+      const hideLgModal = () => { lineGuardModal.style.display = 'none'; };
+      if (closeLgModal) closeLgModal.addEventListener('click', hideLgModal);
+      if (closeLgModal2) closeLgModal2.addEventListener('click', hideLgModal);
+      lineGuardModal.addEventListener('click', (e) => {
+        if (e.target === lineGuardModal) hideLgModal();
+      });
+
+      if (printLgBtn) {
+        printLgBtn.addEventListener('click', () => {
+          window.print();
+        });
+      }
+    }
 
     // Initial calculation and rendering
     calculate();

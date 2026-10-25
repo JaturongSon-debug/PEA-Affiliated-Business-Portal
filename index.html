@@ -78,18 +78,50 @@
                     รวบรวมระบบคำนวณราคามาตรฐานเพื่อให้การประเมินงบประมาณสะดวก สะดวกรวดเร็ว แม่นยำ และโปร่งใสตามหลักเกณฑ์ กฟภ.
                 </p>
                 
+                <!-- Executive KPI Bar (Executive Dashboard Summary) -->
+                <div class="executive-kpi-bar">
+                    <div class="kpi-card">
+                        <div class="kpi-icon-wrap active-pulse"><i class="fa-solid fa-circle-check"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-value" id="kpi-active-count">4 ระบบ</span>
+                            <span class="kpi-label">เปิดใช้งานพร้อมประเมิน</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon-wrap"><i class="fa-solid fa-shield-halved"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-value">PEA 2026</span>
+                            <span class="kpi-label">มาตรฐานระเบียบ กฟภ.</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon-wrap"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-value">VAT 7%</span>
+                            <span class="kpi-label">คำนวณภาษี & เอกสาร PDF</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon-wrap upcoming-pulse"><i class="fa-solid fa-rocket"></i></div>
+                        <div class="kpi-info">
+                            <span class="kpi-value" id="kpi-upcoming-count">2 ระบบ</span>
+                            <span class="kpi-label">อยู่ในแผนพัฒนาต่อเนื่อง</span>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Search & Filter Controls -->
                 <div class="search-box-container">
                     <div class="search-input-wrapper">
                         <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" id="search-input" placeholder="ค้นหาระบบประมาณการ เช่น เครื่องกำเนิดไฟฟ้า, Line Guard..." autocomplete="off">
-                        <button id="clear-search" class="clear-btn hidden"><i class="fa-solid fa-xmark"></i></button>
+                        <input type="text" id="search-input" placeholder="ค้นหาระบบประมาณการ เช่น เครื่องกำเนิดไฟฟ้า, Line Guard, โซลาร์เซลล์, หม้อแปลง..." autocomplete="off">
+                        <button id="clear-search" class="clear-btn hidden" aria-label="Clear Search"><i class="fa-solid fa-xmark"></i></button>
                     </div>
                     <div class="category-filters" id="category-filters">
-                        <button class="filter-chip active" data-category="all">ทั้งหมด</button>
-                        <button class="filter-chip" data-category="active">พร้อมใช้งาน</button>
-                        <button class="filter-chip" data-category="popular">ยอดนิยม</button>
-                        <button class="filter-chip" data-category="upcoming">กำลังพัฒนา</button>
+                        <button class="filter-chip active" data-category="all"><i class="fa-solid fa-layer-group"></i> ทั้งหมด</button>
+                        <button class="filter-chip" data-category="active"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</button>
+                        <button class="filter-chip" data-category="popular"><i class="fa-solid fa-fire"></i> ยอดนิยม</button>
+                        <button class="filter-chip" data-category="upcoming"><i class="fa-solid fa-clock-rotate-left"></i> กำลังพัฒนา</button>
                     </div>
                 </div>
             </div>
@@ -98,13 +130,16 @@
         <!-- System Cards Grid -->
         <section class="systems-section">
             <div class="section-header">
-                <h2 class="section-title"><i class="fa-solid fa-grid-2"></i> ระบบประมาณการทั้งหมด</h2>
-                <span class="results-count" id="results-count">กำลังแสดง 4 จาก 4 ระบบ</span>
+                <div class="header-title-wrap">
+                    <h2 class="section-title"><i class="fa-solid fa-grid-2"></i> ระบบประมาณการค่าบริการธุรกิจเกี่ยวเนื่อง</h2>
+                    <p class="section-subtitle">เลือกบริการที่ต้องการเพื่อเปิดระบบคำนวณและออกเอกสารประมาณการอัตโนมัติ</p>
+                </div>
+                <span class="results-count" id="results-count">กำลังแสดง 6 จาก 6 ระบบ</span>
             </div>
 
             <div class="systems-grid" id="systems-grid">
                 <!-- Card 1: Gen Estimate -->
-                <div class="system-card" data-category="active popular" data-name="gen estimate เครื่องกำเนิดไฟฟ้า เช่า generator">
+                <div class="system-card" data-category="active popular" data-name="gen estimate เครื่องกำเนิดไฟฟ้า เช่า generator ไฟฟ้าสำรอง kwh">
                     <div class="card-badge active"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</div>
                     <div class="card-header">
                         <div class="card-icon generator-icon">
@@ -116,7 +151,7 @@
                         </div>
                     </div>
                     <p class="card-description">
-                        ระบบคำนวณและประมาณการค่าเช่าชุดเครื่องกำเนิดไฟฟ้า คำนวณค่าบริการ น้ำมันเชื้อเพลิง ระยะทางขนส่ง และพนักงานคุมเครื่องตามหลักเกณฑ์ PEA Standard
+                        ระบบคำนวณและประมาณการค่าเช่าชุดเครื่องกำเนิดไฟฟ้า คำนวณค่าบริการ น้ำมันเชื้อเพลิง ระยะทางขนส่ง พนักงานคุมเครื่อง และแปลง kW/h ตามหลักเกณฑ์ PEA Standard
                     </p>
                     <div class="card-features">
                         <span class="feature-tag"><i class="fa-solid fa-gas-pump"></i> คิดค่าน้ำมันอัตโนมัติ</span>
@@ -132,7 +167,7 @@
                 </div>
 
                 <!-- Card 2: Line Guard Estimate -->
-                <div class="system-card" data-category="active popular" data-name="line guard estimate ครอบสาย ฉนวนครอบสายแรงสูง">
+                <div class="system-card" data-category="active popular" data-name="line guard estimate ครอบสาย ฉนวนครอบสายแรงสูง ป้องกันอันตราย">
                     <div class="card-badge active"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</div>
                     <div class="card-header">
                         <div class="card-icon lineguard-icon">
@@ -144,10 +179,10 @@
                         </div>
                     </div>
                     <p class="card-description">
-                        ระบบคำนวณและประมาณการค่าบริการติดตั้งฉนวนครอบสายแรงสูง (Line Guard) สำหรับงานก่อสร้างใกล้นานระบบไฟฟ้าเพื่อความปลอดภัยสูงสุด
+                        ระบบคำนวณและประมาณการค่าบริการติดตั้งฉนวนครอบสายแรงสูง (Line Guard) สำหรับงานก่อสร้างใกล้นานระบบไฟฟ้าเพื่อความปลอดภัยสูงสุดตามระเบียบ ผวก.
                     </p>
                     <div class="card-features">
-                        <span class="feature-tag"><i class="fa-solid fa-clock"></i> คำนวณตามจำนวนวัน/เดือน</span>
+                        <span class="feature-tag"><i class="fa-solid fa-clock"></i> คำนวณตามจำนวนวัน/ชิ้น</span>
                         <span class="feature-tag"><i class="fa-solid fa-file-pdf"></i> พิมพ์ใบประมาณการ</span>
                         <span class="feature-tag"><i class="fa-solid fa-shield-cat"></i> ป้องกันอันตรายไฟฟ้า</span>
                     </div>
@@ -160,7 +195,7 @@
                 </div>
 
                 <!-- Card 3: Transformer Maintenance -->
-                <div class="system-card" data-category="active popular" data-name="transformer estimate บำรุงรักษาหม้อแปลง ตรวจสอบหม้อแปลงไฟฟ้า">
+                <div class="system-card" data-category="active popular" data-name="transformer estimate บำรุงรักษาหม้อแปลง ตรวจสอบหม้อแปลงไฟฟ้า กรองน้ำมัน">
                     <div class="card-badge active"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</div>
                     <div class="card-header">
                         <div class="card-icon transformer-icon">
@@ -172,11 +207,12 @@
                         </div>
                     </div>
                     <p class="card-description">
-                        ระบบประมาณการค่าบริการบำรุงรักษา กรองน้ำมันหม้อแปลง และทดสอบหม้อแปลงไฟฟ้าประจำปีสำหรับผู้ใช้ไฟรายใหญ่
+                        ระบบประมาณการค่าบริการบำรุงรักษา กรองน้ำมันหม้อแปลง และทดสอบหม้อแปลงไฟฟ้าประจำปีสำหรับผู้ใช้ไฟรายใหญ่ พร้อมลายเซ็นดิจิทัลและพิมพ์ PDF
                     </p>
                     <div class="card-features">
-                        <span class="feature-tag"><i class="fa-solid fa-vial"></i> ทดสอบคุณภาพน้ำมัน</span>
-                        <span class="feature-tag"><i class="fa-solid fa-wrench"></i> บำรุงรักษาเชิงป้องกัน</span>
+                        <span class="feature-tag"><i class="fa-solid fa-vial"></i> Package A & B ครบวงจร</span>
+                        <span class="feature-tag"><i class="fa-solid fa-signature"></i> ลายเซ็นดิจิทัล</span>
+                        <span class="feature-tag"><i class="fa-solid fa-file-pdf"></i> ส่งออกเอกสาร PDF</span>
                     </div>
                     <div class="card-footer">
                         <a href="Tranformer Estimate/index.html" class="btn btn-primary">
@@ -187,7 +223,7 @@
                 </div>
 
                 <!-- Card 4: Solar Rooftop Estimate -->
-                <div class="system-card" data-category="active popular" data-name="solar rooftop estimate โซลาร์เซลล์ ประเมินราคาติดตั้ง จุดคุ้มทุน ล้างแผง">
+                <div class="system-card" data-category="active popular" data-name="solar rooftop estimate โซลาร์เซลล์ ประเมินราคาติดตั้ง จุดคุ้มทุน ล้างแผง roi">
                     <div class="card-badge active"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</div>
                     <div class="card-header">
                         <div class="card-icon solar-icon">
@@ -199,10 +235,10 @@
                         </div>
                     </div>
                     <p class="card-description">
-                        ระบบประมาณการติดตั้ง บำรุงรักษา และคำนวณจุดคุ้มทุน (ROI 25 ปี) ระบบผลิตไฟฟ้าพลังงานแสงอาทิตย์บนหลังคา (Solar Rooftop)
+                        ระบบประมาณการติดตั้ง บำรุงรักษา และคำนวณจุดคุ้มทุน (ROI 25 ปี) ระบบผลิตไฟฟ้าพลังงานแสงอาทิตย์บนหลังคา (Solar Rooftop) ตามมาตรฐาน กฟภ. ปี 2569
                     </p>
                     <div class="card-features">
-                        <span class="feature-tag"><i class="fa-solid fa-sun"></i> คำนวณจุดคุ้มทุน (ROI)</span>
+                        <span class="feature-tag"><i class="fa-solid fa-sun"></i> คำนวณจุดคุ้มทุน (ROI 25 ปี)</span>
                         <span class="feature-tag"><i class="fa-solid fa-screwdriver-wrench"></i> ค่าบำรุงรักษา</span>
                         <span class="feature-tag"><i class="fa-solid fa-leaf"></i> ลดการปล่อยคาร์บอน</span>
                     </div>
@@ -213,13 +249,67 @@
                         </a>
                     </div>
                 </div>
+
+                <!-- Card 5: EV Charging Station (Upcoming) -->
+                <div class="system-card upcoming-card" data-category="upcoming" data-name="ev charger volta ยานยนต์ไฟฟ้า สถานีชาร์จ รถยนต์ไฟฟ้า">
+                    <div class="card-badge upcoming"><i class="fa-solid fa-clock-rotate-left"></i> กำลังพัฒนา</div>
+                    <div class="card-header">
+                        <div class="card-icon ev-icon">
+                            <i class="fa-solid fa-car-battery"></i>
+                        </div>
+                        <div class="card-meta">
+                            <span class="card-category">ยานยนต์ไฟฟ้า PEA VOLTA</span>
+                            <h3 class="card-title">PEA EV Station Estimate</h3>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        ระบบประมาณการติดตั้งเครื่องอัดประจุไฟฟ้าสำหรับยานยนต์ไฟฟ้า (EV Charging Station) รองรับทั้งแบบ Normal Charge (AC) และ Quick Charge (DC Fast Charge)
+                    </p>
+                    <div class="card-features">
+                        <span class="feature-tag"><i class="fa-solid fa-plug-circle-bolt"></i> AC 22kW / DC 50-120kW</span>
+                        <span class="feature-tag"><i class="fa-solid fa-calculator"></i> คิดค่าขยายเขตหม้อแปลง</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-secondary upcoming-btn" disabled>
+                            <i class="fa-solid fa-hourglass-half"></i>
+                            <span>อยู่ในแผนงานพัฒนา 2569</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Card 6: Energy Audit & Efficiency AI (Upcoming) -->
+                <div class="system-card upcoming-card" data-category="upcoming" data-name="energy audit ประสิทธิภาพพลังงาน ตรวจวัดพลังงาน ประหยัดไฟ ai">
+                    <div class="card-badge upcoming"><i class="fa-solid fa-clock-rotate-left"></i> กำลังพัฒนา</div>
+                    <div class="card-header">
+                        <div class="card-icon audit-icon">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                        <div class="card-meta">
+                            <span class="card-category">การจัดการพลังงาน</span>
+                            <h3 class="card-title">PEA Energy Audit AI</h3>
+                        </div>
+                    </div>
+                    <p class="card-description">
+                        ระบบประเมินค่าบริการตรวจวัดและวิเคราะห์ประสิทธิภาพการใช้พลังงานในโรงงานอุตสาหกรรมและอาคารควบคุม พร้อมระบบ AI แนะนำมาตรการประหยัดพลังงาน
+                    </p>
+                    <div class="card-features">
+                        <span class="feature-tag"><i class="fa-solid fa-microchip"></i> ตรวจวัด Heat & Power Factor</span>
+                        <span class="feature-tag"><i class="fa-solid fa-wand-magic-sparkles"></i> AI คำนวณคืนทุน</span>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-secondary upcoming-btn" disabled>
+                            <i class="fa-solid fa-hourglass-half"></i>
+                            <span>อยู่ในแผนงานพัฒนา 2569</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <!-- No Results Message -->
             <div id="no-results" class="no-results hidden">
                 <i class="fa-solid fa-box-open empty-icon"></i>
                 <h3>ไม่พบระบบประมาณการที่คุณค้นหา</h3>
-                <p>ลองค้นหาด้วยคำอื่น เช่น "เครื่องกำเนิดไฟฟ้า", "Line Guard" หรือรีเซ็ตการกรอง</p>
+                <p>ลองค้นหาด้วยคำอื่น เช่น "เครื่องกำเนิดไฟฟ้า", "Line Guard", "Solar", "EV" หรือรีเซ็ตการกรอง</p>
                 <button id="reset-search-btn" class="btn btn-secondary mt-3">รีเซ็ตการค้นหา</button>
             </div>
         </section>

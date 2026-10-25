@@ -242,6 +242,11 @@
                         <div class="total-label">ยอดรวมทั้งสิ้น (รวม VAT)</div>
                         <div class="total-amount"><span id="total-with-vat">0</span> <span class="currency">บาท</span></div>
                         <div class="total-baht-text" id="total-baht-text">(ศูนย์บาทถ้วน)</div>
+                        <div class="quote-action-wrap" style="margin-top: 1.25rem;">
+                            <button type="button" id="open-quote-modal-btn" class="btn btn-quote" style="width: 100%; padding: 0.9rem; background: linear-gradient(135deg, #7c3aed, #4c1d95); color: white; border: none; border-radius: 12px; font-weight: 600; font-family: 'Prompt', sans-serif; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.6rem; box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3); font-size: 0.95rem;">
+                                <i class="fa-solid fa-file-invoice-dollar"></i> ออกใบประมาณการทางการ (Official Estimate Sheet)
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Remarks & Footnotes -->
@@ -409,6 +414,112 @@
         <footer class="app-footer">
             <p>Copyright &copy; 2026 App Gen Estimate ผรผ.กสฟ.น2</p>
         </footer>
+    </div>
+
+    <!-- Official Estimate Sheet Modal -->
+    <div id="quote-modal" class="modal-overlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px;">
+        <div class="modal-content" style="background: var(--bg-card, #ffffff); color: var(--text-primary, #1e293b); max-width: 780px; width: 100%; max-height: 90vh; overflow-y: auto; border-radius: 16px; border: 1px solid rgba(124,58,237,0.3); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); padding: 30px;">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid rgba(124,58,237,0.2); padding-bottom: 15px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fa-solid fa-bolt" style="font-size: 1.8rem; color: #7c3aed;"></i>
+                    <div>
+                        <h3 style="margin: 0; font-family: 'Prompt', sans-serif; font-size: 1.3rem;">ใบประมาณการค่าบริการเช่าเครื่องกำเนิดไฟฟ้า</h3>
+                        <p style="margin: 0; font-size: 0.85rem; color: #64748b;">การไฟฟ้าส่วนภูมิภาค (Provincial Electricity Authority)</p>
+                    </div>
+                </div>
+                <button type="button" id="close-quote-modal" style="background: transparent; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div id="print-area" style="font-family: 'Sarabun', 'Prompt', sans-serif;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 0.9rem;">
+                    <div>
+                        <strong>เลขที่เอกสาร:</strong> PEA-GEN-<span id="q-doc-id">2026-001</span><br>
+                        <strong>ระเบียบ:</strong> <span id="q-reg">ระเบียบการคิดค่าเช่าเครื่องกำเนิดไฟฟ้า</span><br>
+                        <strong>ประเภทผู้เช่า:</strong> <span id="q-cust">ประเภท ก (หน่วยงานภายใน)</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <strong>วันที่ออกเอกสาร:</strong> <span id="q-date">25 ตุลาคม 2569</span><br>
+                        <strong>ระยะทางขนส่ง:</strong> <span id="q-dist">1-50 กม.</span><br>
+                        <strong>สถานะ:</strong> <span style="color: #10b981; font-weight: 600;">พร้อมให้บริการ</span>
+                    </div>
+                </div>
+
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9rem;">
+                    <thead>
+                        <tr style="background: rgba(124,58,237,0.1); border-bottom: 2px solid #7c3aed;">
+                            <th style="padding: 10px; text-align: center; width: 50px;">ลำดับ</th>
+                            <th style="padding: 10px; text-align: left;">รายการประมาณการ (Service Description)</th>
+                            <th style="padding: 10px; text-align: center; width: 100px;">จำนวน/วัน</th>
+                            <th style="padding: 10px; text-align: right; width: 130px;">จำนวนเงิน (บาท)</th>
+                        </tr>
+                    </thead>
+                    <tbody style="border-bottom: 1px solid #cbd5e1;">
+                        <tr>
+                            <td style="padding: 10px; text-align: center;">1</td>
+                            <td style="padding: 10px;">
+                                <strong>ค่าเช่าชุดเครื่องยนต์กำเนิดไฟฟ้า</strong><br>
+                                <span id="q-gen-desc" style="font-size: 0.85rem; color: #64748b;">ขนาด 3-10 kW</span>
+                            </td>
+                            <td style="padding: 10px; text-align: center;" id="q-gen-qty">1 เครื่อง / 1 วัน</td>
+                            <td style="padding: 10px; text-align: right;" id="q-gen-amount">0.00</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;">2</td>
+                            <td style="padding: 10px;">
+                                <strong>ค่าพนักงานควบคุมเครื่องยนต์</strong><br>
+                                <span id="q-staff-desc" style="font-size: 0.85rem; color: #64748b;">อัตรามาตรฐาน กฟภ.</span>
+                            </td>
+                            <td style="padding: 10px; text-align: center;" id="q-staff-qty">1 คน / 1 วัน</td>
+                            <td style="padding: 10px; text-align: right;" id="q-staff-amount">0.00</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; text-align: center;">3</td>
+                            <td style="padding: 10px;">
+                                <strong>ค่าจัดส่งและขนส่งเครื่องยนต์</strong><br>
+                                <span id="q-trans-desc" style="font-size: 0.85rem; color: #64748b;">ไป-กลับ</span>
+                            </td>
+                            <td style="padding: 10px; text-align: center;" id="q-trans-qty">1 เครื่อง</td>
+                            <td style="padding: 10px; text-align: right;" id="q-trans-amount">0.00</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" style="padding: 8px 10px; text-align: right; font-weight: 600;">รวมเป็นเงิน (ก่อนภาษี):</td>
+                            <td style="padding: 8px 10px; text-align: right; font-weight: 600;" id="q-subtotal">0.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="padding: 8px 10px; text-align: right;">ภาษีมูลค่าเพิ่ม VAT 7%:</td>
+                            <td style="padding: 8px 10px; text-align: right;" id="q-vat">0.00</td>
+                        </tr>
+                        <tr style="background: rgba(124,58,237,0.1); font-size: 1.05rem;">
+                            <td colspan="3" style="padding: 12px 10px; text-align: right; font-weight: 700; color: #7c3aed;">ยอดรวมสุทธิทั้งสิ้น (รวมภาษีมูลค่าเพิ่ม):</td>
+                            <td style="padding: 12px 10px; text-align: right; font-weight: 700; color: #7c3aed;" id="q-total">0.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="padding: 8px 10px; text-align: center; font-style: italic; color: #64748b;" id="q-baht-text">(ศูนย์บาทถ้วน)</td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; text-align: center; font-size: 0.9rem;">
+                    <div>
+                        <div style="border-bottom: 1px dotted #94a3b8; width: 180px; margin: 40px auto 10px;"></div>
+                        <div>( .................................................... )</div>
+                        <div style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">ผู้ขอใช้บริการ / ผู้เช่า</div>
+                    </div>
+                    <div>
+                        <div style="border-bottom: 1px dotted #94a3b8; width: 180px; margin: 40px auto 10px;"></div>
+                        <div>( นายจาตุรงค์ ทรงภักดี )</div>
+                        <div style="color: #64748b; font-size: 0.85rem; margin-top: 4px;">พชง.7 ผรผ.กสฟ.(น2) ผู้ประมาณการ</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer" style="margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(124,58,237,0.2); display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" id="close-modal-btn2" style="padding: 10px 20px; border-radius: 8px; border: 1px solid #cbd5e1; background: transparent; color: inherit; cursor: pointer;">ปิดหน้าต่าง</button>
+                <button type="button" id="print-quote-btn" style="padding: 10px 24px; border-radius: 8px; border: none; background: #7c3aed; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;"><i class="fa-solid fa-print"></i> พิมพ์เอกสาร / บันทึก PDF</button>
+            </div>
+        </div>
     </div>
 
     <!-- Script connection -->
