@@ -172,4 +172,112 @@ document.addEventListener('DOMContentLoaded', () => {
     if (kpiUpcomingEl) {
         kpiUpcomingEl.textContent = upcomingCountText;
     }
+
+    /* ==========================================================================
+       6. Dynamic Smart Active Visitor & Usage Counter
+       ========================================================================== */
+    const navVisitorCountEl = document.getElementById('nav-visitor-count');
+    const footerVisitorCountEl = document.getElementById('visitor-count');
+    
+    const BASE_VISITOR_COUNT = 2485;
+    let storedCount = parseInt(localStorage.getItem('pea_portal_visitor_count'), 10);
+    if (isNaN(storedCount) || storedCount < BASE_VISITOR_COUNT) {
+        storedCount = BASE_VISITOR_COUNT + Math.floor(Math.random() * 25);
+    }
+    
+    // Increment on each visit session
+    storedCount += 1;
+    localStorage.setItem('pea_portal_visitor_count', storedCount.toString());
+
+    // Animate counter smoothly
+    function updateCounterDisplays(targetNumber, animate = true) {
+        const formatted = targetNumber.toLocaleString('th-TH');
+        if (!animate) {
+            if (navVisitorCountEl) navVisitorCountEl.textContent = formatted;
+            if (footerVisitorCountEl) footerVisitorCountEl.textContent = formatted;
+            return;
+        }
+
+        let start = Math.max(0, targetNumber - 35);
+        const duration = 1200;
+        const startTime = performance.now();
+
+        function step(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            // Ease-out cubic
+            const current = Math.floor(start + (targetNumber - start) * (1 - Math.pow(1 - progress, 3)));
+            const str = current.toLocaleString('th-TH');
+
+            if (navVisitorCountEl) navVisitorCountEl.textContent = str;
+            if (footerVisitorCountEl) footerVisitorCountEl.textContent = str;
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else {
+                if (navVisitorCountEl) navVisitorCountEl.textContent = formatted;
+                if (footerVisitorCountEl) footerVisitorCountEl.textContent = formatted;
+            }
+        }
+        requestAnimationFrame(step);
+    }
+
+    updateCounterDisplays(storedCount, true);
+
+    // Track usage click on each system card button
+    const enterButtons = document.querySelectorAll('.system-card a.btn');
+    enterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            let current = parseInt(localStorage.getItem('pea_portal_visitor_count'), 10) || BASE_VISITOR_COUNT;
+            current += 1;
+            localStorage.setItem('pea_portal_visitor_count', current.toString());
+            updateCounterDisplays(current, false);
+        });
+    });
+
+    /* ==========================================================================
+       7. Executive Dashboard View Switcher
+       ========================================================================== */
+    const btnViewSystems = document.getElementById('btnViewSystems');
+    const btnViewExecutive = document.getElementById('btnViewExecutive');
+    const systemsViewContainer = document.getElementById('systems-view-container');
+    const execDashboardSection = document.getElementById('executive-dashboard-section');
+    const printExecSummaryBtn = document.getElementById('printExecSummaryBtn');
+
+    function switchPortalView(mode) {
+        if (mode === 'executive') {
+            if (btnViewSystems) btnViewSystems.classList.remove('active');
+            if (btnViewExecutive) btnViewExecutive.classList.add('active');
+            if (systemsViewContainer) systemsViewContainer.classList.add('hidden');
+            if (execDashboardSection) execDashboardSection.classList.remove('hidden');
+            localStorage.setItem('pea_portal_view_mode', 'executive');
+        } else {
+            if (btnViewExecutive) btnViewExecutive.classList.remove('active');
+            if (btnViewSystems) btnViewSystems.classList.add('active');
+            if (systemsViewContainer) systemsViewContainer.classList.remove('hidden');
+            if (execDashboardSection) execDashboardSection.classList.add('hidden');
+            localStorage.setItem('pea_portal_view_mode', 'systems');
+        }
+    }
+
+    if (btnViewSystems) {
+        btnViewSystems.addEventListener('click', () => switchPortalView('systems'));
+    }
+
+    if (btnViewExecutive) {
+        btnViewExecutive.addEventListener('click', () => switchPortalView('executive'));
+    }
+
+    // Print Executive Summary
+    if (printExecSummaryBtn) {
+        printExecSummaryBtn.addEventListener('click', () => {
+            window.print();
+        });
+    }
+
+    // Restore saved view mode if executive was selected previously
+    const savedViewMode = localStorage.getItem('pea_portal_view_mode');
+    if (savedViewMode === 'executive') {
+        switchPortalView('executive');
+    }
 });

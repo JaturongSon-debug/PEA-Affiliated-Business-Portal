@@ -264,36 +264,12 @@
                         <div class="total-text" id="calc_text">(ศูนย์บาทถ้วน)</div>
                     </div>
 
-                    <div style="margin-top: 15px;">
-                        <button type="button" id="openTransformerQuoteBtn" class="btn-quote-tf">
-                            <i class="fa-solid fa-file-invoice-dollar"></i> ออกใบประมาณการทางการ (Official Estimate Sheet)
+                    <div style="margin-top: 20px;">
+                        <button type="button" id="openTransformerQuoteBtn" class="btn-quote-tf" style="width: 100%; justify-content: center; padding: 15px 20px; font-size: 1.05rem; border-radius: 12px; background: linear-gradient(135deg, #7c3aed, #9333ea); color: #ffffff; border: none; cursor: pointer; box-shadow: 0 4px 18px rgba(124, 58, 237, 0.45); font-weight: 700; display: flex; align-items: center; gap: 10px;">
+                            <i class="fa-solid fa-file-invoice-dollar" style="font-size: 1.25rem;"></i>
+                            <span>ออกใบประมาณการทางการ (Official Estimate Sheet)</span>
                         </button>
                     </div>
-                </section>
-
-                <section class="card signature-section" id="signatureSection" style="opacity: 0.5; pointer-events: none; transition: opacity 0.3s;">
-                    <div class="section-title">
-                        <h2>ลงนามรับทราบเงื่อนไข</h2>
-                    </div>
-                    
-                    <div class="sig-pad-wrapper">
-                        <canvas id="modernSignaturePad" width="350" height="150"></canvas>
-                        <button id="ui_clearSignature" class="btn-ghost">ล้างลายเซ็น</button>
-                    </div>
-                    
-                    <div class="form-group mt-3">
-                        <label>ลงชื่อ (ชื่อพิมพ์)</label>
-                        <input type="text" id="ui_signNamePrinted" class="modern-input">
-                    </div>
-                    <div class="form-group mt-3">
-                        <label>ตำแหน่ง</label>
-                        <input type="text" id="ui_signPosition" class="modern-input">
-                    </div>
-                    
-                    <button id="ui_btnReport" class="btn-primary-large mt-4">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px; vertical-align:middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                        สร้างรายงาน PDF
-                    </button>
                 </section>
 
             </div>
@@ -305,145 +281,7 @@
         </footer>
     </div>
 
-    <!-- ==================== HIDDEN A4 TEMPLATE FOR PDF ==================== -->
-    <div class="hidden-pdf-container">
-        <div id="documentContent" class="document-page a4-format">
-            
-            <div class="doc-header">
-                <div class="doc-logo">
-                    <!-- Base64 or external URL for logo to ensure it loads in pdf -->
-                    <img src="https://upload.wikimedia.org/wikipedia/th/a/ad/Provincial_Electricity_Authority_Logo.png" alt="PEA Logo" width="100">
-                </div>
-                <h2>การไฟฟ้าส่วนภูมิภาค</h2>
-                <h3>PROVINCIAL ELECTRICITY AUTHORITY</h3>
-                <h3 class="doc-title">ใบตอบรับการขอใช้ บริการบำรุงรักษาหม้อแปลงไฟฟ้า</h3>
-            </div>
 
-            <div class="doc-body">
-                <div class="doc-header-top" style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                    <div>เลขที่ <span class="input-red" id="docNo"></span></div>
-                    <div style="text-align: right;">
-                        <div style="margin-bottom: 10px;">เขียนที่ <span class="input-red" id="writeAt"></span></div>
-                        <div>วันที่ <span class="input-red" id="docDay"></span> เดือน <span class="input-red" id="docMonth"></span> พ.ศ. <span class="input-red" id="docYear"></span></div>
-                    </div>
-                </div>
-
-                <div class="doc-subject" style="margin-bottom: 25px; line-height: 1.6;">
-                    <div><strong>เรื่อง</strong> ขอใช้บริการบำรุงรักษาหม้อแปลงไฟฟ้า</div>
-                    <div><strong>เรียน</strong> ผู้จัดการ การไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์</div>
-                </div>
-
-                <div class="doc-paragraph" style="text-indent: 50px; margin-bottom: 15px;">
-                    ข้าพเจ้า <span class="input-red" id="customerName"></span> 
-                    ชื่อกิจการ <span class="input-red" id="companyName"></span> 
-                    ตั้งอยู่เลขที่ <span class="input-red" id="addressNo"></span> 
-                    ถนน(ตรอก,ซอย) <span class="input-red" id="street"></span> 
-                    ตำบล <span class="input-red" id="subDistrict"></span> 
-                    อำเภอ <span class="input-red" id="district"></span> 
-                    จังหวัด <span class="input-red" id="province"></span> 
-                    โทรศัพท์ <span class="input-red" id="phone"></span> 
-                    โทรสาร <span class="input-red" id="fax"></span>
-                </div>
-                
-                <div class="doc-paragraph" style="text-indent: 50px; margin-bottom: 25px;">
-                    มีความประสงค์ใช้บริการบำรุงรักษาหม้อแปลงไฟฟ้าจากการไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์ ทั้งนี้ ขอให้การไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์ ไปดำเนินการบำรุงรักษาหม้อแปลงไฟฟ้า ของหน่วยงาน / ข้าพเจ้า ดังนี้.- (เลือกเครื่องหมาย ✔ ลงในช่อง ☐ ตามแพกเกจที่ต้องการใช้บริการ)
-                </div>
-
-                <table class="package-table" style="margin-bottom: 10px;">
-                    <thead>
-                        <tr>
-                            <th>PACKAGE: A<br>บำรุงรักษาหม้อแปลงขั้นพื้นฐาน</th>
-                            <th>PACKAGE: B<br>บำรุงรักษาไฟฟ้าแบบครบวงจร</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="cb-wrap"><span class="cb" id="cb-A1"></span> Package A1: ระบบ 1 และ 3 เฟส<br>ขนาดไม่เกิน 250 kVA อัตราค่าบริการ 3,000 บาท*</div>
-                            </td>
-                            <td>
-                                <div class="cb-wrap"><span class="cb" id="cb-B1"></span> Package B1: หม้อแปลงภายในรวมไม่เกิน 2 เครื่อง<br>ไม่เกิน 1,500 kVA อัตราค่าบริการ 35,000 บาท*</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="cb-wrap"><span class="cb" id="cb-A2"></span> Package A2: ระบบ 3 เฟส ขนาดเกินกว่า 250<br>ถึง 1,500 kVA อัตราค่าบริการ 7,000 บาท*</div>
-                            </td>
-                            <td>
-                                <div class="cb-wrap"><span class="cb" id="cb-B2"></span> Package B2: หม้อแปลงภายในรวมไม่เกิน 2 เครื่อง<br>ไม่เกิน 500 kVA อัตราค่าบริการ 25,000 บาท*</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="cb-wrap"><span class="cb" id="cb-A3"></span> Package A3: ระบบ 3 เฟส ขนาดเกินกว่า 1,500<br>kVA อัตราค่าบริการ 9,000 บาท*</div>
-                            </td>
-                            <td>
-                                <div class="cb-wrap"><span class="cb" id="cb-B3"></span> Package B3: หม้อแปลงภายในรวม ไม่เกิน 250<br>kVA อัตราค่าบริการ 20,000 บาท*</div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>
-                                <div class="cb-wrap"><span class="cb" id="cb-B4"></span> Package B4: หม้อแปลงภายในรวมไม่เกิน 50 kVA<br>อัตราค่าบริการ 10,000 บาท*</div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div style="text-align: right; margin-bottom: 20px; font-size: 14pt;">*เป็นราคาที่ยังไม่รวมภาษีมูลค่าเพิ่ม</div>
-
-                <table class="price-summary-table" style="margin-bottom: 25px;">
-                    <tr>
-                        <td class="text-right" style="width: 70%;"><strong>ราคาแพ็กเกจที่เลือก:</strong></td>
-                        <td class="text-right"><span id="pdf_subtotal" class="input-red">0</span> บาท</td>
-                    </tr>
-                    <tr>
-                        <td class="text-right"><strong>ภาษีมูลค่าเพิ่ม (VAT 7%):</strong></td>
-                        <td class="text-right"><span id="pdf_vat" class="input-red">0</span> บาท</td>
-                    </tr>
-                    <tr>
-                        <td class="text-right"><strong>ยอดรวมทั้งสิ้น:</strong></td>
-                        <td class="text-right"><strong class="input-red" id="pdf_total">0</strong> <strong>บาท</strong></td>
-                    </tr>
-                </table>
-
-                <div class="doc-paragraph" style="margin-bottom: 20px; padding-left: 20px;">
-                    1. หม้อแปลง ขนาด <span class="input-red" id="tr1_kva"></span> เควีเอ. หมายเลข พีอีเอ. <span class="input-red" id="tr1_pea"></span><br>
-                    2. หม้อแปลง ขนาด <span class="input-red" id="tr2_kva"></span> เควีเอ. หมายเลข พีอีเอ. <span class="input-red" id="tr2_pea"></span><br>
-                    3. หม้อแปลง ขนาด <span class="input-red" id="tr3_kva"></span> เควีเอ. หมายเลข พีอีเอ. <span class="input-red" id="tr3_pea"></span><br>
-                    4. หม้อแปลง ขนาด <span class="input-red" id="tr4_kva"></span> เควีเอ. หมายเลข พีอีเอ. <span class="input-red" id="tr4_pea"></span>
-                </div>
-
-                <div class="doc-paragraph" style="text-indent: 50px; margin-bottom: 15px;">
-                    ในช่วงเวลา <span class="input-red" id="timeStart"></span> น. ถึงเวลา <span class="input-red" id="timeEnd"></span> น. 
-                    ในระหว่าง วันที่ <span class="input-red" id="periodDayStart"></span> เดือน <span class="input-red" id="periodMonthStart"></span> พ.ศ. <span class="input-red" id="periodYearStart"></span> 
-                    ถึงวันที่ <span class="input-red" id="periodDayEnd"></span> เดือน <span class="input-red" id="periodMonthEnd"></span> พ.ศ. <span class="input-red" id="periodYearEnd"></span> 
-                    และเพื่อความสะดวกในการดำเนินการกรุณาแจ้งกำหนดวัน เวลา ให้ทราบล่วงหน้าอย่างน้อย ๒ วัน โดยสามารถประสานงานกับ <span class="input-red" id="contactPerson"></span> (ผู้ประสานงาน และ หมายเลขโทรศัพท์)
-                </div>
-
-                <div class="doc-paragraph" style="text-indent: 50px; margin-bottom: 15px;">
-                    อนึ่ง หากมีความจำเป็นต้อง กรอง เติม เปลี่ยนถ่ายน้ำมันใหม่และซ่อมแซมอุปกรณ์ที่ชำรุดนั้น ทางหน่วยงาน / ข้าพเจ้า ขอให้การไฟฟ้าส่วนภูมิภาคจังหวัดอุตรดิตถ์ ดำเนินการพร้อมในคราวเดียวกัน และ ยินดีชำระค่าใช้จ่ายที่เกิดขึ้นตามระเบียบของการไฟฟ้าส่วนภูมิภาค ทุกประการ
-                </div>
-
-                <div class="doc-paragraph" style="text-indent: 50px; margin-bottom: 40px;">
-                    จึงเรียนมาเพื่อทราบและดำเนินการต่อไปด้วย
-                </div>
-
-                <div class="signature-section html2pdf__page-break" style="display: flex; justify-content: flex-end; margin-top: 20px;">
-                    <div style="text-align: center; width: 350px;">
-                        <div class="signature-image-container" style="min-height: 80px; margin-bottom: 10px;">
-                            <img id="signatureImage" src="" alt="Signature" style="display:none; max-width: 250px; max-height: 80px;">
-                        </div>
-                        
-                        <div style="margin-bottom: 10px;">(ลงชื่อ) <span class="input-red" id="signName"></span></div>
-                        <div style="margin-bottom: 10px;">(<span class="input-red" id="signNamePrinted"></span>)</div>
-                        <div style="margin-bottom: 10px;">ตำแหน่ง <span class="input-red" id="signPosition"></span></div>
-                        <div style="color: #666;">(ตราประทับ หากมี)</div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
 
     <!-- Transformer Official Estimate Sheet Modal -->
     <div id="transformerQuoteModal" class="modal-overlay" style="position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px;">

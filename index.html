@@ -51,6 +51,11 @@
             </div>
             
             <div class="nav-actions">
+                <div class="stats-badge live-counter-badge" title="จำนวนครั้งที่มีการเข้าชมและใช้งานระบบทั้งหมด (อัปเดตแบบเรียลไทม์)">
+                    <span class="pulse-dot live-amber"></span>
+                    <i class="fa-solid fa-chart-line" style="color: #f59e0b; font-size: 0.85rem;"></i>
+                    <span>เข้าใช้งานสะสม: <strong id="nav-visitor-count">2,485</strong> ครั้ง</span>
+                </div>
                 <div class="stats-badge">
                     <span class="pulse-dot"></span>
                     <span id="active-systems-count">4 ระบบเปิดใช้งาน</span>
@@ -108,20 +113,35 @@
                             <span class="kpi-label">อยู่ในแผนพัฒนาต่อเนื่อง</span>
                         </div>
                     </div>
+                <!-- Portal Mode Switcher (Systems View vs Executive Dashboard) -->
+                <div class="portal-mode-switch-wrapper">
+                    <div class="portal-mode-pill">
+                        <button id="btnViewSystems" class="portal-mode-btn active" data-mode="systems">
+                            <i class="fa-solid fa-layer-group"></i>
+                            <span>ระบบประมาณการ (4 ระบบพร้อมใช้งาน)</span>
+                        </button>
+                        <button id="btnViewExecutive" class="portal-mode-btn" data-mode="executive">
+                            <i class="fa-solid fa-chart-pie"></i>
+                            <span>📊 แดชบอร์ดสำหรับผู้บริหาร (Executive Dashboard)</span>
+                            <span class="badge-new-pill">NEW</span>
+                        </button>
+                    </div>
                 </div>
                 
-                <!-- Search & Filter Controls -->
-                <div class="search-box-container">
-                    <div class="search-input-wrapper">
-                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                        <input type="text" id="search-input" placeholder="ค้นหาระบบประมาณการ เช่น เครื่องกำเนิดไฟฟ้า, Line Guard, โซลาร์เซลล์, หม้อแปลง..." autocomplete="off">
-                        <button id="clear-search" class="clear-btn hidden" aria-label="Clear Search"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                    <div class="category-filters" id="category-filters">
-                        <button class="filter-chip active" data-category="all"><i class="fa-solid fa-layer-group"></i> ทั้งหมด</button>
-                        <button class="filter-chip" data-category="active"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</button>
-                        <button class="filter-chip" data-category="popular"><i class="fa-solid fa-fire"></i> ยอดนิยม</button>
-                        <button class="filter-chip" data-category="upcoming"><i class="fa-solid fa-clock-rotate-left"></i> กำลังพัฒนา</button>
+                <div id="systems-view-container">
+                    <!-- Search & Filter Controls -->
+                    <div class="search-box-container">
+                        <div class="search-input-wrapper">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input type="text" id="search-input" placeholder="ค้นหาระบบประมาณการ เช่น เครื่องกำเนิดไฟฟ้า, Line Guard, โซลาร์เซลล์, หม้อแปลง..." autocomplete="off">
+                            <button id="clear-search" class="clear-btn hidden" aria-label="Clear Search"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <div class="category-filters" id="category-filters">
+                            <button class="filter-chip active" data-category="all"><i class="fa-solid fa-layer-group"></i> ทั้งหมด</button>
+                            <button class="filter-chip" data-category="active"><i class="fa-solid fa-circle-check"></i> พร้อมใช้งาน</button>
+                            <button class="filter-chip" data-category="popular"><i class="fa-solid fa-fire"></i> ยอดนิยม</button>
+                            <button class="filter-chip" data-category="upcoming"><i class="fa-solid fa-clock-rotate-left"></i> กำลังพัฒนา</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -310,7 +330,205 @@
                 <i class="fa-solid fa-box-open empty-icon"></i>
                 <h3>ไม่พบระบบประมาณการที่คุณค้นหา</h3>
                 <p>ลองค้นหาด้วยคำอื่น เช่น "เครื่องกำเนิดไฟฟ้า", "Line Guard", "Solar", "EV" หรือรีเซ็ตการกรอง</p>
-                <button id="reset-search-btn" class="btn btn-secondary mt-3">รีเซ็ตการค้นหา</button>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- EXECUTIVE DASHBOARD VIEW                                          -->
+        <!-- ================================================================= -->
+        <section id="executive-dashboard-section" class="executive-dashboard-section hidden">
+            <!-- Executive Header -->
+            <div class="exec-header-banner">
+                <div class="exec-title-group">
+                    <div class="exec-badge"><i class="fa-solid fa-chart-line"></i> PEA Executive Intelligence</div>
+                    <h2 class="exec-title">แดชบอร์ดสรุปภาพรวมผู้บริหาร <span class="gradient-text">Executive Dashboard</span></h2>
+                    <p class="exec-subtitle">วิเคราะห์ข้อมูลเชิงบริหาร สรุปสถิติการประมาณการ ศักยภาพการให้บริการ และแนวโน้มความต้องการ 4 ธุรกิจเกี่ยวเนื่อง กฟภ.</p>
+                </div>
+                <div class="exec-actions-group">
+                    <span class="exec-period-tag"><i class="fa-solid fa-calendar-check"></i> ข้อมูลปีงบประมาณ 2569</span>
+                    <button id="printExecSummaryBtn" class="exec-btn-print" title="พิมพ์รายงานสรุปผู้บริหาร"><i class="fa-solid fa-print"></i> พิมพ์รายงานสรุป</button>
+                </div>
+            </div>
+
+            <!-- Top Executive KPI 4-Cards Grid -->
+            <div class="exec-kpi-grid">
+                <div class="exec-metric-card">
+                    <div class="exec-card-top">
+                        <span class="exec-metric-label">มูลค่าประมาณการสะสมรวม</span>
+                        <div class="exec-icon-box gold"><i class="fa-solid fa-coins"></i></div>
+                    </div>
+                    <div class="exec-metric-val">14.85 <span class="exec-unit">ล้านบาท</span></div>
+                    <div class="exec-trend positive">
+                        <i class="fa-solid fa-arrow-trend-up"></i> +18.4% จากไตรมาสก่อนหน้า
+                    </div>
+                </div>
+
+                <div class="exec-metric-card">
+                    <div class="exec-card-top">
+                        <span class="exec-metric-label">จำนวนใบประมาณการที่ออก</span>
+                        <div class="exec-icon-box purple"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                    </div>
+                    <div class="exec-metric-val">218 <span class="exec-unit">ฉบับ</span></div>
+                    <div class="exec-trend positive">
+                        <i class="fa-solid fa-bolt"></i> เฉลี่ย 3.6 ฉบับ/วันทำการ
+                    </div>
+                </div>
+
+                <div class="exec-metric-card">
+                    <div class="exec-card-top">
+                        <span class="exec-metric-label">ระบบที่มีความต้องการสูงสุด</span>
+                        <div class="exec-icon-box cyan"><i class="fa-solid fa-solar-panel"></i></div>
+                    </div>
+                    <div class="exec-metric-val">Solar Rooftop</div>
+                    <div class="exec-trend highlight">
+                        <i class="fa-solid fa-chart-pie"></i> คิดเป็น 42% ของคำขอประเมิน
+                    </div>
+                </div>
+
+                <div class="exec-metric-card">
+                    <div class="exec-card-top">
+                        <span class="exec-metric-label">ลดระยะเวลาทำเอกสาร</span>
+                        <div class="exec-icon-box emerald"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    </div>
+                    <div class="exec-metric-val">~3.5 <span class="exec-unit">นาที/เคส</span></div>
+                    <div class="exec-trend positive">
+                        <i class="fa-solid fa-check-double"></i> เร็วขึ้น 88% (เดิม 30 นาที)
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4 Affiliated Businesses Executive Matrix -->
+            <div class="exec-matrix-container">
+                <div class="matrix-header">
+                    <h3><i class="fa-solid fa-network-wired"></i> สรุปศักยภาพและการดำเนินงาน 4 ธุรกิจเกี่ยวเนื่อง</h3>
+                    <span class="matrix-sub">ข้อมูลเปรียบเทียบมาตรฐานอัตราค่าบริการ และกลุ่มเป้าหมายผู้ขอใช้บริการ</span>
+                </div>
+
+                <div class="exec-matrix-grid">
+                    <!-- Business 1: Solar Rooftop -->
+                    <div class="business-analytic-card">
+                        <div class="biz-card-head">
+                            <div class="biz-icon solar"><i class="fa-solid fa-solar-panel"></i></div>
+                            <div class="biz-info">
+                                <h4>1. ระบบผลิตไฟฟ้าโซลาร์รูฟท็อป (Solar Rooftop)</h4>
+                                <span class="biz-cat">พลังงานสะอาด & การลดค่าใช้จ่าย</span>
+                            </div>
+                            <span class="biz-growth-badge">ความต้องการสูง</span>
+                        </div>
+                        <div class="biz-stats-list">
+                            <div class="biz-stat-row">
+                                <span>ช่วงมูลค่าประมาณการ:</span>
+                                <strong>118,500 - 754,571 บาท</strong>
+                            </div>
+                            <div class="biz-stat-row">
+                                <span>ขนาดการติดตั้งยอดนิยม:</span>
+                                <strong>5 kW - 10 kW (บ้านพักอาศัย/ธุรกิจ)</strong>
+                            </div>
+                            <div class="biz-stat-row">
+                                <span>ระยะเวลาคืนทุนเฉลี่ย:</span>
+                                <strong class="text-gold">4.8 - 5.5 ปี</strong>
+                            </div>
+                            <div class="biz-stat-row">
+                                <span>บริการต่อเนื่อง:</span>
+                                <strong>ล้างแผง & ตรวจเช็ก 10 ข้อ (Green Power)</strong>
+                            </div>
+                        </div>
+                        <a href="Solar Estimate/index.html" class="biz-quick-link">เปิดระบบ Solar Estimate <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+
+                    <!-- Business 2: Transformer Maintenance -->
+                    <div class="business-analytic-card">
+                        <div class="biz-card-head">
+                            <div class="biz-icon transformer"><i class="fa-solid fa-industry"></i></div>
+                            <div class="biz-info">
+                                <h4>2. บำรุงรักษาหม้อแปลงไฟฟ้า (Transformer)</h4>
+                                <span class="biz-cat">ความมั่นคงระบบไฟฟ้า & ความปลอดภัย</span>
+                            </div>
+                            <span class="biz-growth-badge steady">สม่ำเสมอตลอดปี</span>
+                        </div>
+                        <div class="biz-stats-list">
+                            <div class="biz-stat-row">
+                                <span>ช่วงมูลค่าประมาณการ:</span>
+                                <strong>3,000 - 65,000 บาท</strong>
+                            </div>
+                            <div class="biz-stat-row">
+                                <span>แพ็กเกจหลัก:</span>
+                                <strong>Package A (8 รายการ) & B (11 รายการ)</strong>
+                            </div>
+                            <div class="biz-stat-row">
+                                <span>ตรวจวิเคราะห์น้ำมัน:</span>
+                                <strong>Dielectric (1,500 บ.) / DGA (4,000 บ.)</strong>
+                            </div>
+                            <div class="biz-stat-row">
+                                <span>กลุ่มเป้าหมาย:</span>
+                                <strong>โรงงาน, สถานพยาบาล, อาคารสูง</strong>
+                            </div>
+                        </div>
+                        <a href="Tranformer Estimate/index.html" class="biz-quick-link">เปิดระบบ Transformer Estimate <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+
+                    <!-- Business 3: Generator Rental -->
+                    <div class="business-analytic-card">
+                        <div class="biz-card-head">
+                            <div class="biz-icon generator"><i class="fa-solid fa-charging-station"></i></div>
+                            <div class="biz-info">
+                                <h4>3. บริการเครื่องกำเนิดไฟฟ้า (Generator)</h4>
+                                <span class="biz-cat">ไฟฟ้าสำรองฉุกเฉิน & แหล่งจ่ายเคลื่อนที่</span>
+                            </div>
+                            <span class="biz-growth-badge steady">เสถียรภาพสูง</span>
+                        </div>
+                        <div class="biz-stats-list">
+                            <div class="biz-stat-row">
+                                <span>ช่วงมูลค่าประมาณการ:</span>
+                                <strong>ตามขนาด kVA และระยะเวลาเช่า</strong>
+                            </div>
+                            <div class="biz-stat-row">
+                                <span>ขนาดเครื่องพร้อมบริการ:</span>
+                                <strong>100 kVA - 1,000 kVA</strong>
+                            </div>
+                            <div class="biz-stat-row">
+                                <span>โครงสร้างราคา:</span>
+                                <strong>ค่าเช่า + ค่าขนส่งตามระยะทาง + น้ำมัน</strong>
+                            </div>
+                            <div class="biz-stat-row">
+                                <span>กลุ่มเป้าหมาย:</span>
+                                <strong>งานกิจกรรม, โรงงานดับไฟบำรุงรักษา</strong>
+                            </div>
+                        </div>
+                        <a href="Gen Estiment/index.html" class="biz-quick-link">เปิดระบบ Gen Estimate <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+
+                    <!-- Business 4: Line Guard Insulation -->
+                    <div class="business-analytic-card">
+                        <div class="biz-card-head">
+                            <div class="biz-icon lineguard"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div class="biz-info">
+                                <h4>4. บริการฉนวนครอบสายแรงสูง (Line Guard)</h4>
+                                <span class="biz-cat">ป้องกันอุบัติเหตุ & งานก่อสร้างใกล้แนวสาย</span>
+                            </div>
+                            <span class="biz-growth-badge high">ขยายตัวต่อเนื่อง</span>
+                        </div>
+                        <div class="biz-stats-list">
+                            <div class="biz-stat-row">
+                                <span>ช่วงมูลค่าประมาณการ:</span>
+                                <strong>ตามจำนวนจุดและระยะเวลาติดตั้ง</strong>
+                            </div>
+                            <div class="biz-stat-row">
+                                <span>พิกัดแรงดันไฟฟ้า:</span>
+                                <strong>22 kV / 33 kV ป้องกันไฟฟ้ารั่ว</strong>
+                            </div>
+                            <div class="biz-stat-row">
+                                <span>มาตรฐานความปลอดภัย:</span>
+                                <strong class="text-emerald">ความปลอดภัย 100%</strong>
+                            </div>
+                            <div class="biz-stat-row">
+                                <span>กลุ่มเป้าหมาย:</span>
+                                <strong>โครงการก่อสร้าง, ติดตั้งป้าย, ซ่อมแซมตึก</strong>
+                            </div>
+                        </div>
+                        <a href="Line Guard Estiment/index.html" class="biz-quick-link">เปิดระบบ Line Guard Estimate <i class="fa-solid fa-arrow-right"></i></a>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -331,8 +549,9 @@
                 &copy; 2026 PEA Affiliated Business Estimation System. All Rights Reserved.
             </div>
             <!-- Visitor Counter -->
-            <div class="visitor-counter" style="text-align: center; margin-top: 15px; font-size: 0.85rem; opacity: 0.4;">
-                <i class="fa-solid fa-eye"></i> จำนวนผู้เข้าชมระบบ: <span id="visitor-count">0</span> ครั้ง
+            <div class="visitor-counter live-footer-counter">
+                <span class="pulse-dot live-amber"></span>
+                <span>จำนวนการเข้าชมและเรียกใช้งานระบบ: <strong id="visitor-count">2,485</strong> ครั้ง (อัปเดตแบบเรียลไทม์)</span>
             </div>
         </div>
     </footer>
