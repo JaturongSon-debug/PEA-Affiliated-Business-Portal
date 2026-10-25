@@ -400,6 +400,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (printQuoteBtn) {
       printQuoteBtn.addEventListener('click', () => {
+        try {
+          let amt = 0;
+          const totalEl = document.getElementById('q-total');
+          if (totalEl) {
+            amt = parseFloat(totalEl.textContent.replace(/[^0-9.]/g, '')) || 0;
+          }
+          if (window.PEATracker) {
+            const genSize = document.getElementById('q-size') ? document.getElementById('q-size').textContent : '';
+            window.PEATracker.recordEstimate({
+              systemKey: 'generator',
+              systemName: 'บริการเครื่องกำเนิดไฟฟ้า',
+              amount: amt,
+              details: genSize
+            });
+          }
+        } catch (err) {
+          console.warn(err);
+        }
         window.print();
       });
     }

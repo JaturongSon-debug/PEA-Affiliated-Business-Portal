@@ -838,44 +838,69 @@ body {
 .portal-mode-switch-wrapper {
     display: flex;
     justify-content: center;
-    margin: 1.5rem 0 1rem;
+    align-items: center;
+    margin: 1.75rem auto 2.25rem;
     position: relative;
     z-index: 10;
+    width: 100%;
+    max-width: 760px;
 }
 
 .portal-mode-pill {
     display: inline-flex;
     background: var(--bg-card);
     border: 1px solid var(--border-color);
-    padding: 0.35rem;
+    padding: 0.4rem;
     border-radius: var(--radius-full);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    gap: 0.35rem;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.09);
+    gap: 0.4rem;
+    max-width: 100%;
 }
 
 .portal-mode-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.65rem 1.4rem;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1.6rem;
     border-radius: var(--radius-full);
     border: none;
     background: transparent;
     color: var(--text-secondary);
-    font-size: 0.92rem;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
 }
 
 .portal-mode-btn:hover {
     color: var(--text-primary);
+    background: rgba(124, 58, 237, 0.08);
 }
 
 .portal-mode-btn.active {
     background: linear-gradient(135deg, #7c3aed, #9333ea);
     color: #ffffff;
-    box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35);
+    box-shadow: 0 4px 18px rgba(124, 58, 237, 0.4);
+}
+
+@media (max-width: 680px) {
+    .portal-mode-pill {
+        flex-direction: column;
+        width: 100%;
+        border-radius: var(--radius-lg);
+        padding: 0.5rem;
+        gap: 0.5rem;
+    }
+    .portal-mode-btn {
+        width: 100%;
+        border-radius: var(--radius-md);
+        padding: 0.65rem 1rem;
+        font-size: 0.88rem;
+        white-space: normal;
+        text-align: center;
+    }
 }
 
 .badge-new-pill {
@@ -886,6 +911,20 @@ body {
     padding: 0.15rem 0.45rem;
     border-radius: 9999px;
     letter-spacing: 0.05em;
+}
+
+.biz-stat-row.active-count-row {
+    background: rgba(124, 58, 237, 0.08);
+    border: 1px solid rgba(124, 58, 237, 0.22);
+    border-radius: var(--radius-sm);
+    padding: 0.4rem 0.65rem;
+    margin-bottom: 0.4rem;
+}
+
+.biz-stat-row.active-count-row strong {
+    color: var(--pea-purple-light);
+    font-weight: 700;
+    font-size: 0.92rem;
 }
 
 .pulse-dot.live-amber {

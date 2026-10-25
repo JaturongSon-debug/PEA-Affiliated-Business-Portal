@@ -24,6 +24,7 @@
   
   <!-- Custom Stylesheet -->
   <link rel="stylesheet" href="style.css">
+  <script src="../js/pea-tracker.js"></script>
 </head>
 <body>
   <!-- Ambient background glow & PEA electrical pattern elements -->
@@ -573,6 +574,18 @@
 
       if (printLgBtn) {
         printLgBtn.addEventListener('click', () => {
+          try {
+            if (window.PEATracker) {
+              window.PEATracker.recordEstimate({
+                systemKey: 'lineguard',
+                systemName: 'ฉนวนครอบสาย Line Guard',
+                amount: currentCalculations.grandTotal || 0,
+                details: `${currentCalculations.pieces} ท่อน, ${currentCalculations.days} วัน`
+              });
+            }
+          } catch (err) {
+            console.warn(err);
+          }
           window.print();
         });
       }

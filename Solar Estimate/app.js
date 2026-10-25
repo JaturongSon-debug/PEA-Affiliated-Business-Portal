@@ -1517,6 +1517,24 @@ function initSolarQuoteModal() {
 
     if (printBtn) {
         printBtn.addEventListener("click", () => {
+            try {
+                let amt = 0;
+                const totalEl = document.getElementById("sqGrandTotal");
+                if (totalEl) {
+                    amt = parseFloat(totalEl.textContent.replace(/[^0-9.]/g, '')) || 0;
+                }
+                if (window.PEATracker) {
+                    const itemTitle = document.getElementById('sqItem1Title') ? document.getElementById('sqItem1Title').textContent : '';
+                    window.PEATracker.recordEstimate({
+                        systemKey: 'solar',
+                        systemName: 'Solar Rooftop',
+                        amount: amt,
+                        details: itemTitle
+                    });
+                }
+            } catch (err) {
+                console.warn(err);
+            }
             window.print();
         });
     }

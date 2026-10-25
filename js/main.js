@@ -174,20 +174,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /* ==========================================================================
-       6. Dynamic Smart Active Visitor & Usage Counter
+       6. Dynamic Smart Active Visitor & Usage Counter (Starts fresh from 0)
        ========================================================================== */
     const navVisitorCountEl = document.getElementById('nav-visitor-count');
     const footerVisitorCountEl = document.getElementById('visitor-count');
     
-    const BASE_VISITOR_COUNT = 2485;
-    let storedCount = parseInt(localStorage.getItem('pea_portal_visitor_count'), 10);
-    if (isNaN(storedCount) || storedCount < BASE_VISITOR_COUNT) {
-        storedCount = BASE_VISITOR_COUNT + Math.floor(Math.random() * 25);
+    // Increment visitor count via PEATracker
+    let currentVisitorCount = 0;
+    if (window.PEATracker) {
+        currentVisitorCount = window.PEATracker.incrementVisitor();
+    } else {
+        currentVisitorCount = parseInt(localStorage.getItem('pea_portal_visitor_count'), 10) || 1;
     }
-    
-    // Increment on each visit session
-    storedCount += 1;
-    localStorage.setItem('pea_portal_visitor_count', storedCount.toString());
 
     // Animate counter smoothly
     function updateCounterDisplays(targetNumber, animate = true) {
@@ -198,14 +196,13 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        let start = Math.max(0, targetNumber - 35);
-        const duration = 1200;
+        let start = Math.max(0, targetNumber - 10);
+        const duration = 800;
         const startTime = performance.now();
 
         function step(now) {
             const elapsed = now - startTime;
             const progress = Math.min(elapsed / duration, 1);
-            // Ease-out cubic
             const current = Math.floor(start + (targetNumber - start) * (1 - Math.pow(1 - progress, 3)));
             const str = current.toLocaleString('th-TH');
 
@@ -222,25 +219,154 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(step);
     }
 
-    updateCounterDisplays(storedCount, true);
+    updateCounterDisplays(currentVisitorCount, true);
 
     // Track usage click on each system card button
-    const enterButtons = document.querySelectorAll('.system-card a.btn');
+    const enterButtons = document.querySelectorAll('.system-card a.btn, .biz-quick-link');
     enterButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            let current = parseInt(localStorage.getItem('pea_portal_visitor_count'), 10) || BASE_VISITOR_COUNT;
-            current += 1;
-            localStorage.setItem('pea_portal_visitor_count', current.toString());
-            updateCounterDisplays(current, false);
+            const href = btn.getAttribute('href') || '';
+            let key = 'general';
+            if (href.includes('Gen Estiment')) key = 'generator';
+            else if (href.includes('Line Guard')) key = 'lineguard';
+            else if (href.includes('Solar Estimate')) key = 'solar';
+            else if (href.includes('Tranformer Estimate')) key = 'transformer';
+
+            if (window.PEATracker) {
+                window.PEATracker.recordSystemClick(key);
+                updateCounterDisplays(window.PEATracker.getVisitorCount(), false);
+                renderExecutiveDashboard();
+            }
         });
     });
 
     /* ==========================================================================
-       7. Executive Dashboard View Switcher
+       7. Executive Dashboard Dynamic Real-Time Metrics (Starting from 0)
+       ========================================================================== */
+    function renderExecutiveDashboard() {
+        if (!window.PEATracker) return;
+        const metrics = window.PEATracker.getMetrics();
+        
+        // 1. Total Estimated Value
+        const totalValEl = document.getElementById('exec-total-value');
+        const trendValEl = document.getElementById('exec-trend-value');
+        if (totalValEl) {
+            if (metrics.totalAmount >= 1000000) {
+                const millions = (metrics.totalAmount / 1000000).toFixed(2);
+                totalValEl.innerHTML = `${millions} <span class="exec-unit">ล้านบาท</span>`;
+            } else {
+                totalValEl.innerHTML = `${metrics.totalAmount.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} <span class="exec-unit">บาท</span>`;
+            }
+        }
+        if (trendValEl) {
+            if (metrics.totalDocs > 0) {
+                trendValEl.className = 'exec-trend positive';
+                trendValEl.innerHTML = `<i class="fa-solid fa-arrow-trend-up"></i> ยอดสะสมจริงจาก ${metrics.totalDocs} ฉบับ`;
+            } else {
+                trendValEl.className = 'exec-trend';
+                trendValEl.innerHTML = `<i class="fa-solid fa-clock"></i> รอการเริ่มบันทึกจากระบบคำนวณ`;
+            }
+        }
+
+        // 2. Total Docs Issued
+        const totalDocsEl = document.getElementById('exec-total-docs');
+        const trendDocsEl = document.getElementById('exec-trend-docs');
+        if (totalDocsEl) {
+            totalDocsEl.innerHTML = `${metrics.totalDocs.toLocaleString('th-TH')} <span class="exec-unit">ฉบับ</span>`;
+        }
+        if (trendDocsEl) {
+            if (metrics.totalDocs > 0) {
+                trendDocsEl.className = 'exec-trend positive';
+                trendDocsEl.innerHTML = `<i class="fa-solid fa-bolt"></i> ออกเอกสารแล้ว ${metrics.totalDocs} ฉบับ`;
+            } else {
+                trendDocsEl.className = 'exec-trend';
+                trendDocsEl.innerHTML = `<i class="fa-solid fa-clock"></i> รอการออกเอกสารใบแรก`;
+            }
+        }
+
+        // 3. Top Demanded System
+        const topSysEl = document.getElementById('exec-top-system');
+        const trendSysEl = document.getElementById('exec-trend-system');
+        if (topSysEl) {
+            topSysEl.textContent = metrics.topSystemName;
+        }
+        if (trendSysEl) {
+            if (metrics.totalDocs > 0 || metrics.topSystemKey) {
+                const cnt = metrics.systemCounts[metrics.topSystemKey] || 0;
+                trendSysEl.className = 'exec-trend highlight';
+                trendSysEl.innerHTML = `<i class="fa-solid fa-chart-pie"></i> คำขอประเมิน ${cnt} ฉบับ`;
+            } else {
+                trendSysEl.className = 'exec-trend';
+                trendSysEl.innerHTML = `<i class="fa-solid fa-chart-pie"></i> รอข้อมูลการใช้งานจริง`;
+            }
+        }
+
+        // 4. Time Saved
+        const timeSavedEl = document.getElementById('exec-time-saved');
+        const trendTimeEl = document.getElementById('exec-trend-time');
+        if (timeSavedEl) {
+            if (metrics.timeSavedMinutes >= 60) {
+                const hrs = (metrics.timeSavedMinutes / 60).toFixed(1);
+                timeSavedEl.innerHTML = `~${hrs} <span class="exec-unit">ชั่วโมง</span>`;
+            } else {
+                timeSavedEl.innerHTML = `~${Math.round(metrics.timeSavedMinutes)} <span class="exec-unit">นาที</span>`;
+            }
+        }
+        if (trendTimeEl) {
+            if (metrics.totalDocs > 0) {
+                trendTimeEl.className = 'exec-trend positive';
+                trendTimeEl.innerHTML = `<i class="fa-solid fa-check-double"></i> เร็วขึ้นเฉลี่ย 88% (~26.5 นาที/เคส)`;
+            } else {
+                trendTimeEl.className = 'exec-trend';
+                trendTimeEl.innerHTML = `<i class="fa-solid fa-check-double"></i> ประหยัดเฉลี่ย ~26.5 นาที/เคส`;
+            }
+        }
+
+        // 5. Individual Business Cards
+        const bSolar = document.getElementById('biz-stat-solar-docs');
+        if (bSolar) {
+            bSolar.textContent = `${metrics.systemCounts.solar} ฉบับ (${metrics.systemAmounts.solar.toLocaleString('th-TH', { minimumFractionDigits: 2 })} บาท)`;
+        }
+        const bTf = document.getElementById('biz-stat-transformer-docs');
+        if (bTf) {
+            bTf.textContent = `${metrics.systemCounts.transformer} ฉบับ (${metrics.systemAmounts.transformer.toLocaleString('th-TH', { minimumFractionDigits: 2 })} บาท)`;
+        }
+        const bGen = document.getElementById('biz-stat-generator-docs');
+        if (bGen) {
+            bGen.textContent = `${metrics.systemCounts.generator} ฉบับ (${metrics.systemAmounts.generator.toLocaleString('th-TH', { minimumFractionDigits: 2 })} บาท)`;
+        }
+        const bLg = document.getElementById('biz-stat-lineguard-docs');
+        if (bLg) {
+            bLg.textContent = `${metrics.systemCounts.lineguard} ฉบับ (${metrics.systemAmounts.lineguard.toLocaleString('th-TH', { minimumFractionDigits: 2 })} บาท)`;
+        }
+    }
+
+    renderExecutiveDashboard();
+
+    // Listen to real-time events from sub-systems
+    window.addEventListener('pea_tracker_updated', () => {
+        renderExecutiveDashboard();
+        if (window.PEATracker) {
+            updateCounterDisplays(window.PEATracker.getVisitorCount(), false);
+        }
+    });
+
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'pea_portal_estimates_log' || e.key === 'pea_portal_visitor_count' || e.key === 'pea_portal_system_clicks') {
+            renderExecutiveDashboard();
+            if (window.PEATracker) {
+                updateCounterDisplays(window.PEATracker.getVisitorCount(), false);
+            }
+        }
+    });
+
+    /* ==========================================================================
+       8. Executive Dashboard View Switcher
        ========================================================================== */
     const btnViewSystems = document.getElementById('btnViewSystems');
     const btnViewExecutive = document.getElementById('btnViewExecutive');
     const systemsViewContainer = document.getElementById('systems-view-container');
+    const systemsSection = document.querySelector('.systems-section');
     const execDashboardSection = document.getElementById('executive-dashboard-section');
     const printExecSummaryBtn = document.getElementById('printExecSummaryBtn');
 
@@ -249,12 +375,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (btnViewSystems) btnViewSystems.classList.remove('active');
             if (btnViewExecutive) btnViewExecutive.classList.add('active');
             if (systemsViewContainer) systemsViewContainer.classList.add('hidden');
+            if (systemsSection) systemsSection.classList.add('hidden');
             if (execDashboardSection) execDashboardSection.classList.remove('hidden');
             localStorage.setItem('pea_portal_view_mode', 'executive');
+            renderExecutiveDashboard();
         } else {
             if (btnViewExecutive) btnViewExecutive.classList.remove('active');
             if (btnViewSystems) btnViewSystems.classList.add('active');
             if (systemsViewContainer) systemsViewContainer.classList.remove('hidden');
+            if (systemsSection) systemsSection.classList.remove('hidden');
             if (execDashboardSection) execDashboardSection.classList.add('hidden');
             localStorage.setItem('pea_portal_view_mode', 'systems');
         }

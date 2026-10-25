@@ -54,7 +54,7 @@
                 <div class="stats-badge live-counter-badge" title="จำนวนครั้งที่มีการเข้าชมและใช้งานระบบทั้งหมด (อัปเดตแบบเรียลไทม์)">
                     <span class="pulse-dot live-amber"></span>
                     <i class="fa-solid fa-chart-line" style="color: #f59e0b; font-size: 0.85rem;"></i>
-                    <span>เข้าใช้งานสะสม: <strong id="nav-visitor-count">2,485</strong> ครั้ง</span>
+                    <span>เข้าใช้งานสะสม: <strong id="nav-visitor-count">0</strong> ครั้ง</span>
                 </div>
                 <div class="stats-badge">
                     <span class="pulse-dot"></span>
@@ -113,7 +113,9 @@
                             <span class="kpi-label">อยู่ในแผนพัฒนาต่อเนื่อง</span>
                         </div>
                     </div>
-                <!-- Portal Mode Switcher (Systems View vs Executive Dashboard) -->
+                </div>
+
+                <!-- Portal Mode Switcher (Clean Independent Segment Control) -->
                 <div class="portal-mode-switch-wrapper">
                     <div class="portal-mode-pill">
                         <button id="btnViewSystems" class="portal-mode-btn active" data-mode="systems">
@@ -357,9 +359,9 @@
                         <span class="exec-metric-label">มูลค่าประมาณการสะสมรวม</span>
                         <div class="exec-icon-box gold"><i class="fa-solid fa-coins"></i></div>
                     </div>
-                    <div class="exec-metric-val">14.85 <span class="exec-unit">ล้านบาท</span></div>
-                    <div class="exec-trend positive">
-                        <i class="fa-solid fa-arrow-trend-up"></i> +18.4% จากไตรมาสก่อนหน้า
+                    <div class="exec-metric-val" id="exec-total-value">0.00 <span class="exec-unit">บาท</span></div>
+                    <div class="exec-trend" id="exec-trend-value">
+                        <i class="fa-solid fa-circle-notch"></i> รอการเริ่มบันทึกจากระบบคำนวณ
                     </div>
                 </div>
 
@@ -368,20 +370,20 @@
                         <span class="exec-metric-label">จำนวนใบประมาณการที่ออก</span>
                         <div class="exec-icon-box purple"><i class="fa-solid fa-file-invoice-dollar"></i></div>
                     </div>
-                    <div class="exec-metric-val">218 <span class="exec-unit">ฉบับ</span></div>
-                    <div class="exec-trend positive">
-                        <i class="fa-solid fa-bolt"></i> เฉลี่ย 3.6 ฉบับ/วันทำการ
+                    <div class="exec-metric-val" id="exec-total-docs">0 <span class="exec-unit">ฉบับ</span></div>
+                    <div class="exec-trend" id="exec-trend-docs">
+                        <i class="fa-solid fa-circle-notch"></i> รอการออกเอกสารใบแรก
                     </div>
                 </div>
 
                 <div class="exec-metric-card">
                     <div class="exec-card-top">
                         <span class="exec-metric-label">ระบบที่มีความต้องการสูงสุด</span>
-                        <div class="exec-icon-box cyan"><i class="fa-solid fa-solar-panel"></i></div>
+                        <div class="exec-icon-box cyan"><i class="fa-solid fa-solar-panel" id="exec-top-icon"></i></div>
                     </div>
-                    <div class="exec-metric-val">Solar Rooftop</div>
-                    <div class="exec-trend highlight">
-                        <i class="fa-solid fa-chart-pie"></i> คิดเป็น 42% ของคำขอประเมิน
+                    <div class="exec-metric-val" id="exec-top-system">-</div>
+                    <div class="exec-trend" id="exec-trend-system">
+                        <i class="fa-solid fa-chart-pie"></i> รอข้อมูลการใช้งานจริง
                     </div>
                 </div>
 
@@ -390,9 +392,9 @@
                         <span class="exec-metric-label">ลดระยะเวลาทำเอกสาร</span>
                         <div class="exec-icon-box emerald"><i class="fa-solid fa-clock-rotate-left"></i></div>
                     </div>
-                    <div class="exec-metric-val">~3.5 <span class="exec-unit">นาที/เคส</span></div>
-                    <div class="exec-trend positive">
-                        <i class="fa-solid fa-check-double"></i> เร็วขึ้น 88% (เดิม 30 นาที)
+                    <div class="exec-metric-val" id="exec-time-saved">0 <span class="exec-unit">นาที</span></div>
+                    <div class="exec-trend" id="exec-trend-time">
+                        <i class="fa-solid fa-check-double"></i> ประหยัดเฉลี่ย ~26.5 นาที/เคส
                     </div>
                 </div>
             </div>
@@ -416,6 +418,10 @@
                             <span class="biz-growth-badge">ความต้องการสูง</span>
                         </div>
                         <div class="biz-stats-list">
+                            <div class="biz-stat-row active-count-row">
+                                <span>คำขอประมาณการจริง:</span>
+                                <strong id="biz-stat-solar-docs">0 ฉบับ (0.00 บาท)</strong>
+                            </div>
                             <div class="biz-stat-row">
                                 <span>ช่วงมูลค่าประมาณการ:</span>
                                 <strong>118,500 - 754,571 บาท</strong>
@@ -447,6 +453,10 @@
                             <span class="biz-growth-badge steady">สม่ำเสมอตลอดปี</span>
                         </div>
                         <div class="biz-stats-list">
+                            <div class="biz-stat-row active-count-row">
+                                <span>คำขอประมาณการจริง:</span>
+                                <strong id="biz-stat-transformer-docs">0 ฉบับ (0.00 บาท)</strong>
+                            </div>
                             <div class="biz-stat-row">
                                 <span>ช่วงมูลค่าประมาณการ:</span>
                                 <strong>3,000 - 65,000 บาท</strong>
@@ -478,6 +488,10 @@
                             <span class="biz-growth-badge steady">เสถียรภาพสูง</span>
                         </div>
                         <div class="biz-stats-list">
+                            <div class="biz-stat-row active-count-row">
+                                <span>คำขอประมาณการจริง:</span>
+                                <strong id="biz-stat-generator-docs">0 ฉบับ (0.00 บาท)</strong>
+                            </div>
                             <div class="biz-stat-row">
                                 <span>ช่วงมูลค่าประมาณการ:</span>
                                 <strong>ตามขนาด kVA และระยะเวลาเช่า</strong>
@@ -509,6 +523,10 @@
                             <span class="biz-growth-badge high">ขยายตัวต่อเนื่อง</span>
                         </div>
                         <div class="biz-stats-list">
+                            <div class="biz-stat-row active-count-row">
+                                <span>คำขอประมาณการจริง:</span>
+                                <strong id="biz-stat-lineguard-docs">0 ฉบับ (0.00 บาท)</strong>
+                            </div>
                             <div class="biz-stat-row">
                                 <span>ช่วงมูลค่าประมาณการ:</span>
                                 <strong>ตามจำนวนจุดและระยะเวลาติดตั้ง</strong>
@@ -551,12 +569,13 @@
             <!-- Visitor Counter -->
             <div class="visitor-counter live-footer-counter">
                 <span class="pulse-dot live-amber"></span>
-                <span>จำนวนการเข้าชมและเรียกใช้งานระบบ: <strong id="visitor-count">2,485</strong> ครั้ง (อัปเดตแบบเรียลไทม์)</span>
+                <span>จำนวนการเข้าชมและเรียกใช้งานระบบ: <strong id="visitor-count">0</strong> ครั้ง (อัปเดตแบบเรียลไทม์)</span>
             </div>
         </div>
     </footer>
 
     <!-- Custom JS -->
+    <script src="js/pea-tracker.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

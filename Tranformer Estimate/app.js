@@ -243,6 +243,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (printTfBtn) {
             printTfBtn.addEventListener('click', () => {
+                try {
+                    const totalEl = document.getElementById('calc_total');
+                    let amt = 0;
+                    if (totalEl) {
+                        amt = parseFloat(totalEl.textContent.replace(/[^0-9.]/g, '')) || 0;
+                    }
+                    if (window.PEATracker) {
+                        const pkgName = document.getElementById('sum_pkg_name') ? document.getElementById('sum_pkg_name').textContent : '';
+                        window.PEATracker.recordEstimate({
+                            systemKey: 'transformer',
+                            systemName: 'บำรุงรักษาหม้อแปลง',
+                            amount: amt,
+                            details: pkgName
+                        });
+                    }
+                } catch (err) {
+                    console.warn(err);
+                }
                 window.print();
             });
         }
